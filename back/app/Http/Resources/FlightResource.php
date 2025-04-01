@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Flight_info_resource extends JsonResource
+class FlightResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,9 +20,7 @@ class Flight_info_resource extends JsonResource
             'destination_code' => $this->destiantion_code,
             'origin_code' => $this->origin_code,
             'airline_code'=> $this->airline_code,
-
-            // TO FIX: typo
-            'flightnumber' => $this->flightnumber,
+            'flight_number' => $this->flight_number,
             
         ];  
     }

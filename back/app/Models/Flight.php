@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Flight_info extends Model
+class Flight extends Model
 {
     use Notifiable, HasApiTokens;
 

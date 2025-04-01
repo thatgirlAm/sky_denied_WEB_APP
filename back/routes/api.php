@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\HTTP\Controllers\Flight_controller ;
+use App\HTTP\Controllers\FlightController ;
 
 
 //-- For now I do not put any middleware--//
@@ -14,4 +14,4 @@ Route::get('/user', function (Request $request) {
 
 //-- Using CRUD --//
 // (TEST: trying to display the index with the CRUD function)
-Route::apiResource('flight_info', Flight_controller::class); 
+Route::apiResource('flight', FlightController::class); 

@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Flight_info;
+use App\Models\Flight;
 use Illuminate\Http\Request;
-use lluminate\Http\Resources\Flight_info_resouce ; 
-use App\Http\Requests\Flight_info_request ; 
+use lluminate\Http\Resources\FlightResource ; 
+use App\Http\Requests\FlightRequest ; 
 use Format; 
 
-class Flight_controller extends Controller
+class FlightController extends Controller
 {
     /**
      * Display a listing of the resource: this will be used for the search engine.
      */
     public function index()
     {
-        return $this->format(['Index found', Response::HTTP_OK, Flight_info_resource::collection(Flight_info::all())]); 
+        return $this->format(['Index found', Response::HTTP_OK, FlightResource::collection(Flight::all())]); 
     }
 
     /**
@@ -29,16 +29,16 @@ class Flight_controller extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(FLight_info_request $request)
+    public function show(FlightResource $request)
     {
-        $response = Flight_info_resource::make($request);
-        return new Flight_info_Resource($response); 
+        $response = FlightResource::make($request);
+        return new FlightResource($response); 
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Flight_info $flight_info)
+    public function update(Request $request, Flight $flight)
     {
         // not managed in the back-end
     }
@@ -46,7 +46,7 @@ class Flight_controller extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Flight_info $flight_info)
+    public function destroy(Flight $flight)
     {
         // not managed in the back-end
     }
