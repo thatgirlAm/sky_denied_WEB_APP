@@ -14,4 +14,4 @@ Route::get('/user', function (Request $request) {
 
 //-- Using CRUD --//
 // (TEST: trying to display the index with the CRUD function)
-Route::apiResource('flight', FlightController::class); 
+Route::apiResource('flights', FlightController::class); 
