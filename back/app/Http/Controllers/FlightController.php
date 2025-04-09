@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Flight;
 use Illuminate\Http\Request;
-use lluminate\Http\Resources\FlightResource ; 
+use App\Http\Resources\FlightResource ; 
 use App\Http\Requests\FlightRequest ; 
-use Format; 
+use Symfony\Component\HttpFoundation\Response;
 
 class FlightController extends Controller
 {
+    use FormatTrait;
     /**
      * Display a listing of the resource: this will be used for the search engine.
      */

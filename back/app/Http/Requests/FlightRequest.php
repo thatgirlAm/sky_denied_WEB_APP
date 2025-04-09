@@ -22,7 +22,7 @@ class FlightInfoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'flight_id'=>'required|string',
+            'tail_number'=>'required|string',
             'departure_time'=>'required|date'
         ];
     }
