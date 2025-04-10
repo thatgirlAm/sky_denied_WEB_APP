@@ -41,7 +41,7 @@ class FlightController extends Controller
      */
     public function update(Request $request, Flight $flight)
     {
-        // not managed in the back-end
+        $flight->update($request->all());
     }
 
     /**

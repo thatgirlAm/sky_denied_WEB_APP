@@ -1,5 +1,5 @@
 <?php
-// source: personal project : https://github.com/thatgirlAm/daisy/blob/main/back/app/Http/Controllers/FormatTrait.php ; 
+// source: personal project - Daisy : https://github.com/thatgirlAm/daisy/blob/main/back/app/Http/Controllers/FormatTrait.php ; 
 // author: Amaëlle DIOP - 461543 -- Sky Denied 
 
 namespace App\Http\Controllers;
@@ -7,7 +7,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-// The response to an API call should be in a particular format for every request; having a format controller helps setting the wanted format of a response 
+// Any response to an API call should be in a particular format for every request; 
+// having a format controller helps setting the wanted format of a response. 
 
 Trait FormatTrait 
 {

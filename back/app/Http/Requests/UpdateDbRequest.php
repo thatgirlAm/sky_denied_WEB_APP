@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FlightRequest extends FormRequest
+class UpdateDbRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,7 @@ class FlightRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tail_number'=>'required|string',
-            'departure_time'=>'required|date'
+            //
         ];
     }
 }
