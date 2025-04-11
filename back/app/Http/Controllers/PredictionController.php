@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Prediction;
 use Illuminate\Http\Request;
-use App\Htpp\Request\CrawlingRequest ; 
-use App\Htpp\Request\ModelRequest ; 
+use \App\Http\Requests\CrawlingRequest ; 
+use \App\Http\Requests\ModelRequest; 
+use PhpParser\Node\Stmt\Catch_;
 use Symfony\Component\Process\Process;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Process\Exceptions\ProcessFailedException;
@@ -74,9 +75,12 @@ class PredictionController extends Controller
     // function to trigger the data python script and crawl the data
     public function crawling_trigger(CrawlingRequest $crawling_request)
     {
-        $tail_number = $crawling_request->tail_number; 
-        $script_path = base_path('data/main.py') ; 
-        $process = new Process(['python3', $script_path, $tail_number]);
+        $tail_number = $crawling_request->route('tail_number');
+     
+        // TODO: change the path
+        $script_path = base_path('../test/data.py') ; 
+        // TODO: change the python path
+        $process = new Process(['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', $script_path, $tail_number]);
 
         try
         {
@@ -88,6 +92,7 @@ class PredictionController extends Controller
         {
             return $this->format_error('Script did not run: '. $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+            
     }
 
     // function to handle the data resizing                   
@@ -128,15 +133,43 @@ class PredictionController extends Controller
         $data = json_encode($model_request['data']);
 
         // TODO: replace by model's path
-        $script_path = base_path('model_path.py') ; 
-        $process = new Process(['python3', $script_path, $data]);
-        try{
+        $script_path = base_path('../test/model.py') ; 
+        $process = new Process(['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', $script_path, $data]);
+        try
+        {
             $process->run();
             return json_decode($process->getOutput(), true);
         }
         catch (\Exception $e) 
         {
             return $this->format_error('Model did not run', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    public function model_trigger_test()
+    {
+        // data is an array with 2 json files: one for flight information and one for weather information 
+        // $data = json_encode($model_request['data']);
+        $tail_number = '12HBDN';
+        $crawlingRequest = new CrawlingRequest(['tail_number' => $tail_number]);
+        $data = $this->crawling_trigger($crawlingRequest);
+        $response_data = $data->getData();
+        $data_array = json_decode(json_encode($response_data), true); 
+        $data_formatted = $this->data_handling(new Request($data_array));
+
+        $data_array = json_encode($data_formatted);
+        // TODO: replace by model's path
+        $script_path = base_path('../test/model.py') ; 
+        $process = new Process(['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', $script_path, $data_formatted]);
+        try
+        {
+            $process->run();
+            return json_decode($process->getOutput(), true);
+        }
+        catch (\Exception $e) 
+        {
+            return $this->format_error('Model did not run : ' .$e, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -169,8 +202,8 @@ class PredictionController extends Controller
             }
 
             // Updating the DB
-            $flight->update($status, $flight);
-            $prediction->update($prediction_data, $prediction);
+            $flight->update($status, $flight_data);
+            $prediction->update($prediction_data, $prediction_data);
 
             return $this->format(['Prediction OK', Response::HTTP_OK, $prediction]);
         }
@@ -179,5 +212,10 @@ class PredictionController extends Controller
             return $this->format_error('The scheme did not run', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         }
+    
+    catch (ProcessFailedException $e)
+    {
+        return $this->format_error('Prediction did not run', Response::HTTP_INTERNAL_SERVER_ERROR);
     }
+}
 }
