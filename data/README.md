@@ -88,10 +88,10 @@ deactivate
 
 ## Important Note
 - Make sure to setup .env file for database connection
-POSTGRES_HOST= ""
-POSTGRES_PORT= ""
-POSTGRES_DB= ""
-POSTGRES_USER= ""
-POSTGRES_PASSWORD= ""
+  - POSTGRES_HOST= ""
+  - POSTGRES_PORT= ""
+  - POSTGRES_DB= ""
+  - POSTGRES_USER= ""
+  - POSTGRES_PASSWORD= ""
 - Check log file if there are any issues.
 - Potentially have to handel SSL certificate
