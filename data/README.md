@@ -2,7 +2,7 @@
 
 ## Installation Guide
 
-### Setting Up the Environment (cleanData)
+### Setting Up the Environment
 
 To set up your environment for running `main.py`:
 Make sure to have python version 3.9 or above installed.
