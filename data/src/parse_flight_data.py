@@ -9,7 +9,8 @@ from Flightera and Flightradar24.
 import re
 import pandas as pd
 from dateutil import parser
-import datetime
+from datetime import datetime
+
 
 def parse_flightera(soup, mode="arrival"):
     rows = soup.find_all("tr", class_=lambda c: c and ("bg-white" in c or "bg-gray-50" in c))
@@ -141,7 +142,6 @@ def parse_flightera(soup, mode="arrival"):
 
     return pd.DataFrame(flight_data)
 
-
 def parse_flightradar24(soup, mode="arrival"):
     table = soup.find("table", class_="table table-condensed table-hover data-table m-n-t-15")
     if table is None:
@@ -161,9 +161,9 @@ def parse_flightradar24(soup, mode="arrival"):
                 flight_date_raw = date_td.get_text(strip=True)  # e.g. "Tuesday, Apr 01"
                 # remove weekday
                 flight_date_no_days = flight_date_raw.split(", ")[1]  # "Apr 01"
-                current_year = datetime.datetime.now().year
+                current_year = datetime.now().year
                 full_date_str = f"{flight_date_no_days} {current_year}"
-                parsed_date = datetime.datetime.strptime(full_date_str, "%b %d %Y")
+                parsed_date = datetime.strptime(full_date_str, "%b %d %Y")
                 flight_date = parsed_date.strftime("%Y-%m-%d")
             continue
 
@@ -183,7 +183,7 @@ def parse_flightradar24(soup, mode="arrival"):
         try:
             code_iata = airport_location.split("(")[1].split(")")[0]  # "BGY"
         except IndexError:
-            code_iata = ""
+            code_iata = None
 
         # --- Tail Number (Optional) ---
         aircraft_info = cols[4].get_text(" ", strip=True)  # e.g. "B38M (9H-VUE)"
@@ -208,3 +208,75 @@ def parse_flightradar24(soup, mode="arrival"):
         flight_data.append(flight_record)
 
     return pd.DataFrame(flight_data)
+
+def split_status(val):
+    if " " in val:
+        parts = val.split(" ", 1)
+        return pd.Series([parts[1], parts[0]])
+    return pd.Series(["", val])
+
+def parse_flightradar24_aircraft(soup):
+    info_rows = soup.select("#cnt-aircraft-info .row")
+    airline = ""
+    for row in info_rows:
+        label = row.find("label")
+        if label and label.get_text(strip=True).upper() == "AIRLINE":
+            airline_span = row.find("span", class_="details")
+            if airline_span:
+                airline = airline_span.get_text(strip=True)
+    
+    tail_number = soup.find_all("h1")[0].get_text(strip=True).split("-")[1]
+    # Find all rows in the flight history table
+    rows = soup.find_all("tr", class_="data-row")
+    flight_history = []
+
+    def convert_to_24h(time_str):
+        if "AM" in time_str or "PM" in time_str:
+            try:
+                return datetime.strptime(time_str, "%I:%M %p").strftime("%H:%M")
+            except ValueError:
+                return ""
+
+    for row in rows:
+        cells = row.find_all("td")
+        if len(cells) < 13:
+            continue
+        flight_date = cells[2].get_text(strip=True)
+        flight_date = pd.to_datetime(flight_date, format="%d %b %Y").strftime("%Y-%m-%d")
+        depart_from = cells[3].get_text(strip=True).rsplit("(", 1)[0].strip()
+        depart_from_iata = cells[3].find("a")
+        depart_from_iata = depart_from_iata.get_text(strip=True).strip("()") if depart_from_iata else ""
+
+        arrive_at = cells[4].get_text(strip=True).rsplit("(", 1)[0].strip()
+        arrive_at_iata = cells[4].find("a")
+        arrive_at_iata = arrive_at_iata.get_text(strip=True).strip("()") if arrive_at_iata else ""
+
+        flight_number_iata = cells[5].get_text(strip=True)
+        duration = cells[6].get_text(strip=True)
+        scheduled_departure_local = convert_to_24h(cells[7].get_text(strip=True))
+        actual_departure_local = convert_to_24h(cells[8].get_text(strip=True))
+        scheduled_arrival_local = convert_to_24h(cells[9].get_text(strip=True))
+
+        status = cells[11].get_text(strip=True)
+        parts = status.split(" ", 1)
+        status = parts[0]
+        actual_arrival_local = convert_to_24h(parts[1]) if len(parts) > 1 else ""
+
+        flight_history.append({
+            "flight_date": flight_date,
+            "airline": airline,
+            "tail_number": tail_number,
+            "depart_from": depart_from,
+            "depart_from_iata": depart_from_iata,
+            "arrive_at": arrive_at,
+            "arrive_at_iata": arrive_at_iata,
+            "flight_number_iata": flight_number_iata,
+            "duration": duration,
+            "scheduled_departure_local": f"{flight_date} {scheduled_departure_local}" if scheduled_departure_local else "",
+            "actual_departure_local": actual_departure_local,
+            "scheduled_arrival_local": scheduled_arrival_local,
+            "actual_arrival_local": actual_arrival_local,
+            "status": status
+        })
+    
+    return pd.DataFrame(flight_history)
