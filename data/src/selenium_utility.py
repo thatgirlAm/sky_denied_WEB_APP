@@ -6,6 +6,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
+import logging
+
+logger = logging.getLogger("schedule")
 
 def gen_driver():
     try:
@@ -35,17 +38,22 @@ def gen_driver():
             fix_hairline=True,
         )
 
+        logger.info("Chrome driver initialized successfully.")
         return driver
 
     except Exception as e:
-        print("Error initializing Chrome driver:", e)
+        logger.exception("Error initializing Chrome driver: %s", e)
         return None
 
 def driver_wait(driver, xpath, random_start=1, random_end=2, wait_time=30):
-    WebDriverWait(driver, wait_time).until(
-        EC.presence_of_element_located((By.XPATH, xpath))
-    )
-    time.sleep(random.uniform(random_start, random_end))
+    try:
+        WebDriverWait(driver, wait_time).until(
+            EC.presence_of_element_located((By.XPATH, xpath))
+        )
+        time.sleep(random.uniform(random_start, random_end))
+        logger.info("Element at xpath '%s' is present.", xpath)
+    except Exception as e:
+        logger.warning("Timeout waiting for element at xpath '%s': %s", xpath, e)
 
 def click_button(driver, xpath, wait_time=10, scroll=True):
     try:
@@ -60,22 +68,18 @@ def click_button(driver, xpath, wait_time=10, scroll=True):
             time.sleep(random.uniform(0.8, 1.5))
         actions = ActionChains(driver)
         actions.move_to_element(button).pause(random.uniform(0.4, 1.2)).click().perform()
-        print("Button clicked successfully!")
+        logger.info("Button at xpath '%s' clicked successfully.", xpath)
         return True
     except Exception as e:
-        print(f"Failed to click button at {xpath}: {e}")
+        logger.warning("Failed to click button at xpath '%s': %s", xpath, e)
         return False
 
 def click_all_buttons(driver, xpath):
     click_count = 0
     while True:
-        print(f"Clicking button ({click_count + 1})...")
+        logger.info("Attempting to click button #%d at xpath '%s'...", click_count + 1, xpath)
         if not click_button(driver, xpath):
-            print("No more buttons found.")
+            logger.info("No more buttons found after %d clicks.", click_count)
             break
         click_count += 1
         time.sleep(random.uniform(1.0, 3.0))  # simulate load time
-
-
-
-
