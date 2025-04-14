@@ -11,7 +11,7 @@ Route::middleware([])->group(function () {
 // (TEST: trying to display the index with the CRUD function)
 Route::apiResource('/flights', FlightController::class); 
 Route::apiResource('/prediction', PredictionController::class); 
-Route::post('/flights/search/{tail_number}/{flight_date_utc}/{flight_number_iata}', [FlightController::class,'search_engine']);
+Route::post('/flights/search/', [FlightController::class,'search_engine']);
 
 // -- Prediction -- // 
 // Route for the entire prediction scheme

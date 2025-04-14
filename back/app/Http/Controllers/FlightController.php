@@ -55,10 +55,10 @@ class FlightController extends Controller
     public function search_engine(FlightRequest $request)
     {
         // Extract search parameters from the request
-        $date = $request->route('flight_date_utc');
-        $tail_number = $request->route('tail_number');
-        $flight_number = $request->route('flight_number_iata');
-        return $date . " ". $tail_number . " " . $flight_number;
+        $response = $request->all();
+        $tail_number = $response['tail_number'] ?? null;
+        $date = $response['flight_date_utc'] ?? null;
+        $flight_number = $response['flight_number_iata'] ?? null;
 
         $query = Flight::query();
 
