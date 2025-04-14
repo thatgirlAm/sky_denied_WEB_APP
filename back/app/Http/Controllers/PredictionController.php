@@ -158,10 +158,10 @@ class PredictionController extends Controller
         $data_array = json_decode(json_encode($response_data), true); 
         $data_formatted = $this->data_handling(new Request($data_array));
 
-        $data_array = json_encode($data_formatted);
+        $data_array_passed= json_encode($data_formatted);
         // TODO: replace by model's path
-        $script_path = base_path('../test/model.py') ; 
-        $process = new Process(['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', $script_path, $data_formatted]);
+        $script_path = base_path('../test/model_test.py') ; 
+        $process = new Process(['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', $script_path, $data_array_passed]);
         try
         {
             $process->run();
