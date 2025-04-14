@@ -23,6 +23,7 @@ def gen_driver():
         brave_options.binary_location = '/Applications/Brave Browser.app/Contents/MacOS/Brave Browser'  # Path to Brave
         
         # Common options
+        brave_options.add_argument("--headless=new")
         brave_options.add_argument("--start-maximized")
         brave_options.add_argument(f"user-agent={user_agent}")
         brave_options.add_argument("--disable-blink-features=AutomationControlled")

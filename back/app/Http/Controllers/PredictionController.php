@@ -76,21 +76,25 @@ class PredictionController extends Controller
     public function crawling_trigger(CrawlingRequest $crawling_request)
     {
         $tail_number = $crawling_request->route('tail_number');
-     
+        $mode = "real_time" ; 
         // TODO: change the path
-        $script_path = base_path('../test/data.py') ; 
+        $script_path = base_path('../data/main.py') ; 
+        $data = json_encode([[
+            'aircraft' => $tail_number,
+            'mode' => $mode
+        ]]);
         // TODO: change the python path
-        $process = new Process(['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', $script_path, $tail_number]);
+        $process = new Process(['python3', $script_path, $data]);
 
-        try
+        try 
         {
             $process->mustRun();
             $output = json_decode($process->getOutput(), true);
             return $this->format(['Script Run successfully', Response::HTTP_OK, $output]);
-        }
-        catch (ProcessFailedException $e)
+        } 
+        catch (ProcessFailedException $e) 
         {
-            return $this->format_error('Script did not run: '. $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->format_error('Script did not run: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
             
     }
@@ -134,7 +138,7 @@ class PredictionController extends Controller
 
         // TODO: replace by model's path
         $script_path = base_path('../test/model.py') ; 
-        $process = new Process(['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', $script_path, $data]);
+        $process = new Process(['python3', $script_path, $data]);
         try
         {
             $process->run();
