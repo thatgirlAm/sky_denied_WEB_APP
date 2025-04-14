@@ -23,7 +23,7 @@ class FlightRequest extends FormRequest
     {
         return [
             'tail_number'=>'required|string',
-            'departure_time'=>'required|date'
+            //'departure_time'=>'required|date'
         ];
     }
 }

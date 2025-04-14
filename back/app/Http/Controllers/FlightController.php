@@ -51,4 +51,37 @@ class FlightController extends Controller
     {
         // not managed in the back-end
     }
+
+    public function search_engine(FlightRequest $request)
+    {
+        // Extract search parameters from the request
+        $date = $request->route('flight_date_utc');
+        $tail_number = $request->route('tail_number');
+        $flight_number = $request->route('flight_number_iata');
+        return $date . " ". $tail_number . " " . $flight_number;
+
+        $query = Flight::query();
+
+        if ($date) 
+        {
+            $query->whereDate('flight_date_utc', $date);
+        }
+
+        if ($tail_number) 
+        {
+            $query->where('tail_number', 'LIKE', "%{$tail_number}%");
+        }
+
+        if ($flight_number) 
+        {
+            $query->where('flight_number_iata', 'LIKE', "%{$flight_number}%");
+        }
+
+        // Execute the query and get results
+        $results = $query->get();
+
+        return $results;
+//$this->format(['Search completed successfully', Response::HTTP_OK, FlightResource::collection($results)]);
+    }
+    
 }

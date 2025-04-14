@@ -10,11 +10,13 @@ class FlightResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
     {
         return [
+
             'flight_date' => $this->flight_date,
             'flight_date_utc' => $this->flight_date_utc,
             'flight_number_iata' => $this->flight_number_iata,
@@ -41,6 +43,8 @@ class FlightResource extends JsonResource
             'actual_arrival_local_tz' => $this->actual_arrival_local_tz,
             'actual_arrival_utc' => $this->actual_arrival_utc,
             'duration' => $this->duration,
+
+            
         ];
     }
 }
