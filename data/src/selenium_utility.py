@@ -31,7 +31,9 @@ def get_chrome_path():
     for path in paths:
         if path and os.path.exists(path):
             return path
-    return None
+        
+    fallback = shutil.which("google-chrome") or shutil.which("chrome") or shutil.which("chromium")
+    return fallback
 
 
 def gen_driver():
