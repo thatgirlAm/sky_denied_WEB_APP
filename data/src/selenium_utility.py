@@ -18,8 +18,59 @@ def gen_driver():
             "Chrome/134.0.0.0 Safari/537.36"
         )
 
+        # Configure Brave options
+        brave_options = uc.ChromeOptions()
+        brave_options.binary_location = '/Applications/Brave Browser.app/Contents/MacOS/Brave Browser'  # Path to Brave
+        
+        # Common options
+        brave_options.add_argument("--start-maximized")
+        brave_options.add_argument(f"user-agent={user_agent}")
+        brave_options.add_argument("--disable-blink-features=AutomationControlled")
+        brave_options.add_argument("--no-sandbox")
+        brave_options.add_argument("--disable-dev-shm-usage")
+        brave_options.add_argument('--ignore-ssl-errors')
+        brave_options.add_argument('--ignore-certificate-errors')
+
+        # Disable SSL verification in Selenium Wire
+        seleniumwire_options = {
+            'verify_ssl': False,
+            'suppress_connection_errors': False
+        }
+
+        driver = uc.Chrome(
+            version_main=134,
+            options=brave_options,
+            seleniumwire_options=seleniumwire_options,
+            browser_executable_path=brave_options.binary_location
+        )
+
+        stealth(
+            driver,
+            languages=["en-US", "en"],
+            vendor="Google Inc.",
+            platform="Win32",
+            webgl_vendor="Intel Inc.",
+            renderer="Intel Iris OpenGL Engine",
+            fix_hairline=True,
+        )
+
+        logger.info("Brave driver initialized successfully.")
+        return driver
+
+    except Exception as e:
+        logger.exception("Error initializing Brave driver: %s", e)
+        return None
+    
+def gen_driver1():
+    try:
+        user_agent = (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/134.0.0.0 Safari/537.36"
+        )
+
         chrome_options = uc.ChromeOptions()
-        chrome_options.add_argument("--headless=new")
+        # chrome_options.add_argument("--headless=new")
         chrome_options.add_argument("--start-maximized")
         chrome_options.add_argument(f"user-agent={user_agent}")
         chrome_options.add_argument("--disable-blink-features=AutomationControlled")
