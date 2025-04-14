@@ -8,8 +8,11 @@ To set up your environment for running `main.py`:
 Make sure to have python version 3.9 or above installed.
 
 ```bash
+# On macOS and Linux.
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
 # Create a virtual environment
-python3 -m venv .venv
+uv venv --python 3.11 .venv
 
 # Activate the virtual environment
 # On Windows:
@@ -18,7 +21,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 
 # Install necessary packages
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 
 # Prepare input for main
 # Structure for scheudle mode: '[{"mode": "schedule", "airport_list_iata": ["NCL", "DUB"]}]'
@@ -27,7 +30,7 @@ pip install -r requirements.txt
 # Run your Python scripts in schedule mode
 python main.py '[{"mode": "schedule", "airport_list_iata": ["NCL", "DUB"]}]'
 # Or realtime mode
-python3 main.py  '[{"mode": "realtime", "aircraft": "n688sl"}]' 
+python main.py  '[{"mode": "realtime", "aircraft": "n688sl"}]' 
 
 # Expected output from main
 # Scheudle mode: Direct push to database
