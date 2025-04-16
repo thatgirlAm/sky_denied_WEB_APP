@@ -75,35 +75,45 @@ class PredictionController extends Controller
 
     // function to trigger the data python script and crawl the data
     public function crawling_trigger(CrawlingRequest $crawling_request)
-    {
-        $tail_number = $crawling_request->route('tail_number');
-        $mode = "real_time" ; 
-        // TODO: change the path
-        $script_path = base_path('../data/main.py') ; 
-        $data = json_encode([[
-            'aircraft' => $tail_number,
-            'mode' => $mode
-        ]]);
-        // TODO: change the python path
-        $process = new Process(['python3', $script_path, $data]);
-        $process->setTimeout(120);
+{
+    $tail_number = $crawling_request->query('tail_number');
+    $mode = $crawling_request->query('mode');
 
-        try 
-        {
-            $process->mustRun();
-            $output = json_decode($process->getOutput(), true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                Log::error("JSON decode error: " . json_last_error_msg());
-                return $this->format_error('Error parsing script output: ' . json_last_error_msg(), Response::HTTP_INTERNAL_SERVER_ERROR);
-            }
-            return $this->format(['Script Run successfully', Response::HTTP_OK, $output]);
-        } 
-        catch (ProcessFailedException $e) 
-        {
-            return $this->format_error('Script did not run: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+    
+    // Construct the JSON data to be passed to the Python script
+    $data = json_encode([[
+        'aircraft' => $tail_number,
+        'mode' => $mode
+    ]]);
+
+    // Determine the script path using a relative path
+    $script_path = base_path('../data/main.py');
+
+    // Define the Python binary path (adjust if necessary)
+    $process = new Process(['python3', $script_path, $data]);
+    $process->setTimeout(120);
+
+    try {
+        $process->mustRun();
+        
+        // Trim the output and log it for debugging
+        $output = trim($process->getOutput());
+        \Log::info("Raw Python output: " . $output);
+
+        // Attempt to decode the JSON output
+        $result = json_decode($output, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            \Log::error("JSON decode error: " . json_last_error_msg());
+            \Log::error("Raw output: " . $output);
+            return $this->format_error('Error parsing script output: ' . json_last_error_msg(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-            
+
+        return $this->format(['Script ran successfully', Response::HTTP_OK, $result]);
+    } catch (ProcessFailedException $e) {
+        return $this->format_error('Script did not run: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
+}
+
 
     // function to handle the data resizing                   
     public function data_handling(Request $request)
