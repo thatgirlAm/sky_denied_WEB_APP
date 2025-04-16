@@ -76,9 +76,9 @@ class PredictionController extends Controller
     // function to trigger the data python script and crawl the data
     public function crawling_trigger(CrawlingRequest $crawling_request)
 {
-    $tail_number = $crawling_request->query('tail_number');
-    $mode = $crawling_request->query('mode');
-
+    $tail_number = $crawling_request->tail_number;
+    $mode = $crawling_request->mode;
+   
     
     // Construct the JSON data to be passed to the Python script
     $data = json_encode([[
