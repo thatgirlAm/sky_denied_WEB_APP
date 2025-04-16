@@ -13,15 +13,6 @@ h1 {
   text-align: center;
 }
 
-h2::before {
-  content: "";
-  display: block;
-  width: 60px;
-  height: 2px;
-  background-color: var(--purple_sd);
-  margin: 0 auto 8px auto;
-}
-
 h2 {
   font-family: 'Lora', serif;
   font-size: 24px;
@@ -68,7 +59,6 @@ a:hover {
 a:hover::after {
   transform: scaleX(1);
 }
-
 
 button {
   font-size: 16px;

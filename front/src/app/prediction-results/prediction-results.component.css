@@ -1,0 +1,107 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+.prediction-popup {
+  width: 70%;
+  border: 2px solid var(--blue_sd);
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 32px;
+  color: var(--blue_sd);
+  background: none;
+  font-weight: bold;
+}
+
+.flight-header h1 {
+  margin-bottom: 0;
+}
+
+.flight-header h2 {
+  margin-top: 0;
+}
+
+.flight-date {
+  color: black;
+  font-family: 'Lato', sans-serif;
+  font-weight: normal;
+  font-size: 24px;
+}
+
+.flight-route {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 40px 30px;
+}
+
+.location {
+  font-family: 'Lato', sans-serif;
+  text-align: center;
+}
+
+.location-label {
+  color: var(--purple_sd);
+  font-family: 'Lora', serif;
+  font-size: 24px;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.city {
+  font-size: 28px;
+  margin: 0;
+}
+
+.time {
+  font-size: 26px;
+  margin: 5px 0;
+}
+
+.plane-container {
+  flex: 0 0 40%;
+  text-align: center;
+}
+
+.plane-icon {
+  font-size: 50px;
+  color: black;
+}
+
+.divider {
+  width: 30%;
+  height: 2px;
+  background-color: black;
+  margin: 0 20px 18px;
+  display: inline-block;
+}
+
+.prediction-banner {
+  background-color: var(--green_sd);
+  color: white;
+  text-align: center;
+  padding: 15px;
+  font-size: 36px;
+  font-family: 'Lora', serif;
+}
+
+.prediction-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.claim-button {
+  background-color: var(--red_sd);
+  font-size: 24px;
+  margin-left: auto;
+}
