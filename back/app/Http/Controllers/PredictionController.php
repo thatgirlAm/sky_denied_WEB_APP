@@ -11,6 +11,7 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Process\Exceptions\ProcessFailedException;
 use App\Models\Flight;
+use Illuminate\Support\Facades\Log; 
 
 class PredictionController extends Controller
 {
@@ -85,11 +86,16 @@ class PredictionController extends Controller
         ]]);
         // TODO: change the python path
         $process = new Process(['python3', $script_path, $data]);
+        $process->setTimeout(120);
 
         try 
         {
             $process->mustRun();
             $output = json_decode($process->getOutput(), true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                Log::error("JSON decode error: " . json_last_error_msg());
+                return $this->format_error('Error parsing script output: ' . json_last_error_msg(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
             return $this->format(['Script Run successfully', Response::HTTP_OK, $output]);
         } 
         catch (ProcessFailedException $e) 

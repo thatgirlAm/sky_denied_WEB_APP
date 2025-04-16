@@ -114,6 +114,31 @@ def run_realtime_mode(aircraft):
     
     if df.empty:
         logger.warning(f"No data found for aircraft: {aircraft}")
+        # Make sure to output valid JSON even when empty
+        print('[]')  # This is critical
+        logger.info("REALTIME mode completed with no data.")
+        return
+    
+    # For non-empty dataframes
+    df_cleaned = clean_aircraft(df)
+    logger.info("Realtime aircraft data cleaned: %d rows", len(df_cleaned))
+
+    # Ensure proper JSON formatting and print to stdout
+    json_array = df_cleaned.to_dict(orient="records")
+    json_string = json.dumps(json_array)
+    logger.info(f"Outputting JSON data: {json_string[:100]}...")  # Log the start of the output
+    print(json_string)  # This is critical - must print to stdout
+
+    logger.info("REALTIME mode completed.")
+'''
+def run_realtime_mode(aircraft):
+    logger = create_logger("realtime", "realtime.log")
+    logger.info("REALTIME mode started for aircraft: %s", aircraft)
+
+    df = run_flightradar24_aircraft_scrape(logger, aircraft)
+    
+    if df.empty:
+        logger.warning(f"No data found for aircraft: {aircraft}")
         # Return an empty array as JSON
         print(json.dumps([]))
         logger.info("REALTIME mode completed with no data.")
@@ -129,7 +154,7 @@ def run_realtime_mode(aircraft):
     print(json_string)
 
     logger.info("REALTIME mode completed.")
-'''
+
 def run_realtime_mode(aircraft):
     # Create or get the realtime logger
     logger = create_logger("realtime", "realtime.log")
