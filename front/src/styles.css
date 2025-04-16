@@ -6,9 +6,38 @@
   --green_sd: #28A745;
 }
 
+h1 {
+  font-family: 'Lora', serif;
+  font-size: 48px;
+  color: var(--purple_sd);
+  text-align: center;
+}
+
+h2::before {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 2px;
+  background-color: var(--purple_sd);
+  margin: 0 auto 8px auto;
+}
+
+h2 {
+  font-family: 'Lora', serif;
+  font-size: 24px;
+  color: var(--purple_sd);
+  text-align: center;
+}
+
 body {
   font-family: 'Lato', sans-serif;
   font-size: 16px;
+}
+
+label {
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  color: black;
 }
 
 a {
