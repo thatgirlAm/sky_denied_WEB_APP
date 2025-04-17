@@ -9,7 +9,7 @@
 .section-divider {
   border: none;
   height: 2px;
-  background-color: var(--purple_sd)
+  background-color: var(--purple_sd);
   margin: 30px 0 10px;
 }
 
