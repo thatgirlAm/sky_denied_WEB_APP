@@ -8,8 +8,13 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class SearchResultsComponent {
   @Output() predictClicked = new EventEmitter<void>();
+  @Output() notifyClicked = new EventEmitter<void>();
 
   triggerPredictionPopup() {
     this.predictClicked.emit();
+  }
+
+  triggerGetNotifiedPopup() {
+    this.notifyClicked.emit();
   }
 }

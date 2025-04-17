@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 
 @Component({
   selector: 'app-input-email-form',
@@ -7,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrl: './input-email-form.component.css'
 })
 export class InputEmailFormComponent {
+  @Output() closeGetNotifiedPopup = new EventEmitter<void>();
 
+  close() {
+    this.closeGetNotifiedPopup.emit();
+  }
 }

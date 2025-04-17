@@ -9,7 +9,7 @@
 .section-divider {
   border: none;
   height: 2px;
-  background-color: var(--purple_sd); /* Or any color you'd like */
+  background-color: var(--purple_sd)
   margin: 30px 0 10px;
 }
 
@@ -67,7 +67,7 @@ a:hover::after {
   transform: scaleX(1);
 }
 
-button {
+button, input[type="submit"] {
   font-size: 16px;
   font-family: 'Lora', serif;
   color: white;
@@ -77,3 +77,13 @@ button {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+
+input {
+  border: none;
+  border-bottom: 1px solid lightgrey;
+}
+
+label {
+  margin: 0.5rem;
+}
+

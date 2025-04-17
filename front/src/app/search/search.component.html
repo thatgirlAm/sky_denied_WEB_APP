@@ -1,4 +1,5 @@
 <app-search-form></app-search-form>
-<app-search-results (predictClicked)="handlePredictionTrigger()"></app-search-results>
+<app-search-results (predictClicked)="handlePredictionTrigger()" (notifyClicked)="handleGetNotifiedTrigger()"></app-search-results>
 
 <app-prediction-results *ngIf="showPredictionPopup" (closePopup)="closePredictionPopup()"></app-prediction-results>
+<app-input-email-form *ngIf="showGetNotifiedPopup" (closeGetNotifiedPopup)="closeGetNotifiedPopup()"></app-input-email-form>

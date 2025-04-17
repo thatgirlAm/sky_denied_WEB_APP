@@ -40,15 +40,6 @@ h2::before {
   margin: 1rem 0;
 }
 
-.input-box label {
-  margin: 0.5rem;
-}
-
-.input-box input {
-  border: none;
-  border-bottom: 1px solid lightgrey;
-}
-
 .search-button button {
   background-color: var(--blue_sd);
   align-content: end;
