@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-prediction-results',
@@ -7,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrl: './prediction-results.component.css'
 })
 export class PredictionResultsComponent {
+  @Output() closePopup = new EventEmitter<void>();
 
+  close() {
+    this.closePopup.emit();
+  }
 }

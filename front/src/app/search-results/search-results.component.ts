@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-search-results',
@@ -7,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrl: './search-results.component.css'
 })
 export class SearchResultsComponent {
+  @Output() predictClicked = new EventEmitter<void>();
 
+  triggerPredictionPopup() {
+    this.predictClicked.emit();
+  }
 }

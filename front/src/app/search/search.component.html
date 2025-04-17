@@ -1,3 +1,4 @@
 <app-search-form></app-search-form>
-<app-search-results></app-search-results>
-<app-prediction-results></app-prediction-results>
+<app-search-results (predictClicked)="handlePredictionTrigger()"></app-search-results>
+
+<app-prediction-results *ngIf="showPredictionPopup" (closePopup)="closePredictionPopup()"></app-prediction-results>
