@@ -10,5 +10,5 @@ export const routes: Routes = [
   { path: 'homepage', component: HomepageComponent  },
   { path: 'about-us', component: AboutUsComponent },
   { path: 'our-model', component: OurModelComponent },
-  { path: 'search-results', component: SearchComponent },
+  { path: 'search', component: SearchComponent },
 ];
