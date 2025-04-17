@@ -1,0 +1,114 @@
+.results {
+  margin:auto;
+  width: 80%;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 0 10px 0;
+}
+
+.header-cell {
+  flex: 1;
+  text-align: center;
+  padding: 15px;
+  font-weight: bold;
+  font-size: 24px;
+  font-family: 'Lora', serif;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-cell:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 15%;
+  right: 0;
+  width: 1px;
+  height: 70%;
+  background-color: var(--purple_sd);
+}
+
+.flight-card {
+  border: 2px solid var(--purple_sd);
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.flight-info {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.cell {
+  flex: 1;
+  padding: 15px;
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Divider */
+.cell:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  right: 0;
+  width: 1px;
+  height: 80%;
+  background-color: var(--purple_sd);
+}
+
+.notify-button {
+  margin-top: 5px;
+  background-color: var(--blue_sd);
+  padding: 4px 8px;
+  border-radius: 5px;
+}
+
+.flight-time {
+  font-size: 16px;
+}
+
+.predict-button {
+  background-color: var(--blue_sd);
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+}
+
+.load-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.load-button {
+  background: none;
+  border: none;
+  color: var(--purple_sd);
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.load-button img {
+  display: block;
+  height: 40px;
+  width: 40px;
+  margin-bottom: 5px;
+}

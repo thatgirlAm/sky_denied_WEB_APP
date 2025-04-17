@@ -6,6 +6,13 @@
   --green_sd: #28A745;
 }
 
+.section-divider {
+  border: none;
+  height: 2px;
+  background-color: var(--purple_sd); /* Or any color you'd like */
+  margin: 30px 0 10px;
+}
+
 h1 {
   font-family: 'Lora', serif;
   font-size: 48px;
