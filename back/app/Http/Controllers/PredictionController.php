@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Process\Exceptions\ProcessFailedException;
 use App\Models\Flight;
 use Illuminate\Support\Facades\Log; 
+use App\Http\Requests\DataHandlingRequest;
 
 class PredictionController extends Controller
 {
@@ -116,34 +117,48 @@ class PredictionController extends Controller
 
 
     // function to handle the data resizing                   
-    public function data_handling(Request $request)
+    public function data_handling(DataHandlingRequest $request)
     {
-    $response = $request->all(); 
-    $flights = $response['flights'] ?? []; // Extracting flights from request data
-    $result = [];
-    if ($response['status'] == Response::HTTP_OK) {
-        foreach ($flights as $index => $flight) {
-            if ($flight['flag'] == '1') {
-                // Adding the flagged flight (flag to know which flight is the predicted one)
-                $result[] = $flight;
-
-                // Add the 3 preceding flights
-                for ($i = 1; $i <= 3; $i++) {
-                    if (isset($flights[$index - $i])) 
-                    {
-                        $result[] = $flights[$index - $i];
+        // Extract the response body from the request
+        $response = $request->all(); 
+        
+        // Ensure 'data' key exists and is an array
+        $flights = $response['data']['flights'] ?? []; 
+        $main_scheduled_departure_utc = $response["data"]["main_scheduled_departure_utc"];
+        
+        $result = [];
+        
+        // Check if the response status is HTTP_OK
+        if ($response['status'] == Response::HTTP_OK) {
+            foreach ($flights as $index => $flight) {
+                // Check if the flight's UTC date matches the main flight date
+                if (isset($flight['scheduled_departure_utc']) && $flight['scheduled_departure_utc']==$main_scheduled_departure_utc) 
+                {
+                    // Add the main flight
+                    $result[] = $flight;
+    
+                    // Add the 3 preceding flights if they exist
+                    for ($i = 1; $i <= 3; $i++) {
+                        if (isset($flights[$index - $i])) {
+                            $result[] = $flights[$index - $i];
+                        }
                     }
+                    break; // Exit after processing the first matching flight
                 }
-                break; 
             }
+    
+            // Return the result as JSON
+            return response()->json(['data' => $result], Response::HTTP_OK);
+        } else {
+            // Handle error case
+            return $this->format_error(
+                'Crawling data from flight went wrong', 
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
-        // Return the result in array(JSON) 
-        return array(response()->json(['data' => $result], Response::HTTP_OK));
-    } else 
-    {
-        return $this->format_error('Crawling data from flight went wrong', Response::HTTP_INTERNAL_SERVER_ERROR);
     }
-    }
+    
+
 
 
     // function to trigger the model 
