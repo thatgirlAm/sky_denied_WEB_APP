@@ -74,48 +74,67 @@ class PredictionController extends Controller
         $prediction->delete();
     }
 
-    // function to trigger the data python script and crawl the data
+    // function to handle data crawling in real time
     public function crawling_trigger(CrawlingRequest $crawling_request)
-{
-    $tail_number = $crawling_request->tail_number;
-    $mode = $crawling_request->mode;
-   
-    
-    // Construct the JSON data to be passed to the Python script
-    $data = json_encode([[
-        'aircraft' => $tail_number,
-        'mode' => $mode
-    ]]);
-
-    // Determine the script path using a relative path
-    $script_path = base_path('../data/main.py');
-
-    // Define the Python binary path (adjust if necessary)
-    $process = new Process(['python3', $script_path, $data]);
-    $process->setTimeout(120);
-
-    try {
-        $process->mustRun();
+    {
+        // Retrieve parameters from the request
+        $response = $crawling_request->all();
+        $tail_number = $response['tail_number'];
+        $mode = $response['mode'];
         
-        // Trim the output and log it for debugging
-        $output = trim($process->getOutput());
-        \Log::info("Raw Python output: " . $output);
-
-        // Attempt to decode the JSON output
-        $result = json_decode($output, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            \Log::error("JSON decode error: " . json_last_error_msg());
-            \Log::error("Raw output: " . $output);
-            return $this->format_error('Error parsing script output: ' . json_last_error_msg(), Response::HTTP_INTERNAL_SERVER_ERROR);
+    
+        // Construct the JSON data to be passed to the Python script
+        $data = json_encode([[
+            'aircraft' => $tail_number,
+            'mode' => $mode]
+        ]);
+        //return $data;
+        // Determine the script path using a relative path
+        $script_path = base_path('../data/main.py');
+    
+        // Define the Python process
+        $process = new Process(['python3', $script_path, $data]);
+        $process->setTimeout(120);
+    
+        try {
+            // Run the process
+            $process->mustRun();
+    
+            // Trim the output and log it for debugging
+            $output = trim($process->getOutput());
+            \Log::info("Raw Python output: " . $output);
+    
+            // Decode the JSON output
+            $result = json_decode($output, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                \Log::error("JSON decode error: " . json_last_error_msg());
+                \Log::error("Raw output: " . $output);
+                return $this->format_error(
+                    'Error parsing script output: ' . json_last_error_msg(),
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            }
+    
+            // Return success response
+            return $this->format(['Script ran successfully', Response::HTTP_OK, $result]);
+        } catch (ProcessFailedException $e) {
+            // Log and handle process failure
+            \Log::error("Python script failed: " . $e->getMessage());
+            return $this->format_error(
+                'Script did not run: ' . $e->getMessage(),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        } catch (\Exception $e) {
+            // Log and handle other exceptions
+            \Log::error("Unexpected error: " . $e->getMessage());
+            return $this->format_error(
+                'An unexpected error occurred: ' . $e->getMessage(),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
-
-        return $this->format(['Script ran successfully', Response::HTTP_OK, $result]);
-    } catch (ProcessFailedException $e) {
-        return $this->format_error('Script did not run: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
-}
-
-
+    
+    
     // function to handle the data resizing                   
     public function data_handling(DataHandlingRequest $request)
     {
