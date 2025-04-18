@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DataHandlingRequest;
 use App\Models\Prediction;
 use Illuminate\Http\Request;
 use \App\Http\Requests\CrawlingRequest ; 
@@ -12,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Process\Exceptions\ProcessFailedException;
 use App\Models\Flight;
 use Illuminate\Support\Facades\Log; 
-use App\Http\Requests\DataHandlingRequest;
+
 
 class PredictionController extends Controller
 {
@@ -147,7 +148,7 @@ class PredictionController extends Controller
     
     
     // function to handle the data resizing                   
-    public function data_handling(DataHandlingRequest $request)
+    public function data_handling(Datahandling_request $request)
     {
         // Extract the response body from the request
         $response = $request->all(); 
@@ -249,7 +250,7 @@ class PredictionController extends Controller
         $flights = $decoded['data'][0]['flights'];
         $mainUtc = $decoded['data'][0]['main_flight_date'];
     
-        // 5) Build the exact payload your DataHandlingRequest expects
+        // 5) Build the exact payload your Datahandling_request expects
         $payload = [
             'status' => Response::HTTP_OK,
             'data'   => [
@@ -259,14 +260,31 @@ class PredictionController extends Controller
         ];
     
         // 6) Instantiate & populate the FormRequest
-        $handlingRequest = new DataHandlingRequest();
-        $handlingRequest->merge($payload);
+        $handling_request = new DataHandlingRequest();
+        $handling_request->merge($payload);
     
         // 7) Dispatch to data_handling() and return its response
-        return $this->data_handling($handlingRequest);
+        return $this->data_handling($handling_request);
     }
     
-
+    public function model_testing(ModelRequest $request)
+    {
+        $data = $request['data']; 
+        //return $data;
+        $script_path = base_path('../model/run_inference.py') ; 
+        $json_data = json_encode($data, true); 
+        $process = new Process(['python3', $script_path, '--flights-cli', $json_data]);
+        try 
+        {
+            $process->run();
+            $output = $process->getOutput();
+            return $output;
+        }
+        catch (\Exception $e)
+        {
+            return $this->format_error("Error: " .$e, Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
     /*
     public function model_trigger_test()
     {
