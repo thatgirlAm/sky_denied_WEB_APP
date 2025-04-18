@@ -155,36 +155,34 @@ class PredictionController extends Controller
         // Ensure 'data' key exists and is an array
         $flights = $response['data']['flights'] ?? []; 
         $main_scheduled_departure_utc = $response["data"]["main_scheduled_departure_utc"];
-        
+        //return $flights ; 
         $result = [];
         
         // Check if the response status is HTTP_OK
         if ($response['status'] == Response::HTTP_OK) {
-            foreach ($flights as $index => $flight) {
-                // Check if the flight's UTC date matches the main flight date
-                if (isset($flight['scheduled_departure_utc']) && $flight['scheduled_departure_utc']==$main_scheduled_departure_utc) 
-                {
-                    // Add the main flight
+            $result = [];
+            foreach ($flights as $i => $flight) {
+                if ($flight['scheduled_departure_utc'] === $main_scheduled_departure_utc) {
                     $result[] = $flight;
-    
-                    // Add the 3 preceding flights if they exist
-                    for ($i = 1; $i <= 3; $i++) {
-                        if (isset($flights[$index - $i])) {
-                            $result[] = $flights[$index - $i];
+                    for ($j = 1; $j <= 3; $j++) {
+                        if (isset($flights[$i - $j])) {
+                            $result[] = $flights[$i - $j];
                         }
                     }
-                    break; // Exit after processing the first matching flight
+                    break;
                 }
             }
-    
-            // Return the result as JSON
-            return response()->json(['data' => $result], Response::HTTP_OK);
-        } else {
-            // Handle error case
-            return $this->format_error(
-                'Crawling data from flight went wrong', 
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
+        
+            // if nothing matched, return a clear NO_CONTENT error
+            if (empty($result)) {
+                return $this->format_error(
+                    'No flight corresponds to the given UTC date/time',
+                    Response::HTTP_NO_CONTENT
+                );
+            }
+        
+            // otherwise return your standard success shape
+            return $this->format(['success', Response::HTTP_OK, $result]);
         }
     }
     
@@ -211,6 +209,63 @@ class PredictionController extends Controller
         }
     }
 
+    // function to test out crawling and data handling
+    public function crawling_handling_test(CrawlingRequest $request)
+    {
+        // 1) Run the crawler and get its JSON‑response
+        $crawlingResponse = $this->crawling_trigger($request);
+    
+        // 2) Decode the raw JSON
+        $raw     = $crawlingResponse->getContent();
+        $decoded = json_decode($raw, true);
+    
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return $this->format_error(
+                'Invalid JSON from crawling_trigger: '.json_last_error_msg(),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    
+        // 3) Did it succeed?
+        $status = $decoded['status'] ?? null;
+        if ($status !== Response::HTTP_OK) {
+            // propagate the failure message/status
+            return $this->format_error(
+                $decoded['message']    ?? 'crawling_trigger failed',
+                $decoded['status']     ?? Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    
+        // 4) Pull out the first (and only) element in data[]
+        if (
+            ! isset($decoded['data'][0]['flights'], $decoded['data'][0]['main_flight_date'])
+        ) {
+            return $this->format_error(
+                'Unexpected payload shape from crawling_trigger',
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    
+        $flights = $decoded['data'][0]['flights'];
+        $mainUtc = $decoded['data'][0]['main_flight_date'];
+    
+        // 5) Build the exact payload your DataHandlingRequest expects
+        $payload = [
+            'status' => Response::HTTP_OK,
+            'data'   => [
+                'main_scheduled_departure_utc' => $mainUtc,
+                'flights'                     => $flights,
+            ],
+        ];
+    
+        // 6) Instantiate & populate the FormRequest
+        $handlingRequest = new DataHandlingRequest();
+        $handlingRequest->merge($payload);
+    
+        // 7) Dispatch to data_handling() and return its response
+        return $this->data_handling($handlingRequest);
+    }
+    
 
     public function model_trigger_test()
     {
