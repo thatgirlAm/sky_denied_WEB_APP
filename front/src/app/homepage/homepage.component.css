@@ -1,0 +1,154 @@
+.section {
+  display: flex;
+  justify-content: space-evenly;
+  max-width: 60%;
+  min-width: 40%;
+  margin: auto;
+  gap: 5%;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.flight-search-container {
+  border: 1px solid var(--blue_sd);
+  border-radius: 8px;
+  padding: 2%;
+  width: 80%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.flight-search-container h1 {
+  width: 100%;
+  max-width: 100%;
+  min-width: 50%;
+  margin: 0;
+}
+
+.tab-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.tab-button {
+  background-color: transparent;
+  border: none;
+  color: black;
+  width: 40%;
+  min-width: auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
+  transition: border-bottom-color;
+}
+
+.tab-button.active {
+  color: var(--purple_sd);
+  border-bottom-color: var(--purple_sd);
+}
+
+.tab-button:hover {
+  color: var(--purple_sd);
+}
+
+.tab-content {
+  display: none;
+  text-align: center;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.input-group {
+  width: 50%;
+  margin: auto auto 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+  font-size: 14px;
+}
+
+.input-group input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid lightgrey;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.submit-button {
+  background-color: var(--blue_sd);
+  width: 50%;
+}
+
+.submit-button:hover {
+  background-color: #004494;
+}
+
+
+.paragraph h1 {
+  text-align: left;
+}
+
+.paragraph {
+  flex: 1 1 40%;
+  min-width: 50%;
+  text-align: justify;
+}
+
+.search-link a {
+  max-width: 50%;
+  text-align: center;
+  font-family: 'Lora', serif;
+  font-size: 48px;
+  color: var(--purple_sd);
+  min-width: 700px;
+}
+
+/* Css from embedded getty image ==> legal code */
+.getty-embed {
+  flex: 1 1 40%;
+  padding-top: 10%;
+  font-size: 11px;
+  width: 100%;
+  max-width: 506px;
+  min-width: 350px;
+}
+
+.getty-caption {
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.getty-caption a {
+  color: #a7a7a7;
+  text-decoration: none;
+  font-weight: normal !important;
+  border: none;
+  display: inline-block;
+}
+
+.getty-frame-container {
+  overflow: hidden;
+  position: relative;
+  height: 0;
+  padding-top: 66.798416%;
+  width: 100%;
+}
+
+.getty-frame-container iframe {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
