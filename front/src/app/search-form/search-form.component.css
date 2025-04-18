@@ -1,8 +1,10 @@
 .search-form {
-  max-width: 800px;
-  margin: 0px auto;
+  max-width: 60%;
+  min-width: 700px;
+  margin: 0 auto;
 }
 
+/* Divider */
 h2::before {
   content: "";
   display: block;
@@ -15,37 +17,38 @@ h2::before {
 .row {
   display: flex;
   width: 100%;
+  min-width: 700px;
   align-items: center;
-  gap: 1rem;
-}
+  gap: 1%;
 
-.row label {
-  width: 200px;
-  text-align: right;
-}
-
-.row input {
-  flex: 1;
-  border: 1px solid lightgrey;
-  border-radius: 4px;
-  text-align: center;
 }
 
 .input-box {
   width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
   border: 1px solid lightgrey;
   background-color: white;
-  padding: 1rem;
   border-radius: 8px;
-  margin: 1rem 0;
+  margin: 1% 0;
+  padding: 0 2%;
 }
 
-.search-button button {
+.search-button {
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.search-button input[type="submit"] {
   background-color: var(--blue_sd);
-  align-content: end;
+  height: 60px;
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   white-space: nowrap;
-}
-
-.button:hover {
-  background-color: #592f6b;
+  box-sizing: border-box;
 }
