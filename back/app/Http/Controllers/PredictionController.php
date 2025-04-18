@@ -267,6 +267,7 @@ class PredictionController extends Controller
     }
     
 
+    /*
     public function model_trigger_test()
     {
         // data is an array with 2 json files: one for flight information and one for weather information 
@@ -294,6 +295,7 @@ class PredictionController extends Controller
     }
 
     // function to trigger the whole prediction scheme
+    */
     public function trigger(CrawlingRequest $crawlingRequest)
     {
         try 
