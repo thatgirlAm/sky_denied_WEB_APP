@@ -17,26 +17,26 @@ from datetime import datetime, time, timedelta
 DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data"))
 GLOBAL_AIRPORTS = airportsdata.load('IATA')
 
-def read_all_csv_from_folder(folder_path):
-    if not os.path.exists(folder_path):
-        print(f"Folder does not exist: {folder_path}")
-        return pd.DataFrame()
+# def read_all_csv_from_folder(folder_path):
+#     if not os.path.exists(folder_path):
+#         print(f"Folder does not exist: {folder_path}")
+#         return pd.DataFrame()
     
-    all_files = [f for f in os.listdir(folder_path) if f.endswith(".csv")]
-    dataframes = []
-    for file in all_files:
-        file_path = os.path.join(folder_path, file)
-        try:
-            df = pd.read_csv(file_path)
-            dataframes.append(df)
-        except Exception as e:
-            print(f"Failed to read {file}: {e}")
+#     all_files = [f for f in os.listdir(folder_path) if f.endswith(".csv")]
+#     dataframes = []
+#     for file in all_files:
+#         file_path = os.path.join(folder_path, file)
+#         try:
+#             df = pd.read_csv(file_path)
+#             dataframes.append(df)
+#         except Exception as e:
+#             print(f"Failed to read {file}: {e}")
 
-    if not dataframes:
-        print(f"No valid CSV files found in {folder_path}")
-        return pd.DataFrame()
+#     if not dataframes:
+#         print(f"No valid CSV files found in {folder_path}")
+#         return pd.DataFrame()
 
-    return pd.concat(dataframes, ignore_index=True)
+#     return pd.concat(dataframes, ignore_index=True)
 
 def to_utc(local_str, iata_code, fmt="%Y-%m-%d %H:%M"):
     if pd.isna(local_str) or local_str == '' or pd.isna(iata_code) or iata_code == '':
@@ -182,7 +182,7 @@ def clean_and_merge(flightera_arrival_dfs, flightera_departure_dfs, flightradar2
     # print(f"Reading arrivals_flightradar24 CSVs from {arrivals_fr24_folder}...")
     # arrival_flightradar24_df = read_all_csv_from_folder(arrivals_fr24_folder)
 
-        # Concatenate each group into a single DataFrame
+    # Concatenate each group into a single DataFrame
     arrival_df = pd.concat(flightera_arrival_dfs, ignore_index=True)
     departure_df = pd.concat(flightera_departure_dfs, ignore_index=True)
     arrival_flightradar24_df = pd.concat(flightradar24_dfs, ignore_index=True)
@@ -207,12 +207,12 @@ def clean_and_merge(flightera_arrival_dfs, flightera_departure_dfs, flightradar2
         if col.endswith("_dep") and col[:-4] in arrival_df_dedup.columns
     ]
     flight_schedule.drop(columns=cols_to_drop, inplace=True)
-    flight_schedule["scheduled_arrival_date_local"] = flight_schedule["scheduled_arrival_local"].astype(str).str[:10]
+    # flight_schedule["scheduled_arrival_date_local"] = flight_schedule["scheduled_arrival_local"].astype(str).str[:10]
     # Merge with FR24
     flight_schedule = flight_schedule.merge(
         arrival_flightradar24_df_dedup,
-        left_on=["scheduled_arrival_date_local","flight_number_iata", "depart_from_iata"],
-        right_on=["scheduled_arrival_date_local", "flight_number_iata", "depart_from_iata"],
+        left_on=["scheduled_arrival_local","flight_number_iata", "depart_from_iata"],
+        right_on=["scheduled_arrival_local", "flight_number_iata", "depart_from_iata"],
         how="left",
         suffixes=("", "_fr24")
     )
@@ -323,10 +323,10 @@ def clean_and_merge(flightera_arrival_dfs, flightera_departure_dfs, flightradar2
 
     flight_schedule = flight_schedule[[c for c in desired_columns if c in flight_schedule.columns]]
     flight_schedule = flight_schedule.sort_values(by='scheduled_departure_utc', ascending=True)
-    # today = datetime.now().date()
-    # # Write the final merged CSV
-    # output_csv = os.path.join(DATA_DIR, f"flight_schedule_{today}.csv")
-    # flight_schedule.to_csv(output_csv, index=False)
+    today = datetime.now().date()
+    # Write the final merged CSV
+    output_csv = os.path.join(DATA_DIR, f"flight_schedule_{today}.csv")
+    flight_schedule.to_csv(output_csv, index=False)
     return flight_schedule
 
 
@@ -367,6 +367,7 @@ def clean_aircraft(df):
     df["actual_duration"] = pd.to_datetime(df["actual_arrival_utc"],format="%Y-%m-%d %H:%M") - pd.to_datetime(df["actual_departure_utc"],format="%Y-%m-%d %H:%M")
     df["schedule_duration"] = pd.to_timedelta(df["schedule_duration"], errors="coerce").apply(format_duration)
     df["actual_duration"] = pd.to_timedelta(df["actual_duration"], errors="coerce").apply(format_duration)
+
     desired_columns = [
         "flight_date",
         "flight_date_utc",
@@ -374,6 +375,7 @@ def clean_aircraft(df):
         "flight_number_icao",
         "tail_number",
         "airline",
+        "airline_code",
         "status",
         "depart_from",
         "depart_from_iata",
@@ -394,12 +396,12 @@ def clean_aircraft(df):
         "actual_arrival_local_tz",
         "actual_arrival_utc",
         "schedule_duration",
-        "actual_duration",
-
+        "actual_duration"
     ]
 
-    # Create a new DataFrame with only the desired columns, in the desired order
+    # Create a new DataFrame with only the desired columns
     df_reorganized = df[[col for col in desired_columns if col in df.columns]]
     df_reorganized = df_reorganized.where(pd.notnull(df_reorganized), None)
+    # df_reorganized = df_reorganized.sort_values(by='scheduled_departure_utc', ascending=True)
 
     return df_reorganized
