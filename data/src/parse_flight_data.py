@@ -225,7 +225,7 @@ def parse_flightradar24_aircraft(soup):
             if airline_span:
                 airline = airline_span.get_text(strip=True)
     
-    tail_number = soup.find_all("h1")[0].get_text(strip=True).split("-",1)[1]
+    tail_number = soup.find_all("h1")[0].get_text(strip=True).split("-",1)[1].strip()
     # Find all rows in the flight history table
     rows = soup.find_all("tr", class_="data-row")
     flight_history = []
