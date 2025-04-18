@@ -148,7 +148,7 @@ class PredictionController extends Controller
     
     
     // function to handle the data resizing                   
-    public function data_handling(Datahandling_request $request)
+    public function data_handling(DatahandlingRequest $request)
     {
         // Extract the response body from the request
         $response = $request->all(); 
