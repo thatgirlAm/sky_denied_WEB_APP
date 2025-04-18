@@ -150,20 +150,16 @@ class PredictionController extends Controller
     // function to handle the data resizing                   
     public function data_handling(DatahandlingRequest $request)
     {
-        // Extract the response body from the request
         $response = $request->all(); 
-        
-        // Ensure 'data' key exists and is an array
-        $flights = $response['data']['flights'] ?? []; 
+        $flights = $response['data']['flights'] ?? [];
         $main_scheduled_departure_utc = $response["data"]["main_scheduled_departure_utc"];
-        //return $flights ; 
         $result = [];
         
-        // Check if the response status is HTTP_OK
         if ($response['status'] == Response::HTTP_OK) {
-            $result = [];
+            // Find matching flight and previous 3 flights
             foreach ($flights as $i => $flight) {
                 if ($flight['scheduled_departure_utc'] === $main_scheduled_departure_utc) {
+                    // Add matching flight and previous 3 flights
                     $result[] = $flight;
                     for ($j = 1; $j <= 3; $j++) {
                         if (isset($flights[$i - $j])) {
@@ -173,20 +169,28 @@ class PredictionController extends Controller
                     break;
                 }
             }
-        
-            // if nothing matched, return a clear NO_CONTENT error
+    
+            // Add reporting_airline to filtered flights
+            foreach ($result as &$flight) {
+                $flightNumberIata = $flight['flight_number_iata'] ?? '';
+                $flight['reporting_airline'] = substr($flightNumberIata, 0, 2);
+            }
+            unset($flight); // Break the reference
+    
             if (empty($result)) {
                 return $this->format_error(
                     'No flight corresponds to the given UTC date/time',
                     Response::HTTP_NO_CONTENT
                 );
             }
-        
-            // otherwise return your standard success shape
-            return $this->format(['success', Response::HTTP_OK, $result]);
+    
+            return $this->format([
+                'success',
+                Response::HTTP_OK,
+                array_reverse($result) // Reverse to maintain chronological order
+            ]);
         }
     }
-    
 
 
 
