@@ -16,6 +16,7 @@ import { ToastrService } from 'ngx-toastr';
 export class SearchComponent {
   showPredictionPopup = false;
   showGetNotifiedPopup = false;
+  loader = false ; 
   // to know if the model has been triggered
   isModelTriggering = false;
 
@@ -43,6 +44,8 @@ export class SearchComponent {
 
 // Charlotte's functions
   handlePredictionTrigger() {
+    this.loader = true ; 
+    //this.trigger_model(); 
     this.showPredictionPopup = true;
   }
 
