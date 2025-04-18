@@ -76,63 +76,74 @@ class PredictionController extends Controller
 
     // function to handle data crawling in real time
     public function crawling_trigger(CrawlingRequest $crawling_request)
-    {
-        // Retrieve parameters from the request
-        $response = $crawling_request->all();
-        $tail_number = $response['tail_number'];
-        $mode = $response['mode'];
-        
-    
-        // Construct the JSON data to be passed to the Python script
-        $data = json_encode([[
-            'aircraft' => $tail_number,
-            'mode' => $mode]
-        ]);
-        //return $data;
-        // Determine the script path using a relative path
-        $script_path = base_path('../data/main.py');
-    
-        // Define the Python process
-        $process = new Process(['python3', $script_path, $data]);
-        $process->setTimeout(120);
-    
-        try {
-            // Run the process
-            $process->mustRun();
-    
-            // Trim the output and log it for debugging
-            $output = trim($process->getOutput());
-            \Log::info("Raw Python output: " . $output);
-    
-            // Decode the JSON output
-            $result = json_decode($output, true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                \Log::error("JSON decode error: " . json_last_error_msg());
-                \Log::error("Raw output: " . $output);
-                return $this->format_error(
-                    'Error parsing script output: ' . json_last_error_msg(),
-                    Response::HTTP_INTERNAL_SERVER_ERROR
-                );
-            }
-    
-            // Return success response
-            return $this->format(['Script ran successfully', Response::HTTP_OK, $result]);
-        } catch (ProcessFailedException $e) {
-            // Log and handle process failure
-            \Log::error("Python script failed: " . $e->getMessage());
+{
+    // Retrieve parameters from the request
+    $response = $crawling_request->all();
+    $tail_number = $response['tail_number'];
+    $mode = $response['mode'];
+    $main_flight_date_utc = $response['main_scheduled_departure_utc'];
+
+    // Construct the JSON data to be passed to the Python script
+    $data = json_encode([[
+        'aircraft' => $tail_number,
+        'mode' => $mode
+    ]]);
+
+    // Determine the script path using a relative path
+    $script_path = base_path('../data/main.py');
+
+    // Define the Python process
+    $process = new Process(['python3', $script_path, $data]);
+    $process->setTimeout(120);
+
+    try {
+        // Run the process
+        $process->mustRun();
+
+        // Trim the output and log it for debugging
+        $output = trim($process->getOutput());
+        \Log::info("Raw Python output: " . $output);
+
+        // Decode the JSON output
+        $flights_information = json_decode($output, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            \Log::error("JSON decode error: " . json_last_error_msg());
+            \Log::error("Raw output: " . $output);
             return $this->format_error(
-                'Script did not run: ' . $e->getMessage(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        } catch (\Exception $e) {
-            // Log and handle other exceptions
-            \Log::error("Unexpected error: " . $e->getMessage());
-            return $this->format_error(
-                'An unexpected error occurred: ' . $e->getMessage(),
+                'Error parsing script output: ' . json_last_error_msg(),
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
+       
+        // Structure the result as desired
+        $result = [
+            [
+                'flights' => $flights_information,
+                'main_flight_date' => $main_flight_date_utc
+            ]
+        ];
+
+        // Return success response
+        return $this->format(['Script ran successfully', Response::HTTP_OK, $result]);
+
+    } catch (ProcessFailedException $e) {
+        // Log and handle process failure
+        \Log::error("Python script failed: " . $e->getMessage());
+        return $this->format_error(
+            'Script did not run: ' . $e->getMessage(),
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        );
+
+    } catch (\Exception $e) {
+        // Log and handle other exceptions
+        \Log::error("Unexpected error: " . $e->getMessage());
+        return $this->format_error(
+            'An unexpected error occurred: ' . $e->getMessage(),
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        );
     }
+}
+
     
     
     // function to handle the data resizing                   
