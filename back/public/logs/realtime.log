@@ -1,0 +1,14 @@
+realtime | main | 2025-04-16 11:42:01,560 | INFO | REALTIME mode started for aircraft: G-EUUG
+realtime | get_flight_by_aircraft_flightradar24 | 2025-04-16 11:42:17,931 | INFO | Opening Flightradar24 aircraft URL: https://www.flightradar24.com/data/aircraft/G-EUUG
+realtime | get_flight_by_aircraft_flightradar24 | 2025-04-16 11:42:42,662 | WARNING | Timed out waiting for flight data table to appear
+realtime | get_flight_by_aircraft_flightradar24 | 2025-04-16 11:42:43,245 | INFO | Flightradar24 aircraft scrape done for G-EUUG: 45 rows
+realtime | main | 2025-04-16 11:42:43,293 | INFO | Realtime aircraft data cleaned: 45 rows
+realtime | main | 2025-04-16 11:42:43,299 | INFO | Outputting JSON data: [{"flight_date": "2025-04-18", "flight_date_utc": null, "flight_number_iata": "BA712", "tail_number"...
+realtime | main | 2025-04-16 11:42:43,300 | INFO | REALTIME mode completed.
+realtime | main | 2025-04-16 11:45:36,011 | INFO | REALTIME mode started for aircraft: G-EUUG
+realtime | get_flight_by_aircraft_flightradar24 | 2025-04-16 11:45:38,970 | INFO | Opening Flightradar24 aircraft URL: https://www.flightradar24.com/data/aircraft/G-EUUG
+realtime | get_flight_by_aircraft_flightradar24 | 2025-04-16 11:46:02,850 | WARNING | Timed out waiting for flight data table to appear
+realtime | get_flight_by_aircraft_flightradar24 | 2025-04-16 11:46:03,472 | INFO | Flightradar24 aircraft scrape done for G-EUUG: 45 rows
+realtime | main | 2025-04-16 11:46:03,520 | INFO | Realtime aircraft data cleaned: 45 rows
+realtime | main | 2025-04-16 11:46:03,524 | INFO | Outputting JSON data: [{"flight_date": "2025-04-18", "flight_date_utc": null, "flight_number_iata": "BA712", "tail_number"...
+realtime | main | 2025-04-16 11:46:03,524 | INFO | REALTIME mode completed.

@@ -225,17 +225,24 @@ def parse_flightradar24_aircraft(soup):
             if airline_span:
                 airline = airline_span.get_text(strip=True)
     
-    tail_number = soup.find_all("h1")[0].get_text(strip=True).split("-")[1]
+    tail_number = soup.find_all("h1")[0].get_text(strip=True).split("-",1)[1]
     # Find all rows in the flight history table
     rows = soup.find_all("tr", class_="data-row")
     flight_history = []
 
     def convert_to_24h(time_str):
-        if "AM" in time_str or "PM" in time_str:
-            try:
-                return datetime.strptime(time_str, "%I:%M %p").strftime("%H:%M")
-            except ValueError:
-                return ""
+        if not time_str or not any(char.isdigit() for char in time_str):
+            return None  # No numbers in the string — probably not a time
+        try:
+           # Try parsing it as 12-hour format to validate
+            if "AM" in time_str.upper() or "PM" in time_str.upper():
+                return datetime.strptime(time_str.strip(), "%I:%M %p").strftime("%H:%M")
+            else:
+                # Try parsing it as 24-hour format to validate
+                datetime.strptime(time_str.strip(), "%H:%M")
+                return time_str.strip()
+        except ValueError:
+            return None
 
     for row in rows:
         cells = row.find_all("td")

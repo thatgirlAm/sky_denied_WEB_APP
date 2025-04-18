@@ -1,0 +1,28 @@
+{
+    "airports": {
+        "US": [
+            { "code": "ATL", "name": "Hartsfield-Jackson Atlanta International Airport" },
+            { "code": "DFW", "name": "Dallas/Fort Worth International Airport" },
+            { "code": "DEN", "name": "Denver International Airport" },
+            { "code": "ORD", "name": "Chicago O'Hare International Airport" },
+            { "code": "CLT", "name": "Charlotte Douglas International Airport" },
+            { "code": "LAX", "name": "Los Angeles International Airport" },
+            { "code": "LAS", "name": "Harry Reid International Airport (formerly McCarran)" },
+            { "code": "SEA", "name": "Seattle-Tacoma International Airport" },
+            { "code": "PHX", "name": "Phoenix Sky Harbor International Airport" },
+            { "code": "LGA", "name": "LaGuardia Airport" }
+        ],
+        "EU": [
+            { "code": "IST", "name": "Istanbul Airport" },
+            { "code": "AMS", "name": "Amsterdam Airport Schiphol" },
+            { "code": "CDG", "name": "Charles de Gaulle Airport" },
+            { "code": "LHR", "name": "London Heathrow Airport" },
+            { "code": "FRA", "name": "Frankfurt Airport" },
+            { "code": "MAD", "name": "Adolfo Suárez Madrid-Barajas Airport" },
+            { "code": "BCN", "name": "Barcelona-El Prat Airport" },
+            { "code": "MUC", "name": "Munich Airport" },
+            { "code": "PMI", "name": "Palma de Mallorca Airport" },
+            { "code": "AYT", "name": "Antalya Airport" }
+        ]
+    }
+}
