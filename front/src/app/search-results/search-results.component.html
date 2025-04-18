@@ -2,13 +2,19 @@
   <hr class="section-divider" />
   <h1 class="results-title">Results</h1>
 
-    <div class="results-header">
-      <div class="header-cell">Flight Number</div>
-      <div class="header-cell">Departure schedule date</div>
-      <div class="header-cell">Arrival schedule date</div>
-      <div class="header-cell">Prediction</div>
-    </div>
-  <div class="flight-card">
+  <div class="results-header">
+    <div class="header-cell">Flight Number</div>
+    <div class="header-cell">Departure schedule date</div>
+    <div class="header-cell">Arrival schedule date</div>
+    <div class="header-cell">Prediction</div>
+  </div>
+
+  <div class="loader" *ngIf="!loaded">
+    <img src="image/loader.svg" alt="Loading image" />
+    <p>Search in progress...</p>
+  </div>
+
+  <div class="flight-card" *ngIf="loaded">
     <div class="flight-info">
       <div class="cell">
         <div class="flight-number">AA1234</div>
@@ -28,7 +34,7 @@
     </div>
   </div>
 
-  <div class="load-more">
+  <div class="load-more" *ngIf="loaded">
     <button class="load-button">
       <img src="image/loading_icon.svg" alt="Load more icon" />
       <span>Load more results</span>

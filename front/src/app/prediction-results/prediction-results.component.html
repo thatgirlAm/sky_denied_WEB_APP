@@ -1,38 +1,47 @@
 <div class="container">
-  <div class="prediction-popup">
+
+  <div class="prediction-popup" >
     <button class="close-button" (click)="close()">✕</button>
-
-    <div class="flight-header">
-      <h1 class="flight-number"> AA1234 </h1>
-      <h2 class="flight-date">20 March 2025</h2>
+    <div class="loader" *ngIf="!prediction_loaded">
+      <img src="image/loader.svg" alt="Loading image" />
+      <p>The model prediction can take as long as 1min to process.
+        <br>Please excuse the waiting time...</p>
     </div>
+    <div class="prediction-result" *ngIf="prediction_loaded">
+      <button class="close-button" (click)="close()">✕</button>
 
-    <div class="flight-route">
-      <div class="location">
-        <div class="location-label">From</div>
-        <p class="city">PARIS</p>
-        <p class="time">6:20</p>
+      <div class="flight-header">
+        <h1 class="flight-number"> AA1234 </h1>
+        <h2 class="flight-date">20 March 2025</h2>
       </div>
 
-      <div class="plane-container">
-        <span class="divider"></span>
-        <span class="plane-icon">✈</span>
-        <span class="divider"></span>
+      <div class="flight-route">
+        <div class="location">
+          <div class="location-label">From</div>
+          <p class="city">PARIS</p>
+          <p class="time">6:20</p>
+        </div>
+
+        <div class="plane-container">
+          <span class="divider"></span>
+          <span class="plane-icon">✈</span>
+          <span class="divider"></span>
+        </div>
+
+        <div class="location">
+          <div class="location-label">To</div>
+          <p class="city">BERLIN</p>
+          <p class="time">8:40</p>
+        </div>
       </div>
 
-      <div class="location">
-        <div class="location-label">To</div>
-        <p class="city">BERLIN</p>
-        <p class="time">8:40</p>
+      <div class="prediction-banner">
+        Less than 30 min late
       </div>
-    </div>
 
-    <div class="prediction-banner">
-      Less than 30 min late
-    </div>
-
-    <div class="prediction-footer">
-      <button class="claim-button">Claim compensation</button>
+      <div class="prediction-footer">
+        <button class="claim-button">Claim compensation</button>
+      </div>
     </div>
   </div>
 

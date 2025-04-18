@@ -9,14 +9,14 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-search',
-  imports: [SearchFormComponent, ApiService, SearchResultsComponent, PredictionResultsComponent, InputEmailFormComponent, CommonModule],
+  imports: [SearchFormComponent, SearchResultsComponent, PredictionResultsComponent, InputEmailFormComponent, CommonModule],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css'
 })
 export class SearchComponent {
   showPredictionPopup = false;
   showGetNotifiedPopup = false;
-  loader = false ; 
+  searchClicked = false ;
   // to know if the model has been triggered
   isModelTriggering = false;
 
@@ -44,8 +44,8 @@ export class SearchComponent {
 
 // Charlotte's functions
   handlePredictionTrigger() {
-    this.loader = true ; 
-    //this.trigger_model(); 
+    this.searchClicked = true ;
+    //this.trigger_model();
     this.showPredictionPopup = true;
   }
 

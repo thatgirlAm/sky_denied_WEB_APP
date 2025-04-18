@@ -33,6 +33,22 @@
   background-color: var(--purple_sd);
 }
 
+.loader {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.loader img {
+  height: 150px;
+}
+
+.loader p {
+  text-align: center;
+  color: var(--purple_sd);
+}
+
 .flight-card {
   border: 2px solid var(--purple_sd);
   border-radius: 10px;
