@@ -12,6 +12,22 @@
   z-index: 1000;
 }
 
+.loader {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.loader img {
+  height: 150px;
+}
+
+.loader p {
+  text-align: center;
+  color: var(--purple_sd);
+}
+
 .prediction-popup {
   width: 70%;
   background-color: white;
