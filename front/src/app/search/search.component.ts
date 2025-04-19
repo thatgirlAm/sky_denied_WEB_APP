@@ -19,7 +19,7 @@ export class SearchComponent {
   searchClicked = false ;
   // to know if the model has been triggered
   isModelTriggering = false;
-
+/*
   constructor(private apiService: ApiService, private toastr: ToastrService) {}
 
 
@@ -41,7 +41,7 @@ export class SearchComponent {
     });
   }
 
-
+*/
 // Charlotte's functions
   handlePredictionTrigger() {
     this.searchClicked = true ;
@@ -64,4 +64,5 @@ export class SearchComponent {
 
     this.showGetNotifiedPopup = false;
   }
+
 }

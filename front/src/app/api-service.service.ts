@@ -17,7 +17,6 @@ export class ApiService {
   url : string  = 'http://127.0.0.1:8000/api/';
   data!: string | null;
 
-
   constructor(private router: Router, private http: HttpClient, @Inject(ToastrService) private toastr: ToastrService) { 
   }
 /*
