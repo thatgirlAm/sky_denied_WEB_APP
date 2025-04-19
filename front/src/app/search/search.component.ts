@@ -29,16 +29,7 @@ export class SearchComponent {
     const triggerEndpoint = 'trigger/data';
     const triggerData = data;
     // TODO : validate the format of the data (from the form)
-    this.apiService.PostMessage(triggerEndpoint, triggerData).subscribe({
-      next: (res: any) => {
-        this.toastr.success('Model triggered successfully: ' + res);
-        this.isModelTriggering = false;
-      },
-      error: (err: any) => {
-        this.toastr.error('Error triggering model: ' + err.message);
-        this.isModelTriggering = false;
-      }
-    });
+    // 
   }
 
 

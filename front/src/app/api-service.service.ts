@@ -7,90 +7,40 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr'; 
 import { Inject } from '@angular/core';
 import { lastValueFrom, Observable} from 'rxjs';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
+import { Flight } from './flight';
 
-@Injectable({
-  providedIn: 'root'
-})
 
+@Injectable({ providedIn: 'root' })
 export class ApiService {
-  url : string  = 'http://127.0.0.1:8000/api/';
-  data!: string | null;
+  private readonly baseUrl = 'http://127.0.0.1:8000/api/';
 
+  constructor(
+    private http: HttpClient,
+    private toastr: ToastrService,
+    private router: Router
+  ) {}
 
-  constructor(private router: Router, private http: HttpClient, @Inject(ToastrService) private toastr: ToastrService) { 
-  }
-/*
-   public getFunction(url_:string)
-   {
-    this.http.get<any[]>(this.url+ url_).subscribe({
-      next: (res:any)=>{
-        return res;
-      }
-    });
-   }
-
-*/
-
-// function to get the "data" part of the api response for a "get" function
-   getData(url_: string) {
-    this.http.get<any>(this.url+url_).subscribe({
-      next : (res:any) =>{
-        return res.data
-      } ,
-      error : (err) => 
-        {
-          return this.toastr.error(err);
-        }
-    })
-  }
-
-// function to get the "status" part of the api response for a "get" function
-  getStatus(url_: string) {
-    this.http.get<any>(this.url+url_).subscribe({
-      next : (res:any) =>{
-        return res.status
-      } ,
-      error : (err) => 
-        {
-          return this.toastr.error(err);
-        }
-    })
-    } 
-  // function to get the "message" part of the api response for a "get" function
-  getMessage(url_: string) {
-    this.http.get<any>(this.url+url_).subscribe({
-      next : (res:any) =>{
-        return res.message
-      } ,
-      error : (err) => 
-        {
-          return this.toastr.error(err);
-        }
-    })
-    } 
-  
-// function to get the "status" part of the api response for a "post" function
-  PostStatus(url_: string, data: any) :Observable<any>{
-    return this.http.post<any>(this.url + url_, data).pipe(
-      map((res: any) => res.status)
+  // Generic POST method
+  post<T>(endpoint: string, body: any): Observable<T> {
+    return this.http.post<T>(`${this.baseUrl}${endpoint}`, body).pipe(
+      catchError(err => {
+        this.toastr.error('Request failed');
+        throw err;
+      })
     );
-    }
+  }
 
-// function to get the "data" part of the api response for a "post" function
-PostData(url_: string, data: any): Observable<any> {
-  return this.http.post<any>(this.url + url_, data).pipe(
-    map((res: any) => res.data)
-  );
-}
+  // Specific flight search method
+  searchFlights(tailNumber: string): Observable<Flight[]> {
+    return this.post<Flight[]>('flights/search/', { tail_number: tailNumber });
+  }
 
-
-// function to get the "message" part of the api response for a "post" function
-PostMessage(url_: string, data: any): Observable<any> {
-  return this.http.post<any>(this.url + url_, data).pipe(
-    map((res: any) => res.message)
-  );
-}
-
-  
+  // Test method
+  testMessage(): void {
+    this.http.get<{ message: string }>(`${this.baseUrl}test`).subscribe({
+      next: (res) => this.toastr.success(res.message),
+      error: (err) => this.toastr.error('Test failed')
+    });
+  }
 }

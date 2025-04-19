@@ -7,7 +7,6 @@
           class="tab-button"
           [class.active]="activeTab === 'have-flight'"
           (click)="switchTab('have-flight')"
-          data-tab="have-flight"
         >
           I have a flight
         </button>
@@ -15,36 +14,39 @@
           class="tab-button"
           [class.active]="activeTab === 'search-flight'"
           (click)="switchTab('search-flight')"
-          data-tab="search-flight"
         >
           I want to search a flight
         </button>
       </div>
-      <div class="tab-content" [class.active]="activeTab === 'have-flight'" id="have-flight">
+      
+      <!-- Have Flight Tab -->
+      <div class="tab-content" [formGroup]="form" [class.active]="activeTab === 'have-flight'">
         <div class="input-group">
-          <label for="flight-number">Flight number</label>
-          <input type="text" id="flight-number" placeholder="DA1234">
+          <label for="tail_number">Tail Number</label>
+          <input formControlName="tail_number" type="text" id="tail_number" placeholder="EC-MEL">
         </div>
         <div class="input-group">
-          <label for="date">Date (DDMMYYYY)</label>
-          <input type="text" id="date" placeholder="10012024">
+          <label for="scheduled_departure_local">Scheduled Departure</label>
+          <input formControlName="scheduled_departure_local" type="datetime-local" id="scheduled_departure_local">
         </div>
-        <input class="submit-button" type="submit" value="Submit"/>
+        <button class="submit-button" (click)="fetchFlightData()" [disabled]="form.invalid">Submit</button>
       </div>
-      <div class="tab-content" [class.active]="activeTab === 'search-flight'" id="search-flight">
+
+      <!-- Search Flight Tab -->
+      <div class="tab-content" [class.active]="activeTab === 'search-flight'">
         <div class="input-group">
-          <label for="departure">Departure</label>
-          <input type="text" id="departure" placeholder="London">
+          <label for="depart_from_iata">Departure Airport (IATA)</label>
+          <input formControlName="depart_from_iata" type="text" id="depart_from_iata" placeholder="BCN">
         </div>
         <div class="input-group">
-          <label for="arrival">Arrival</label>
-          <input type="text" id="arrival" placeholder="Paris">
+          <label for="arrive_at_iata">Arrival Airport (IATA)</label>
+          <input formControlName="arrive_at_iata" type="text" id="arrive_at_iata" placeholder="AMS">
         </div>
         <div class="input-group">
-          <label for="date">Date (DDMMYYYY)</label>
-          <input type="text" id="date" placeholder="10012024">
+          <label for="flight_date">Flight Date</label>
+          <input formControlName="flight_date" type="date" id="flight_date">
         </div>
-        <button class="submit-button">Submit</button>
+        <button class="submit-button" (click)="fetchFlightData()" [disabled]="form.invalid">Search Flights</button>
       </div>
     </div>
   </div>
@@ -78,12 +80,3 @@
     </div>
   </div>
 </div>
-
-<div>
-  <p>Test API</p>
-  <button (click)="TestApi">Test API</button>
-</div>
-<p>Test flight details</p>
-<button (click)="TestApi">Test API</button>
-
-
