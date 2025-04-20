@@ -119,3 +119,19 @@ app-search-form {
   min-width: 50%;
   text-align: justify;
 }
+
+.loader {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.loader img {
+  height: 150px;
+}
+
+.loader p {
+  text-align: center;
+  color: var(--purple_sd);
+}

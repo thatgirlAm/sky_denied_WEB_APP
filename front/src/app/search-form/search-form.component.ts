@@ -35,13 +35,14 @@ export class SearchFormComponent {
   ) {
     this.haveFlightForm = this.fb.group({
       tail_number: ['', Validators.required],
-      scheduled_departure_local: ['', [this.dateTimeValidator]],
+      scheduled_departure_local_have_flight: ['', [this.dateTimeValidator]],
 
     });
 
     this.searchFlightForm = this.fb.group({
       depart_from: ['', [Validators.required]],
-      arrive_at: ['', [Validators.required]]
+      arrive_at: ['', [Validators.required]],
+      scheduled_departure_local_outbound: ['', [this.dateTimeValidator]],
     });
   }
 

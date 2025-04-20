@@ -12,28 +12,12 @@
   z-index: 1000;
 }
 
-.loader {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.loader img {
-  height: 150px;
-}
-
-.loader p {
-  text-align: center;
-  color: var(--purple_sd);
-}
-
 .prediction-popup {
   width: 70%;
   background-color: white;
   border: 2px solid var(--blue_sd);
   border-radius: 10px;
-  padding: 20px;
+  padding: 20px 0;
   position: relative;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
@@ -128,7 +112,7 @@
 }
 
 .claim-button {
-  background-color: var(--red_sd);
+  background-color: var(--purple_sd);
   font-size: 24px;
   margin-left: auto;
 }

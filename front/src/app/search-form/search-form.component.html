@@ -1,9 +1,4 @@
 <div class="section">
-  <!-- Loader Overlay -->
-  <div class="loader-overlay" *ngIf="isLoading">
-    <div class="loader"></div>
-    <div class="loader-text">Processing your request...</div>
-  </div>
 
   <!-- Headers -->
   <div class="flight-search-container">
@@ -39,14 +34,16 @@
         </div>
       </div>
       <div class="input-group">
-        <label for="scheduled_departure_local">Scheduled Departure</label>
-        <input formControlName="scheduled_departure_local" type="date" id="scheduled_departure_local">
+        <label for="scheduled_departure_local_have_flight">Scheduled Departure</label>
+        <input formControlName="scheduled_departure_local_have_flight" type="date" id="scheduled_departure_local_have_flight">
       </div>
-      <button class="submit-button"
-              (click)="fetchFlightData()"
-              [disabled]=" isLoading">
-        {{ isLoading ? 'Processing...' : 'Submit Flight' }}
-      </button>
+      <div class="input-group">
+        <button class="submit-button"
+                (click)="fetchFlightData()"
+                [disabled]=" isLoading">
+          {{ isLoading ? 'Processing...' : 'Submit Flight' }}
+        </button>
+      </div>
     </div>
 
     <!-- Search Flight Tab -->
@@ -55,17 +52,18 @@
         <label for="depart_from">Departure</label>
         <select id="depart_from" formControlName="depart_from">
           <option value="" disabled hidden>Select departure airport</option>
-          <option value="ATL">Atlanta</option>
-          <option value="DFW">Dallas</option>
-          <option value="DEN">Denver</option>
-          <option value="ORD">Chicago</option>
-          <option value="CLT">Charlotte</option>
-          <option value="LAX">Los Angeles</option>
-          <option value="LAS">Las Vegas</option>
-          <option value="SEA">Seattle</option>
-          <option value="MCO">Orlando</option>
-          <option value="PHX">Phoenix</option>
-        </select>        <div class="validation-error" *ngIf="searchFlightForm.get('depart_from')?.errors?.['required'] && searchFlightForm.get('depart_from')?.touched || submitted  ">
+          <option value="Atlanta">Atlanta</option>
+          <option value="Dallas">Dallas</option>
+          <option value="Denver">Denver</option>
+          <option value="Chicago">Chicago</option>
+          <option value="Charlotte">Charlotte</option>
+          <option value="Los Angeles">Los Angeles</option>
+          <option value="Las Vegas">Las Vegas</option>
+          <option value="Seattle">Seattle</option>
+          <option value="Orlando">Orlando</option>
+          <option value="Phoenix">Phoenix</option>
+        </select>
+        <div class="validation-error" *ngIf="searchFlightForm.get('depart_from')?.errors?.['required'] && searchFlightForm.get('depart_from')?.touched || submitted  ">
           ✖ Departure location is required
         </div>
         <!-- <div class="validation-error" *ngIf="searchFlightForm.get('depart_from_iata')?.errors?.['maxlength']">
@@ -76,29 +74,35 @@
         <label for="arrive_at">Arrival</label>
         <select id="arrive_at" formControlName="arrive_at">
           <option value="" disabled hidden>Select departure airport</option>
-          <option value="ATL">Atlanta</option>
-          <option value="DFW">Dallas</option>
-          <option value="DEN">Denver</option>
-          <option value="ORD">Chicago</option>
-          <option value="CLT">Charlotte</option>
-          <option value="LAX">Los Angeles</option>
-          <option value="LAS">Las Vegas</option>
-          <option value="SEA">Seattle</option>
-          <option value="MCO">Orlando</option>
-          <option value="PHX">Phoenix</option>
+          <option value="Atlanta">Atlanta</option>
+          <option value="Dallas">Dallas</option>
+          <option value="Denver">Denver</option>
+          <option value="Chicago">Chicago</option>
+          <option value="Charlotte">Charlotte</option>
+          <option value="Los Angeles">Los Angeles</option>
+          <option value="Las Vegas">Las Vegas</option>
+          <option value="Seattle">Seattle</option>
+          <option value="Orlando">Orlando</option>
+          <option value="Phoenix">Phoenix</option>
         </select>
         <div class="validation-error" *ngIf="searchFlightForm.get('arrive_at')?.errors?.['required'] && searchFlightForm.get('arrive_at')?.touched || submitted  ">
           ✖ Arrival location is required
         </div>
+      </div>
+      <div class="input-group">
+        <label for="scheduled_departure_local_outbound">Scheduled Departure</label>
+        <input formControlName="scheduled_departure_local_outbound" type="date" id="scheduled_departure_local_outbound">
+      </div>
         <!-- <div class="validation-error" *ngIf="searchFlightForm.get('arrive_at')?.errors?.['maxlength']">
           ✖ IATA code must be 3 characters
         </div> -->
+      <div class="input-group">
+        <button class="submit-button"
+                (click)="fetchFlightData()"
+                [disabled]="isLoading">
+          {{ isLoading ? 'Searching...' : 'Search Flights' }}
+        </button>
       </div>
-      <button class="submit-button"
-              (click)="fetchFlightData()"
-              [disabled]="isLoading">
-        {{ isLoading ? 'Searching...' : 'Search Flights' }}
-      </button>
     </div>
 
   </div>

@@ -1,6 +1,8 @@
+
+
 <app-search-form (searchStarted)="handleSearchStarted()" (searchResults)="handleSearchResults($event)"></app-search-form>
 <app-search-results *ngIf="searchClicked" [flights]="searchResults" (predictClicked)="handlePredictionTrigger()" (notifyClicked)="handleGetNotifiedTrigger()"></app-search-results>
 
-<!--pop ups-->
+<!--pop ups -->
 <app-prediction-results *ngIf="showPredictionPopup" (closePopup)="closePredictionPopup()"></app-prediction-results>
 <app-input-email-form *ngIf="showGetNotifiedPopup" (closeGetNotifiedPopup)="closeGetNotifiedPopup()"></app-input-email-form>
