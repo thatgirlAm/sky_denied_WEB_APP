@@ -6,6 +6,7 @@ import { InputEmailFormComponent } from '../input-email-form/input-email-form.co
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../api-service.service';
 import { ToastrService } from 'ngx-toastr';
+import { Flight } from '../flight';
 
 @Component({
   selector: 'app-search',
@@ -17,6 +18,8 @@ export class SearchComponent {
   showPredictionPopup = false;
   showGetNotifiedPopup = false;
   searchClicked = false ;
+  searchResults: Flight[] = [];
+
   // to know if the model has been triggered
   isModelTriggering = false;
 
@@ -29,11 +32,21 @@ export class SearchComponent {
     const triggerEndpoint = 'trigger/data';
     const triggerData = data;
     // TODO : validate the format of the data (from the form)
-    // 
+    //
   }
 
 
 // Charlotte's functions
+
+  handleSearchStarted() {
+    this.searchClicked = true;
+    this.searchResults = [];
+  }
+
+  handleSearchResults(flights: Flight[]) {
+    this.searchResults = flights;
+  }
+
   handlePredictionTrigger() {
     this.searchClicked = true ;
     //this.trigger_model();

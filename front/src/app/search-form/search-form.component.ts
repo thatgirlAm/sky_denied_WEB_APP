@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -19,9 +19,12 @@ import {NgIf} from '@angular/common';
   styleUrl: './search-form.component.css'
 })
 export class SearchFormComponent {
+  @Output() searchStarted = new EventEmitter<void>();
+  @Output() searchResults = new EventEmitter<Flight[]>();
   activeTab = 'have-flight';
   isLoading = false;
   submitted = false;
+  flights: Flight[] = [];
 
   haveFlightForm: FormGroup;
   searchFlightForm: FormGroup;
@@ -52,6 +55,7 @@ export class SearchFormComponent {
     if (formGroup.invalid) return;
 
     this.isLoading = true;
+    this.searchStarted.emit();
 
     // Build search parameters based on active tab
     const searchParams = this.activeTab === 'have-flight'
@@ -69,10 +73,12 @@ export class SearchFormComponent {
         console.table(flights);
         this.isLoading = false;
         this.submitted = false;
+        this.searchResults.emit(flights);
       },
       error: (err) => {
         this.isLoading = false;
         this.submitted = false;
+        this.searchResults.emit([]);
       }
     });
   }
