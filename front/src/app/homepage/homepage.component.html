@@ -9,62 +9,70 @@
     <div class="flight-search-container">
       <h1>Request a prediction</h1>
       <div class="tab-buttons">
-        <!-- Tab buttons remain the same -->
-      </div>
-      
-      <div [formGroup]="form">
-        <!-- "I have a flight" Tab -->
-        <div class="tab-content" [class.active]="activeTab === 'have-flight'">
-          <div class="input-group">
-            <label for="tail_number">Tail Number</label>
-            <input formControlName="tail_number" type="text" id="tail_number">
-            <div class="validation-error" *ngIf="form.get('tail_number')?.invalid && form.get('tail_number')?.touched">
-              ✖ Tail number is required
-            </div>
-          </div>
-          <div class="input-group">
-            <label for="scheduled_departure_local">Scheduled Departure</label>
-            <input formControlName="scheduled_departure_local" type="datetime-local" id="scheduled_departure_local">
-            <div class="validation-error" *ngIf="form.get('scheduled_departure_local')?.invalid && form.get('scheduled_departure_local')?.touched">
-              ✖ Scheduled departure is required
-            </div>
-          </div>
-        </div>
-
-        <!-- "Search flight" Tab -->
-        <div class="tab-content" [class.active]="activeTab === 'search-flight'">
-          <div class="input-group">
-            <label for="depart_from_iata">Departure (IATA)</label>
-            <input formControlName="depart_from_iata" type="text" id="depart_from_iata">
-            <div class="validation-error" *ngIf="form.get('depart_from_iata')?.errors?.['required'] && form.get('depart_from_iata')?.touched">
-              ✖ Departure code is required
-            </div>
-            <div class="validation-error" *ngIf="form.get('depart_from_iata')?.errors?.['maxlength']">
-              ✖ IATA code must be 3 characters
-            </div>
-          </div>
-          <div class="input-group">
-            <label for="arrive_at_iata">Arrival (IATA)</label>
-            <input formControlName="arrive_at_iata" type="text" id="arrive_at_iata">
-            <div class="validation-error" *ngIf="form.get('arrive_at_iata')?.errors?.['required'] && form.get('arrive_at_iata')?.touched">
-              ✖ Arrival code is required
-            </div>
-            <div class="validation-error" *ngIf="form.get('arrive_at_iata')?.errors?.['maxlength']">
-              ✖ IATA code must be 3 characters
-            </div>
-          </div>
-        </div>
-
-        <!-- Submit Button -->
-        <button class="submit-button" 
-                (click)="fetchFlightData()" 
-                [disabled]="form.invalid || isLoading">
-          <span *ngIf="!isLoading">
-            {{ activeTab === 'have-flight' ? 'Submit Flight' : 'Search Flights' }}
-          </span>
-          <span *ngIf="isLoading">Processing...</span>
+        <button
+          class="tab-button"
+          [class.active]="activeTab === 'have-flight'"
+          (click)="switchTab('have-flight')"
+        >
+          I have a flight
+        </button>
+        <button
+          class="tab-button"
+          [class.active]="activeTab === 'search-flight'"
+          (click)="switchTab('search-flight')"
+        >
+          I want to search a flight
         </button>
       </div>
+      
+<!-- Have Flight Tab -->
+<div [formGroup]="haveFlightForm" class="tab-content" [class.active]="activeTab === 'have-flight'">
+  <div class="input-group">
+    <label for="tail_number">Tail Number</label>
+    <input formControlName="tail_number" type="text" id="tail_number">
+    <div class="validation-error" *ngIf="haveFlightForm.get('tail_number')?.invalid && haveFlightForm.get('tail_number')?.touched || submitted ">
+      ✖ Tail number is required
+    </div>
+  </div>
+  <div class="input-group">
+    <label for="scheduled_departure_local">Scheduled Departure</label>
+    <input formControlName="scheduled_departure_local" type="date" id="scheduled_departure_local">
+  </div>
+  <button class="submit-button" 
+          (click)="fetchFlightData()" 
+          [disabled]=" isLoading">
+    {{ isLoading ? 'Processing...' : 'Submit Flight' }}
+  </button>
+</div>
+
+<!-- Search Flight Tab -->
+<div [formGroup]="searchFlightForm" class="tab-content" [class.active]="activeTab === 'search-flight'">
+  <div class="input-group">
+    <label for="depart_from">Departure</label>
+    <input formControlName="depart_from" type="text" id="depart_from">
+    <div class="validation-error" *ngIf="searchFlightForm.get('depart_from')?.errors?.['required'] && searchFlightForm.get('depart_from')?.touched || submitted  ">
+      ✖ Departure location is required
+    </div>
+    <!-- <div class="validation-error" *ngIf="searchFlightForm.get('depart_from_iata')?.errors?.['maxlength']">
+      ✖ IATA code must be 3 characters
+    </div> -->
+  </div>
+  <div class="input-group">
+    <label for="arrive_at">Arrival</label>
+    <input formControlName="arrive_at" type="text" id="arrive_at">
+    <div class="validation-error" *ngIf="searchFlightForm.get('arrive_at')?.errors?.['required'] && searchFlightForm.get('arrive_at')?.touched || submitted  ">
+      ✖ Arrival location is required
+    </div>
+    <!-- <div class="validation-error" *ngIf="searchFlightForm.get('arrive_at')?.errors?.['maxlength']">
+      ✖ IATA code must be 3 characters
+    </div> -->
+  </div>
+  <button class="submit-button" 
+          (click)="fetchFlightData()" 
+          [disabled]="isLoading">
+    {{ isLoading ? 'Searching...' : 'Search Flights' }}
+  </button>
+</div>
     </div>
   </div>
 

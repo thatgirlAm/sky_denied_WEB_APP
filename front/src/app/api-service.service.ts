@@ -31,9 +31,16 @@ export class ApiService {
     );
   }
 
-  // Specific flight search method
-  searchFlights(tailNumber: string): Observable<Flight[]> {
-    return this.post<Flight[]>('flights/search/', { tail_number: tailNumber });
+  searchFlights(searchParams: any): Observable<Flight[]> {
+    return this.post<any>('flights/search/', searchParams)
+      .pipe(map(response => response.data));
+  }
+  
+  searchByAirports(departureIata: string, arrivalIata: string): Observable<Flight[]> {
+    return this.post<Flight[]>('flights/search/', {
+      depart_from_iata: departureIata,
+      arrive_at_iata: arrivalIata
+    });
   }
 
   // Test method

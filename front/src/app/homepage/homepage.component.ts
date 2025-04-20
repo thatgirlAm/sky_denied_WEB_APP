@@ -4,6 +4,8 @@ import { ApiService } from '../api-service.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { log } from 'node:console';
 import { NgIf } from '@angular/common';
+import { Flight } from '../flight';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'app-homepage',
@@ -14,38 +16,77 @@ import { NgIf } from '@angular/common';
 })
 export class HomepageComponent {
   activeTab = 'have-flight';
-  form: FormGroup;
   isLoading = false;
-  constructor(private api: ApiService, private fb: FormBuilder) {
-    this.form = this.fb.group({
+  submitted = false;
+
+  haveFlightForm: FormGroup;
+  searchFlightForm: FormGroup;
+
+  constructor(
+    private fb: FormBuilder,
+    private api: ApiService
+  ) {
+    this.haveFlightForm = this.fb.group({
       tail_number: ['', Validators.required],
-      scheduled_departure_local: ['', Validators.required],
-      depart_from_iata: ['', [Validators.required, Validators.maxLength(3)]],
-      arrive_at_iata: ['', [Validators.required, Validators.maxLength(3)]],
-      flight_date: ['', Validators.required]
+      scheduled_departure_local: ['', [this.dateTimeValidator]],
+
+    });
+
+    this.searchFlightForm = this.fb.group({
+      depart_from: ['', [Validators.required]],
+      arrive_at: ['', [Validators.required]]
     });
   }
 
-  async fetchFlightData() {
-    console.log("button clicked");
+  fetchFlightData() {
+    this.submitted = true;
+    const formGroup = this.activeTab === 'have-flight' 
+      ? this.haveFlightForm 
+      : this.searchFlightForm;
+  
+    formGroup.markAllAsTouched();
+    if (formGroup.invalid) return;
+  
+    this.isLoading = true;
+  
+    // Build search parameters based on active tab
+    const searchParams = this.activeTab === 'have-flight' 
+      ? { tail_number: this.haveFlightForm.value.tail_number }
+      : { 
+          depart_from: this.searchFlightForm.value.depart_from,
+          arrive_at: this.searchFlightForm.value.arrive_at
+        };
+    console.log(searchParams);
     
-    if (this.form.invalid) return;
-
-    const tailNumber = this.form.value.tailNumber;
-
-    this.api.searchFlights(tailNumber).subscribe({
-      next: (flights) => {
-        this.isLoading = true ; 
+  
+    this.api.searchFlights(searchParams).subscribe({
+      next: (flights: Flight[]) => {
         console.log('Flight Data:', flights);
         console.table(flights);
+        this.isLoading = false;
+        this.submitted = false;
       },
       error: (err) => {
-        console.error('Error:', err);
         this.isLoading = false;
-  }});
+        this.submitted = false;
+      }
+    });
   }
-
-  switchTab(tabId: string): void {
+  switchTab(tabId: string) {
+    this.submitted = false;
     this.activeTab = tabId;
   }
+
+  dateTimeValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+
+    // Regular expression to match date and time format (e.g., YYYY-MM-DD HH:mm:ss)
+    const dateTimeRegex = /^\d{4}-\d{2}-\d{2}?$/;
+
+    if (!value || dateTimeRegex.test(value)) {
+        return null; // Valid
+    }
+
+    return { invalidDateTime: 'Invalid date and time format. Use YYYY-MM-DD HH:mm:ss' }; // Invalid
+}
 }
