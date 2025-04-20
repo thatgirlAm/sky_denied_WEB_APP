@@ -1,47 +1,105 @@
-<h1>
-  Search
-</h1>
-<div class="search-form">
-  <div class="row">
-    <div class="input-box">
-      <label for="date">
-        Departure date (YYYYMMDD)
-      </label>
-      <input id="date" placeholder="20250128" />
-    </div>
+<div class="section">
+  <!-- Loader Overlay -->
+  <div class="loader-overlay" *ngIf="isLoading">
+    <div class="loader"></div>
+    <div class="loader-text">Processing your request...</div>
   </div>
-  <h2>
-    Using your outbound
-  </h2>
-  <div class="row">
-    <div class="input-box">
-      <label for="departure">
-        From
-      </label>
-      <input id="departure" placeholder="London" />
+
+  <!-- Headers -->
+  <div class="flight-search-container">
+    <h1>
+      Make a search
+    </h1>
+    <div class="tab-buttons">
+      <button
+        class="tab-button"
+        [class.active]="activeTab === 'have-flight'"
+        (click)="switchTab('have-flight')"
+        data-tab="have-flight"
+      >
+        I have a flight
+      </button>
+      <button
+        class="tab-button"
+        [class.active]="activeTab === 'search-flight'"
+        (click)="switchTab('search-flight')"
+        data-tab="search-flight"
+      >
+        I want to search a flight
+      </button>
     </div>
-    <div class="input-box">
-      <label for="destination">
-        To
-      </label>
-      <input id="destination" placeholder="Paris" />
+
+    <!-- Have Flight Tab -->
+    <div [formGroup]="haveFlightForm" class="tab-content" [class.active]="activeTab === 'have-flight'">
+      <div class="input-group">
+        <label for="tail_number">Tail Number</label>
+        <input formControlName="tail_number" type="text" id="tail_number">
+        <div class="validation-error" *ngIf="haveFlightForm.get('tail_number')?.invalid && haveFlightForm.get('tail_number')?.touched || submitted ">
+          ✖ Tail number is required
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="scheduled_departure_local">Scheduled Departure</label>
+        <input formControlName="scheduled_departure_local" type="date" id="scheduled_departure_local">
+      </div>
+      <button class="submit-button"
+              (click)="fetchFlightData()"
+              [disabled]=" isLoading">
+        {{ isLoading ? 'Processing...' : 'Submit Flight' }}
+      </button>
     </div>
-    <div class="search-button">
-      <input type="submit" value="Make a search">
+
+    <!-- Search Flight Tab -->
+    <div [formGroup]="searchFlightForm" class="tab-content" [class.active]="activeTab === 'search-flight'">
+      <div class="input-group">
+        <label for="depart_from">Departure</label>
+        <select id="depart_from" formControlName="depart_from">
+          <option value="" disabled hidden>Select departure airport</option>
+          <option value="ATL">Atlanta</option>
+          <option value="DFW">Dallas</option>
+          <option value="DEN">Denver</option>
+          <option value="ORD">Chicago</option>
+          <option value="CLT">Charlotte</option>
+          <option value="LAX">Los Angeles</option>
+          <option value="LAS">Las Vegas</option>
+          <option value="SEA">Seattle</option>
+          <option value="MCO">Orlando</option>
+          <option value="PHX">Phoenix</option>
+        </select>        <div class="validation-error" *ngIf="searchFlightForm.get('depart_from')?.errors?.['required'] && searchFlightForm.get('depart_from')?.touched || submitted  ">
+          ✖ Departure location is required
+        </div>
+        <!-- <div class="validation-error" *ngIf="searchFlightForm.get('depart_from_iata')?.errors?.['maxlength']">
+          ✖ IATA code must be 3 characters
+        </div> -->
+      </div>
+      <div class="input-group">
+        <label for="arrive_at">Arrival</label>
+        <select id="arrive_at" formControlName="arrive_at">
+          <option value="" disabled hidden>Select departure airport</option>
+          <option value="ATL">Atlanta</option>
+          <option value="DFW">Dallas</option>
+          <option value="DEN">Denver</option>
+          <option value="ORD">Chicago</option>
+          <option value="CLT">Charlotte</option>
+          <option value="LAX">Los Angeles</option>
+          <option value="LAS">Las Vegas</option>
+          <option value="SEA">Seattle</option>
+          <option value="MCO">Orlando</option>
+          <option value="PHX">Phoenix</option>
+        </select>
+        <div class="validation-error" *ngIf="searchFlightForm.get('arrive_at')?.errors?.['required'] && searchFlightForm.get('arrive_at')?.touched || submitted  ">
+          ✖ Arrival location is required
+        </div>
+        <!-- <div class="validation-error" *ngIf="searchFlightForm.get('arrive_at')?.errors?.['maxlength']">
+          ✖ IATA code must be 3 characters
+        </div> -->
+      </div>
+      <button class="submit-button"
+              (click)="fetchFlightData()"
+              [disabled]="isLoading">
+        {{ isLoading ? 'Searching...' : 'Search Flights' }}
+      </button>
     </div>
-  </div>
-  <h2>
-    Or your flight number
-  </h2>
-  <div class="row">
-    <div class="input-box">
-      <label for="flight_number">
-        Flight number
-      </label>
-      <input id="flight_number" placeholder="AA1234" />
-    </div>
-    <div class="search-button">
-      <input type="submit" value="Make a search">
-    </div>
+
   </div>
 </div>
