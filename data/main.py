@@ -18,6 +18,7 @@ import pandas as pd
 import json
 import sys
 import os
+from selenium.webdriver.chrome.options import Options
 
 # Import scraping functions
 from src.get_flight_by_airport_flightera import crawl_flighttera_airport_flights
