@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { ApiService } from '../api-service.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { log } from 'node:console';
@@ -24,7 +24,8 @@ export class HomepageComponent {
 
   constructor(
     private fb: FormBuilder,
-    private api: ApiService
+    private api: ApiService,
+    private router: Router
   ) {
     this.haveFlightForm = this.fb.group({
       tail_number: ['', Validators.required],
@@ -53,22 +54,40 @@ export class HomepageComponent {
     const searchParams = this.activeTab === 'have-flight' 
       ? { tail_number: this.haveFlightForm.value.tail_number }
       : { 
-          depart_from: this.searchFlightForm.value.depart_from,
-          arrive_at: this.searchFlightForm.value.arrive_at
+          depart_from: this.searchFlightForm.value.depart_from_iata,
+          arrive_at: this.searchFlightForm.value.arrive_at_iata
         };
-    console.log(searchParams);
-    
   
     this.api.searchFlights(searchParams).subscribe({
       next: (flights: Flight[]) => {
-        console.log('Flight Data:', flights);
-        console.table(flights);
+        console.log('Search Params:', searchParams);
+        console.log('Flights:', flights);
+        
         this.isLoading = false;
         this.submitted = false;
+  
+        // Add null check for flights
+        if (flights && flights.length > 0) {
+          this.router.navigate(['search'], {
+            state: {
+              flights: flights,
+              searchParams: searchParams
+            }
+          }).catch(error => {
+            console.error('Navigation error:', error);
+            // Handle navigation error (e.g., show error message)
+          });
+        } else {
+          // Handle no results case
+          console.warn('No flights found');
+          // Optionally show message to user
+        }
       },
       error: (err) => {
+        console.error('API Error:', err);
         this.isLoading = false;
         this.submitted = false;
+        // Optionally show error message to user
       }
     });
   }

@@ -6,15 +6,20 @@ import { InputEmailFormComponent } from '../input-email-form/input-email-form.co
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../api-service.service';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 import { Flight } from '../flight';
+import { Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-search',
-  imports: [SearchFormComponent, SearchResultsComponent, PredictionResultsComponent, InputEmailFormComponent, CommonModule],
+  imports: [SearchFormComponent, SearchResultsComponent, PredictionResultsComponent,InputEmailFormComponent,  CommonModule],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css'
 })
 export class SearchComponent {
+  @Input() flights: Flight[] = [];
+  @Output() predictClicked = new EventEmitter<Flight>();
+  @Output() notifyClicked = new EventEmitter<Flight>();
   showPredictionPopup = false;
   showGetNotifiedPopup = false;
   searchClicked = false ;
@@ -23,16 +28,16 @@ export class SearchComponent {
   // to know if the model has been triggered
   isModelTriggering = false;
 
-  constructor(private apiService: ApiService, private toastr: ToastrService) {}
+  searchParams !: any ; 
 
-
-  // TODO : I do not understand Charlotte's logic here
-  trigger_model(data:any) {
-    this.isModelTriggering = true;
-    const triggerEndpoint = 'trigger/data';
-    const triggerData = data;
-    // TODO : validate the format of the data (from the form)
-    //
+  constructor(private apiService: ApiService, private toastr: ToastrService, private router: Router) {
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras.state) {
+      this.flights = navigation.extras.state['flights'];
+      this.searchParams = navigation.extras.state['searchParams'];
+    }
+    console.log(this.flights);
+    
   }
 
 
