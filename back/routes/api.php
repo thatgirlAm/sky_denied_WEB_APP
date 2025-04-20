@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\HTTP\Controllers\FlightController ;
@@ -32,4 +33,10 @@ Route::post('/prediction/model_testing', [PredictionController::class,'model_tes
 Route::post('/prediction/model_trigger', [PredictionController::class, 'model_trigger']);
 Route::post('/prediction/model_trigger_test', [PredictionController::class, 'model_trigger_test']);
 Route::post('/prediction/data_handling', [PredictionController::class, 'data_handling']);
+
+
+// Mailing system
+// Contact form
+Route::post('/contact', [ContactController::class, 'send_contact']);
+Route::post('/confirm_contact', [ContactController::class, 'confirm_contact']);
 });

@@ -5,6 +5,18 @@
   --red_sd: #DC3545;
   --green_sd: #28A745;
   --purple_hoover_sd: #592f6b;
+  --blue_hoover_sd: #004494;
+}
+
+.section {
+  display: flex;
+  justify-content: space-evenly;
+  max-width: 60%;
+  min-width: 40%;
+  margin: auto;
+  gap: 5%;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .section-divider {
@@ -92,3 +104,34 @@ label {
   font-size: 16px;
 }
 
+app-search-form {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.paragraph h1 {
+  text-align: left;
+}
+
+.paragraph {
+  flex: 1 1 40%;
+  min-width: 50%;
+  text-align: justify;
+}
+
+.loader {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.loader img {
+  height: 150px;
+}
+
+.loader p {
+  text-align: center;
+  color: var(--purple_sd);
+}

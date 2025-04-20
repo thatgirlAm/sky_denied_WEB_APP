@@ -1,110 +1,27 @@
 <div class="homepage-content">
-  <div class="section">
-    <div class="flight-search-container">
-      <h1>Request a prediction</h1>
-      <div class="tab-buttons">
-        <button
-          class="tab-button"
-          [class.active]="activeTab === 'have-flight'"
-          (click)="switchTab('have-flight')"
-          data-tab="have-flight"
-        >
-          I have a flight
-        </button>
-        <button
-          class="tab-button"
-          [class.active]="activeTab === 'search-flight'"
-          (click)="switchTab('search-flight')"
-          data-tab="search-flight"
-        >
-          I want to search a flight
-        </button>
-      </div>
+  <!-- Search form -->
+  <app-search-form></app-search-form>
 
-      <!-- Have Flight Form -->
-      <div class="tab-content" [class.active]="activeTab === 'have-flight'" id="have-flight">
-        <form [formGroup]="haveFlightForm" (ngSubmit)="onSubmitHaveFlight()">
-          <div class="input-group">
-            <label for="flight-number">Flight number</label>
-            <input
-              type="text"
-              id="flight-number"
-              formControlName="flightNumber"
-              placeholder="DA1234"
-            />
-            <div *ngIf="haveFlightForm.get('flightNumber')?.invalid && haveFlightForm.get('flightNumber')?.touched">
-              <small>Flight number is required.</small>
-            </div>
-          </div>
-          <div class="input-group">
-            <label for="date">Date (DDMMYYYY)</label>
-            <input
-              type="text"
-              id="date"
-              formControlName="date"
-              placeholder="10012024"
-            />
-            <div *ngIf="haveFlightForm.get('date')?.invalid && haveFlightForm.get('date')?.touched">
-              <small>Date must be in DDMMYYYY format.</small>
-            </div>
-          </div>
-          <button type="submit" class="submit-button" [disabled]="haveFlightForm.invalid">
-            Submit
-          </button>
-        </form>
-      </div>
-
-      <!-- Search Flight Form -->
-      <div class="tab-content" [class.active]="activeTab === 'search-flight'" id="search-flight">
-        <form [formGroup]="searchForm" (ngSubmit)="onSubmitSearch()">
-          <div class="input-group">
-            <label for="departure">Departure</label>
-            <input
-              type="text"
-              id="departure"
-              formControlName="departure"
-              placeholder="London"
-            />
-            <div *ngIf="searchForm.get('departure')?.invalid && searchForm.get('departure')?.touched">
-              <small>Departure is required.</small>
-            </div>
-          </div>
-          <div class="input-group">
-            <label for="arrival">Arrival</label>
-            <input
-              type="text"
-              id="arrival"
-              formControlName="arrival"
-              placeholder="Paris"
-            />
-            <div *ngIf="searchForm.get('arrival')?.invalid && searchForm.get('arrival')?.touched">
-              <small>Arrival is required.</small>
-            </div>
-          </div>
-          <div class="input-group">
-            <label for="date">Date (DDMMYYYY)</label>
-            <input
-              type="text"
-              id="date"
-              formControlName="date"
-              placeholder="10012024"
-            />
-            <div *ngIf="searchForm.get('date')?.invalid && searchForm.get('date')?.touched">
-              <small>Date must be in DDMMYYYY format.</small>
-            </div>
-          </div>
-          <button type="submit" class="submit-button" [disabled]="searchForm.invalid">
-            Submit
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
-
+    <!-- First section -->
   <div class="section">
     <div class="paragraph">
       <h1>Predicting delays</h1>
-      <p>Flight delays are becoming increasingly common, affecting customers, airlines, and the entire aviation industry...</p>
+      <p>Flight delays are becoming increasingly common, affecting customers, airlines, and the entire aviation industry. For travelers, an unexpected delay can disrupt important plans and cause stress. At Sky Denied, we help you stay ahead by predicting flight delays, allowing you to adjust your schedule accordingly. Our machine learning models analyse real-time data to provide accurate predictions, giving you the power to make informed decisions. Beyond just forecasting delays, we also assist in claiming compensation from airlines, ensuring you get what you're entitled to with ease. Whether you're a frequent flyer or an occasional traveler, our goal is to make your journey smoother and more predictable! </p>
+    </div>
+    <div class="getty-embed">
+      <div class="getty-frame-container">
+        <iframe
+          src="//embed.gettyimages.com/embed/93466101?et=izWYlnX4Rv9zRutOHWsUpg&tld=com&sig=CbPDvrZ_9NG-KNXDvh3eJVjZVZNudTV-AWangIJuAqw=&caption=true&ver=1"
+          scrolling="no"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <div class="getty-caption">
+        <a href="http://www.gettyimages.com/detail/93466101" target="_blank">
+          Embed from Getty Images
+        </a>
+      </div>
     </div>
   </div>
   <div class="section">
