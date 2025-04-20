@@ -87,7 +87,7 @@ export class HomepageComponent {
         console.error('API Error:', err);
         this.isLoading = false;
         this.submitted = false;
-        // Optionally show error message to user
+        
       }
     });
   }
