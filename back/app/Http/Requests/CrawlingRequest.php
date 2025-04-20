@@ -22,7 +22,11 @@ class CrawlingRequest extends FormRequest
     public function rules(): array
     {
         return [
-             'tail_number'=>'required|string',
+            'mode' => 'required|string|in:realtime,scheduled',
+            'tail_number' => 'required_if:mode,realtime|string',
+            'main_scheduled_departure_utc' => 'required_if:mode,realtime|string',
+            'airport_list_iata' => 'required_if:mode,scheduled|array',
+            'airport_list_iata.*' => 'string',
         ];
     }
 }

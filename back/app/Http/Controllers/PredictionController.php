@@ -75,27 +75,50 @@ class PredictionController extends Controller
         $prediction->delete();
     }
 
-    // function to handle data crawling in real time
-    public function crawling_trigger(CrawlingRequest $crawling_request)
+   /**
+ * Main method to trigger crawling process
+ */
+public function crawling_trigger(CrawlingRequest $crawling_request)
 {
     // Retrieve parameters from the request
     $response = $crawling_request->all();
-    $tail_number = $response['tail_number'];
     $mode = $response['mode'];
-    $main_flight_date_utc = $response['main_scheduled_departure_utc'];
-
-    // Construct the JSON data to be passed to the Python script
-    $data = json_encode([[
-        'aircraft' => $tail_number,
-        'mode' => $mode
-    ]]);
+    
+    // Construct the JSON data based on mode
+    $jsonData = [];
+    
+    if ($mode === 'realtime') {
+        $tail_number = $response['tail_number'];
+        $main_flight_date_utc = $response['main_scheduled_departure_utc'];
+        
+        $jsonData = [[
+            'aircraft' => $tail_number,
+            'mode' => $mode
+        ]];
+    } elseif ($mode === 'scheduled') {
+        // For scheduled mode, we need airport list
+        $airport_list_iata = $response['airport_list_iata'] ?? [];
+        
+        $jsonData = [[
+            'mode' => $mode,
+            'airport_list_iata' => $airport_list_iata
+        ]];
+    } else {
+        return $this->format_error(
+            'Invalid mode specified. Supported modes are "realtime" and "scheduled".',
+            Response::HTTP_BAD_REQUEST
+        );
+    }
+    
+    // Encode the data for the Python script
+    $data = json_encode($jsonData);
 
     // Determine the script path using a relative path
     $script_path = base_path('../data/main.py');
 
     // Define the Python process
     $process = new Process(['python3', $script_path, $data]);
-    $process->setTimeout(120);
+    $process->setTimeout(300); // Increased timeout for scheduled mode which may take longer
 
     try {
         // Run the process
@@ -117,12 +140,26 @@ class PredictionController extends Controller
         }
        
         // Structure the result as desired
-        $result = [
-            [
+        $result = [];
+        if ($mode === 'realtime') {
+            $main_flight_date_utc = $response['main_scheduled_departure_utc'];
+            $result = [
+                [
+                    'flights' => $flights_information,
+                    'main_flight_date' => $main_flight_date_utc
+                ]
+            ];
+        } else {
+            // For scheduled mode, update the database with flight information
+            $saveStats = $this->saveFlightsToDatabase($flights_information);
+            \Log::info("Database updated with flights. Created: {$saveStats['created']}, Updated: {$saveStats['updated']}, Skipped: {$saveStats['skipped']}, Errors: {$saveStats['errors']}");
+            
+            // Return the flight information and stats
+            $result = [
                 'flights' => $flights_information,
-                'main_flight_date' => $main_flight_date_utc
-            ]
-        ];
+                'db_stats' => $saveStats
+            ];
+        }
 
         // Return success response
         return $this->format(['Script ran successfully', Response::HTTP_OK, $result]);
@@ -143,6 +180,62 @@ class PredictionController extends Controller
             Response::HTTP_INTERNAL_SERVER_ERROR
         );
     }
+}
+
+/**
+ * Save or update flights in the database
+ * 
+ * @param array $flightsData Decoded JSON data from the Python script
+ * @return array Statistics on the database operation
+ */
+public function saveFlightsToDatabase($flightsData)
+{
+    // Track stats for logging
+    $stats = [
+        'created' => 0,
+        'updated' => 0,
+        'skipped' => 0,
+        'errors' => 0
+    ];
+    
+    // Process each flight
+    foreach ($flightsData as $flightData) {
+        try {
+            // Check if we have a valid flight
+            if (!isset($flightData['flight_number_iata']) || 
+                !isset($flightData['scheduled_departure_utc']) ||
+                !isset($flightData['flight_date'])) {
+                $stats['skipped']++;
+                continue;
+            }
+            
+            // Create a unique identifier for the flight
+            $criteria = [
+                'flight_number_iata' => $flightData['flight_number_iata'],
+                'flight_date' => $flightData['flight_date'],
+                'scheduled_departure_utc' => $flightData['scheduled_departure_utc']
+            ];
+            
+            // Try to find an existing flight
+            $flight = \App\Models\Flight::where($criteria)->first();
+            
+            if ($flight) {
+                // Update existing flight
+                $flight->fill($flightData);
+                $flight->save();
+                $stats['updated']++;
+            } else {
+                // Create new flight
+                \App\Models\Flight::create($flightData);
+                $stats['created']++;
+            }
+        } catch (\Exception $e) {
+            \Log::error("Error saving flight data: " . $e->getMessage());
+            $stats['errors']++;
+        }
+    }
+    
+    return $stats;
 }
 
     
@@ -314,6 +407,8 @@ class PredictionController extends Controller
 
     // function to trigger the whole prediction scheme
     */
+    
+    
     public function trigger(CrawlingRequest $crawlingRequest)
     {
         try 

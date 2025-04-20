@@ -12,3 +12,10 @@ realtime | get_flight_by_aircraft_flightradar24 | 2025-04-16 11:46:03,472 | INFO
 realtime | main | 2025-04-16 11:46:03,520 | INFO | Realtime aircraft data cleaned: 45 rows
 realtime | main | 2025-04-16 11:46:03,524 | INFO | Outputting JSON data: [{"flight_date": "2025-04-18", "flight_date_utc": null, "flight_number_iata": "BA712", "tail_number"...
 realtime | main | 2025-04-16 11:46:03,524 | INFO | REALTIME mode completed.
+realtime | main | 2025-04-20 22:52:48,632 | INFO | REALTIME mode started for aircraft: N688SL
+realtime | get_flight_by_aircraft_flightradar24 | 2025-04-20 22:52:55,736 | INFO | Opening Flightradar24 aircraft URL: https://www.flightradar24.com/data/aircraft/N688SL
+realtime | get_flight_by_aircraft_flightradar24 | 2025-04-20 22:53:22,235 | WARNING | Timed out waiting for flight data table to appear
+realtime | get_flight_by_aircraft_flightradar24 | 2025-04-20 22:53:22,669 | INFO | Flightradar24 aircraft scrape done for N688SL: 8 rows
+realtime | main | 2025-04-20 22:53:22,772 | INFO | Realtime aircraft data cleaned: 8 rows
+realtime | main | 2025-04-20 22:53:22,775 | INFO | Outputting JSON data: [{"flight_date": "2025-04-18", "flight_date_utc": "2025-04-18", "flight_number_iata": "P9301", "tail...
+realtime | main | 2025-04-20 22:53:22,775 | INFO | REALTIME mode completed.
