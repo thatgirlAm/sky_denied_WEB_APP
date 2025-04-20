@@ -30,6 +30,7 @@ export class SearchComponent {
 
   // to know if the model has been triggered
   isModelTriggering = false;
+
   previousSearch = false ; 
   searchParams !: any ; 
   isLoading = false;
@@ -47,11 +48,12 @@ export class SearchComponent {
       tail_number: ['', Validators.required],
       scheduled_departure_local: ['', [this.dateTimeValidator]],
 
+
     });
     
   }
 
-
+*/
 // Charlotte's functions
 
   handleSearchStarted() {
@@ -149,5 +151,6 @@ export class SearchComponent {
 
     return { invalidDateTime: 'Invalid date and time format. Use YYYY-MM-DD HH:mm:ss' }; // Invalid
 }
+
 
 }

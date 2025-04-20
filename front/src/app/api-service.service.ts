@@ -13,6 +13,7 @@ import { Flight } from './flight';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
+
   private readonly baseUrl = 'http://127.0.0.1:8000/api/';
 
   constructor(
@@ -29,6 +30,7 @@ export class ApiService {
         throw err;
       })
     );
+
   }
 
   searchFlights(searchParams: any): Observable<Flight[]> {
