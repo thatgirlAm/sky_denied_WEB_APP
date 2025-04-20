@@ -15,6 +15,7 @@ import {NgIf} from '@angular/common';
 @Component({
   selector: 'app-search-form',
   imports: [ReactiveFormsModule, NgIf],
+  standalone: true,
   templateUrl: './search-form.component.html',
   styleUrl: './search-form.component.css'
 })

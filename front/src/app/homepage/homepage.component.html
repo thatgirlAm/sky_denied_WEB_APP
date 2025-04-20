@@ -1,6 +1,6 @@
 <div class="homepage-content">
   <!-- Search form -->
-  <app-search-form></app-search-form>
+  <app-search-form (searchStarted)="handleSearchStarted()" (searchResults)="handleSearchResults($event)"></app-search-form>
 
     <!-- First section -->
   <div class="section">
