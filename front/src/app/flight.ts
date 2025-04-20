@@ -1,4 +1,3 @@
-
 export interface Flight {
     flight_date: string;
     flight_date_utc: string;
@@ -29,4 +28,3 @@ export interface Flight {
     created_at: string;
     updated_at: string;
   }
-
