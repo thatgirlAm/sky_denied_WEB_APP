@@ -325,8 +325,8 @@ def clean_and_merge(flightera_arrival_dfs, flightera_departure_dfs, flightradar2
     flight_schedule = flight_schedule.sort_values(by='scheduled_departure_utc', ascending=True)
     today = datetime.now().date()
     # Write the final merged CSV
-    output_csv = os.path.join(DATA_DIR, f"flight_schedule_{today}.csv")
-    flight_schedule.to_csv(output_csv, index=False)
+    # output_csv = os.path.join(DATA_DIR, f"flight_schedule_{today}.csv")
+    # flight_schedule.to_csv(output_csv, index=False)
     return flight_schedule
 
 

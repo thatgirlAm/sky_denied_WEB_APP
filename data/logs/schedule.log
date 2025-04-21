@@ -352,3 +352,247 @@ schedule | selenium_utility | 2025-04-20 23:30:57,552 | INFO | No more buttons f
 schedule | get_flight_by_airport_flightradar24 | 2025-04-20 23:30:57,589 | INFO | Parsed 0 rows from Flightradar24 HTML.
 schedule | get_flight_by_airport_flightradar24 | 2025-04-20 23:30:57,888 | INFO | Flightradar24 arrivals scraping complete for DUB: 0 rows
 schedule | main | 2025-04-20 23:30:57,889 | INFO | All schedule scraping done. Cleaning data...
+schedule | main | 2025-04-21 16:09:46,201 | INFO | SCHEDULE mode started with airports: ['NCL', 'BFS']
+schedule | main | 2025-04-21 16:09:46,337 | INFO | --- SCRAPING NCL (EGNT), city=Newcastle ---
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:10:05,199 | INFO | Starting Flightera scrape from: https://www.flightera.net/en/airport/Newcastle/EGNT/arrival/2025-04-21%2023_59?
+schedule | selenium_utility | 2025-04-21 16:10:07,568 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:10:07,864 | INFO | Scraping earlier flights: 2025-04-21 13_35
+schedule | selenium_utility | 2025-04-21 16:10:10,583 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:10:10,769 | INFO | Scraping earlier flights: 2025-04-20 22_55
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:10:10,770 | INFO | Reached end_date. Stopping scrape.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:10:10,956 | INFO | Flightera scrape finished: 60 rows
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:10:13,477 | INFO | Starting Flightera scrape from: https://www.flightera.net/en/airport/Newcastle/EGNT/departure/2025-04-21%2023_59?
+schedule | selenium_utility | 2025-04-21 16:10:15,569 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:10:16,260 | INFO | Scraping earlier flights: 2025-04-21 10_15
+schedule | selenium_utility | 2025-04-21 16:10:17,812 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:10:18,051 | INFO | Scraping earlier flights: 2025-04-20 17_30
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:10:18,051 | INFO | Reached end_date. Stopping scrape.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:10:18,272 | INFO | Flightera scrape finished: 60 rows
+schedule | main | 2025-04-21 16:10:18,272 | INFO | Flightera scrapes done for NCL: arrivals=60 rows, departures=60 rows
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:10:20,819 | INFO | Navigating to Flightradar24 URL: https://www.flightradar24.com/data/airports/NCL/arrivals
+schedule | selenium_utility | 2025-04-21 16:10:27,474 | INFO | Button at xpath '//*[@id="onetrust-reject-all-handler"]' clicked successfully.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:10:27,474 | INFO | Cookie rejection button clicked.
+schedule | selenium_utility | 2025-04-21 16:10:27,474 | INFO | Attempting to click button #1 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-21 16:10:29,902 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]' clicked successfully.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:10:30,907 | INFO | Flightradar24 arrivals scraping complete for NCL: 0 rows
+schedule | main | 2025-04-21 16:11:17,349 | INFO | SCHEDULE mode started with airports: ['NCL', 'BFS']
+schedule | main | 2025-04-21 16:11:17,477 | INFO | --- SCRAPING NCL (EGNT), city=Newcastle ---
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:11:19,814 | INFO | Starting Flightera scrape from: https://www.flightera.net/en/airport/Newcastle/EGNT/arrival/2025-04-21%2023_59?
+schedule | selenium_utility | 2025-04-21 16:11:22,465 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:11:22,659 | INFO | Scraping earlier flights: 2025-04-21 13_35
+schedule | selenium_utility | 2025-04-21 16:11:24,790 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:11:24,964 | INFO | Scraping earlier flights: 2025-04-20 22_55
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:11:24,965 | INFO | Reached end_date. Stopping scrape.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:11:25,153 | INFO | Flightera scrape finished: 60 rows
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:11:27,199 | INFO | Starting Flightera scrape from: https://www.flightera.net/en/airport/Newcastle/EGNT/departure/2025-04-21%2023_59?
+schedule | selenium_utility | 2025-04-21 16:11:29,576 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:11:30,296 | INFO | Scraping earlier flights: 2025-04-21 10_15
+schedule | selenium_utility | 2025-04-21 16:11:33,049 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:11:33,232 | INFO | Scraping earlier flights: 2025-04-20 17_30
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:11:33,233 | INFO | Reached end_date. Stopping scrape.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:11:33,418 | INFO | Flightera scrape finished: 60 rows
+schedule | main | 2025-04-21 16:11:33,418 | INFO | Flightera scrapes done for NCL: arrivals=60 rows, departures=60 rows
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:11:35,497 | INFO | Navigating to Flightradar24 URL: https://www.flightradar24.com/data/airports/NCL/arrivals
+schedule | selenium_utility | 2025-04-21 16:11:40,748 | INFO | Button at xpath '//*[@id="onetrust-reject-all-handler"]' clicked successfully.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:11:40,748 | INFO | Cookie rejection button clicked.
+schedule | selenium_utility | 2025-04-21 16:11:40,748 | INFO | Attempting to click button #1 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-21 16:11:43,599 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-21 16:11:44,965 | INFO | Attempting to click button #2 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-21 16:11:55,027 | WARNING | Failed to click button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]': Message: 
+
+schedule | selenium_utility | 2025-04-21 16:11:55,027 | INFO | No more buttons found after 1 clicks.
+schedule | selenium_utility | 2025-04-21 16:11:55,027 | INFO | Attempting to click button #1 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]'...
+schedule | selenium_utility | 2025-04-21 16:12:05,089 | WARNING | Failed to click button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]': Message: 
+
+schedule | selenium_utility | 2025-04-21 16:12:05,090 | INFO | No more buttons found after 0 clicks.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:12:05,902 | INFO | Parsed 166 rows from Flightradar24 HTML.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:12:06,114 | INFO | Flightradar24 arrivals scraping complete for NCL: 165 rows
+schedule | main | 2025-04-21 16:12:06,115 | INFO | --- SCRAPING BFS (EGAA), city=Belfast ---
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:12:08,226 | INFO | Starting Flightera scrape from: https://www.flightera.net/en/airport/Belfast/EGAA/arrival/2025-04-21%2023_59?
+schedule | selenium_utility | 2025-04-21 16:12:10,316 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:12:10,483 | INFO | Scraping earlier flights: 2025-04-21 13_55
+schedule | selenium_utility | 2025-04-21 16:12:12,552 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:12:12,720 | INFO | Scraping earlier flights: 2025-04-21 00_45
+schedule | selenium_utility | 2025-04-21 16:12:16,453 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:12:16,682 | INFO | Scraping earlier flights: 2025-04-20 17_10
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:12:16,683 | INFO | Reached end_date. Stopping scrape.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:12:16,823 | INFO | Flightera scrape finished: 90 rows
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:12:18,916 | INFO | Starting Flightera scrape from: https://www.flightera.net/en/airport/Belfast/EGAA/departure/2025-04-21%2023_59?
+schedule | selenium_utility | 2025-04-21 16:12:21,344 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:12:21,611 | INFO | Scraping earlier flights: 2025-04-21 12_35
+schedule | selenium_utility | 2025-04-21 16:12:23,567 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:12:23,737 | INFO | Scraping earlier flights: 2025-04-21 06_40
+schedule | selenium_utility | 2025-04-21 16:12:25,884 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:12:26,077 | INFO | Scraping earlier flights: 2025-04-20 15_45
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:12:26,078 | INFO | Reached end_date. Stopping scrape.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:12:26,208 | INFO | Flightera scrape finished: 89 rows
+schedule | main | 2025-04-21 16:12:26,209 | INFO | Flightera scrapes done for BFS: arrivals=90 rows, departures=89 rows
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:12:28,235 | INFO | Navigating to Flightradar24 URL: https://www.flightradar24.com/data/airports/BFS/arrivals
+schedule | selenium_utility | 2025-04-21 16:12:33,825 | INFO | Button at xpath '//*[@id="onetrust-reject-all-handler"]' clicked successfully.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:12:33,826 | INFO | Cookie rejection button clicked.
+schedule | selenium_utility | 2025-04-21 16:12:33,827 | INFO | Attempting to click button #1 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-21 16:12:36,447 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-21 16:12:39,050 | INFO | Attempting to click button #2 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-21 16:12:41,944 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-21 16:12:43,738 | INFO | Attempting to click button #3 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-21 16:12:53,817 | WARNING | Failed to click button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]': Message: 
+
+schedule | selenium_utility | 2025-04-21 16:12:53,817 | INFO | No more buttons found after 2 clicks.
+schedule | selenium_utility | 2025-04-21 16:12:53,817 | INFO | Attempting to click button #1 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]'...
+schedule | selenium_utility | 2025-04-21 16:13:04,038 | WARNING | Failed to click button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]': Message: 
+
+schedule | selenium_utility | 2025-04-21 16:13:04,039 | INFO | No more buttons found after 0 clicks.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:13:04,945 | INFO | Parsed 220 rows from Flightradar24 HTML.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:13:05,147 | INFO | Flightradar24 arrivals scraping complete for BFS: 219 rows
+schedule | main | 2025-04-21 16:13:05,147 | INFO | All schedule scraping done. Cleaning data...
+schedule | main | 2025-04-21 16:15:29,990 | INFO | SCHEDULE mode started with airports: ['NCL', 'BFS']
+schedule | main | 2025-04-21 16:15:30,121 | INFO | --- SCRAPING NCL (EGNT), city=Newcastle ---
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:15:46,333 | INFO | Starting Flightera scrape from: https://www.flightera.net/en/airport/Newcastle/EGNT/arrival/2025-04-21%2023_59?
+schedule | selenium_utility | 2025-04-21 16:15:48,613 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:15:49,347 | INFO | Scraping earlier flights: 2025-04-21 13_35
+schedule | selenium_utility | 2025-04-21 16:15:51,639 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:15:51,815 | INFO | Scraping earlier flights: 2025-04-20 22_55
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:15:51,815 | INFO | Reached end_date. Stopping scrape.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:15:51,957 | INFO | Flightera scrape finished: 60 rows
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:15:54,061 | INFO | Starting Flightera scrape from: https://www.flightera.net/en/airport/Newcastle/EGNT/departure/2025-04-21%2023_59?
+schedule | selenium_utility | 2025-04-21 16:15:56,151 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:15:56,321 | INFO | Scraping earlier flights: 2025-04-21 10_15
+schedule | selenium_utility | 2025-04-21 16:15:58,618 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:15:58,805 | INFO | Scraping earlier flights: 2025-04-20 17_30
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:15:58,805 | INFO | Reached end_date. Stopping scrape.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:15:58,923 | INFO | Flightera scrape finished: 60 rows
+schedule | main | 2025-04-21 16:15:58,924 | INFO | Flightera scrapes done for NCL: arrivals=60 rows, departures=60 rows
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:16:00,962 | INFO | Navigating to Flightradar24 URL: https://www.flightradar24.com/data/airports/NCL/arrivals
+schedule | selenium_utility | 2025-04-21 16:16:06,888 | INFO | Button at xpath '//*[@id="onetrust-reject-all-handler"]' clicked successfully.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:16:06,889 | INFO | Cookie rejection button clicked.
+schedule | selenium_utility | 2025-04-21 16:16:06,890 | INFO | Attempting to click button #1 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-21 16:16:09,336 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-21 16:16:11,727 | INFO | Attempting to click button #2 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-21 16:16:21,806 | WARNING | Failed to click button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]': Message: 
+
+schedule | selenium_utility | 2025-04-21 16:16:21,806 | INFO | No more buttons found after 1 clicks.
+schedule | selenium_utility | 2025-04-21 16:16:21,807 | INFO | Attempting to click button #1 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]'...
+schedule | selenium_utility | 2025-04-21 16:16:31,914 | WARNING | Failed to click button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]': Message: 
+
+schedule | selenium_utility | 2025-04-21 16:16:31,914 | INFO | No more buttons found after 0 clicks.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:16:32,647 | INFO | Parsed 166 rows from Flightradar24 HTML.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:16:32,829 | INFO | Flightradar24 arrivals scraping complete for NCL: 165 rows
+schedule | main | 2025-04-21 16:16:32,830 | INFO | --- SCRAPING BFS (EGAA), city=Belfast ---
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:16:34,928 | INFO | Starting Flightera scrape from: https://www.flightera.net/en/airport/Belfast/EGAA/arrival/2025-04-21%2023_59?
+schedule | selenium_utility | 2025-04-21 16:16:36,650 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:16:37,112 | INFO | Scraping earlier flights: 2025-04-21 13_55
+schedule | selenium_utility | 2025-04-21 16:16:39,195 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:16:39,376 | INFO | Scraping earlier flights: 2025-04-21 00_45
+schedule | selenium_utility | 2025-04-21 16:16:41,605 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:16:41,829 | INFO | Scraping earlier flights: 2025-04-20 17_10
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:16:41,830 | INFO | Reached end_date. Stopping scrape.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:16:42,000 | INFO | Flightera scrape finished: 90 rows
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:16:44,099 | INFO | Starting Flightera scrape from: https://www.flightera.net/en/airport/Belfast/EGAA/departure/2025-04-21%2023_59?
+schedule | selenium_utility | 2025-04-21 16:16:46,210 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:16:46,511 | INFO | Scraping earlier flights: 2025-04-21 12_35
+schedule | selenium_utility | 2025-04-21 16:16:48,198 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:16:48,380 | INFO | Scraping earlier flights: 2025-04-21 06_40
+schedule | selenium_utility | 2025-04-21 16:16:50,666 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:16:50,858 | INFO | Scraping earlier flights: 2025-04-20 15_45
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:16:50,859 | INFO | Reached end_date. Stopping scrape.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:16:51,028 | INFO | Flightera scrape finished: 89 rows
+schedule | main | 2025-04-21 16:16:51,028 | INFO | Flightera scrapes done for BFS: arrivals=90 rows, departures=89 rows
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:16:53,130 | INFO | Navigating to Flightradar24 URL: https://www.flightradar24.com/data/airports/BFS/arrivals
+schedule | selenium_utility | 2025-04-21 16:16:58,265 | INFO | Button at xpath '//*[@id="onetrust-reject-all-handler"]' clicked successfully.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:16:58,269 | INFO | Cookie rejection button clicked.
+schedule | selenium_utility | 2025-04-21 16:16:58,273 | INFO | Attempting to click button #1 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-21 16:17:00,899 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-21 16:17:03,302 | INFO | Attempting to click button #2 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-21 16:17:05,956 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-21 16:17:08,567 | INFO | Attempting to click button #3 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-21 16:17:18,606 | WARNING | Failed to click button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]': Message: 
+
+schedule | selenium_utility | 2025-04-21 16:17:18,607 | INFO | No more buttons found after 2 clicks.
+schedule | selenium_utility | 2025-04-21 16:17:18,607 | INFO | Attempting to click button #1 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]'...
+schedule | selenium_utility | 2025-04-21 16:17:28,761 | WARNING | Failed to click button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]': Message: 
+
+schedule | selenium_utility | 2025-04-21 16:17:28,762 | INFO | No more buttons found after 0 clicks.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:17:29,785 | INFO | Parsed 220 rows from Flightradar24 HTML.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:17:30,089 | INFO | Flightradar24 arrivals scraping complete for BFS: 219 rows
+schedule | main | 2025-04-21 16:17:30,090 | INFO | All schedule scraping done. Cleaning data...
+schedule | main | 2025-04-21 16:17:30,235 | INFO | Data merged successfully with 7 total rows.
+schedule | push_to_postgres | 2025-04-21 16:17:30,237 | INFO | Connecting to PostgreSQL...
+schedule | main | 2025-04-21 16:23:53,561 | INFO | SCHEDULE mode started with airports: ['NCL', 'BFS']
+schedule | main | 2025-04-21 16:23:53,696 | INFO | --- SCRAPING NCL (EGNT), city=Newcastle ---
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:23:57,625 | INFO | Starting Flightera scrape from: https://www.flightera.net/en/airport/Newcastle/EGNT/arrival/2025-04-21%2023_59?
+schedule | selenium_utility | 2025-04-21 16:24:00,852 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:24:01,033 | INFO | Scraping earlier flights: 2025-04-21 13_35
+schedule | selenium_utility | 2025-04-21 16:24:03,253 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:24:03,431 | INFO | Scraping earlier flights: 2025-04-20 22_55
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:24:03,431 | INFO | Reached end_date. Stopping scrape.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:24:03,570 | INFO | Flightera scrape finished: 60 rows
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:24:05,579 | INFO | Starting Flightera scrape from: https://www.flightera.net/en/airport/Newcastle/EGNT/departure/2025-04-21%2023_59?
+schedule | selenium_utility | 2025-04-21 16:24:07,288 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:24:07,984 | INFO | Scraping earlier flights: 2025-04-21 10_15
+schedule | selenium_utility | 2025-04-21 16:24:10,315 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:24:10,499 | INFO | Scraping earlier flights: 2025-04-20 17_30
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:24:10,500 | INFO | Reached end_date. Stopping scrape.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:24:10,629 | INFO | Flightera scrape finished: 60 rows
+schedule | main | 2025-04-21 16:24:10,629 | INFO | Flightera scrapes done for NCL: arrivals=60 rows, departures=60 rows
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:24:12,742 | INFO | Navigating to Flightradar24 URL: https://www.flightradar24.com/data/airports/NCL/arrivals
+schedule | selenium_utility | 2025-04-21 16:24:18,927 | INFO | Button at xpath '//*[@id="onetrust-reject-all-handler"]' clicked successfully.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:24:18,927 | INFO | Cookie rejection button clicked.
+schedule | selenium_utility | 2025-04-21 16:24:18,928 | INFO | Attempting to click button #1 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-21 16:24:21,576 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-21 16:24:23,207 | INFO | Attempting to click button #2 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-21 16:24:33,348 | WARNING | Failed to click button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]': Message: 
+
+schedule | selenium_utility | 2025-04-21 16:24:33,348 | INFO | No more buttons found after 1 clicks.
+schedule | selenium_utility | 2025-04-21 16:24:33,348 | INFO | Attempting to click button #1 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]'...
+schedule | selenium_utility | 2025-04-21 16:24:43,440 | WARNING | Failed to click button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]': Message: 
+
+schedule | selenium_utility | 2025-04-21 16:24:43,441 | INFO | No more buttons found after 0 clicks.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:24:44,220 | INFO | Parsed 166 rows from Flightradar24 HTML.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:24:44,404 | INFO | Flightradar24 arrivals scraping complete for NCL: 165 rows
+schedule | main | 2025-04-21 16:24:44,405 | INFO | --- SCRAPING BFS (EGAA), city=Belfast ---
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:24:46,555 | INFO | Starting Flightera scrape from: https://www.flightera.net/en/airport/Belfast/EGAA/arrival/2025-04-21%2023_59?
+schedule | selenium_utility | 2025-04-21 16:24:49,420 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:24:49,643 | INFO | Scraping earlier flights: 2025-04-21 14_35
+schedule | selenium_utility | 2025-04-21 16:24:51,711 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:24:51,928 | INFO | Scraping earlier flights: 2025-04-21 01_20
+schedule | selenium_utility | 2025-04-21 16:24:53,988 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:24:54,208 | INFO | Scraping earlier flights: 2025-04-20 18_35
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:24:54,208 | INFO | Reached end_date. Stopping scrape.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:24:54,402 | INFO | Flightera scrape finished: 89 rows
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:24:56,577 | INFO | Starting Flightera scrape from: https://www.flightera.net/en/airport/Belfast/EGAA/departure/2025-04-21%2023_59?
+schedule | selenium_utility | 2025-04-21 16:24:58,797 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:24:59,245 | INFO | Scraping earlier flights: 2025-04-21 12_35
+schedule | selenium_utility | 2025-04-21 16:25:01,461 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:25:01,629 | INFO | Scraping earlier flights: 2025-04-21 06_40
+schedule | selenium_utility | 2025-04-21 16:25:04,171 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:25:04,415 | INFO | Scraping earlier flights: 2025-04-20 15_45
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:25:04,416 | INFO | Reached end_date. Stopping scrape.
+schedule | get_flight_by_airport_flightera | 2025-04-21 16:25:04,593 | INFO | Flightera scrape finished: 89 rows
+schedule | main | 2025-04-21 16:25:04,593 | INFO | Flightera scrapes done for BFS: arrivals=89 rows, departures=89 rows
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:25:06,781 | INFO | Navigating to Flightradar24 URL: https://www.flightradar24.com/data/airports/BFS/arrivals
+schedule | selenium_utility | 2025-04-21 16:25:12,176 | INFO | Button at xpath '//*[@id="onetrust-reject-all-handler"]' clicked successfully.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:25:12,177 | INFO | Cookie rejection button clicked.
+schedule | selenium_utility | 2025-04-21 16:25:12,180 | INFO | Attempting to click button #1 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-21 16:25:14,383 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-21 16:25:16,324 | INFO | Attempting to click button #2 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-21 16:25:18,869 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-21 16:25:19,948 | INFO | Attempting to click button #3 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-21 16:25:30,052 | WARNING | Failed to click button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]': Message: 
+
+schedule | selenium_utility | 2025-04-21 16:25:30,052 | INFO | No more buttons found after 2 clicks.
+schedule | selenium_utility | 2025-04-21 16:25:30,052 | INFO | Attempting to click button #1 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]'...
+schedule | selenium_utility | 2025-04-21 16:25:40,177 | WARNING | Failed to click button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]': Message: 
+
+schedule | selenium_utility | 2025-04-21 16:25:40,177 | INFO | No more buttons found after 0 clicks.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:25:41,140 | INFO | Parsed 220 rows from Flightradar24 HTML.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-21 16:25:41,352 | INFO | Flightradar24 arrivals scraping complete for BFS: 219 rows
+schedule | main | 2025-04-21 16:25:41,352 | INFO | All schedule scraping done. Cleaning data...
+schedule | main | 2025-04-21 16:25:41,503 | INFO | Data merged successfully with 7 total rows.
+schedule | push_to_postgres | 2025-04-21 16:25:41,508 | INFO | Connecting to PostgreSQL...
+schedule | push_to_postgres | 2025-04-21 16:25:43,917 | INFO | Connected to DB: postgres | Schema: public
+schedule | push_to_postgres | 2025-04-21 16:25:43,918 | INFO | Creating table 'public.flight_schedule' if not exists...
+schedule | push_to_postgres | 2025-04-21 16:25:44,011 | INFO | Creating and populating temp table 'public.temp_flight_schedule'...
+schedule | push_to_postgres | 2025-04-21 16:25:45,670 | INFO | Performing UPSERT...
+schedule | push_to_postgres | 2025-04-21 16:25:45,768 | INFO | Dropping temp table 'public.temp_flight_schedule'...
+schedule | push_to_postgres | 2025-04-21 16:25:45,960 | INFO | Upsert complete: 7 rows into 'public.flight_schedule'
+schedule | main | 2025-04-21 16:25:45,960 | INFO | SCHEDULE mode completed.
