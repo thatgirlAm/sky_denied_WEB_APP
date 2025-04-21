@@ -30,6 +30,7 @@ Route::post('/prediction/test_crawl_handling', [PredictionController::class, 'cr
 Route::post('/prediction/model_testing', [PredictionController::class,'model_testing']);
 // Route to trigger the model execution
 Route::post('/prediction/model_trigger', [PredictionController::class, 'model_trigger']);
+Route::post('/prediction/trigger', [PredictionController::class, 'trigger']);
 Route::post('/prediction/model_trigger_test', [PredictionController::class, 'model_trigger_test']);
 Route::post('/prediction/data_handling', [PredictionController::class, 'data_handling']);
 });
