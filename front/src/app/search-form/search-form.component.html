@@ -29,7 +29,8 @@
       <div class="input-group">
         <label for="tail_number">Tail Number</label>
         <input formControlName="tail_number" type="text" id="tail_number">
-        <div class="validation-error" *ngIf="haveFlightForm.get('tail_number')?.invalid && haveFlightForm.get('tail_number')?.touched || submitted ">
+        <div class="validation-error" *ngIf="haveFlightForm.get('tail_number')?.hasError('required') && 
+        (haveFlightForm.get('tail_number')?.touched )">
           ✖ Tail number is required
         </div>
       </div>
@@ -39,7 +40,7 @@
       </div>
       <div class="input-group">
         <button class="submit-button"
-                (click)="fetchFlightData()"
+                (click)="formSubmitted()"
                 [disabled]=" isLoading">
           {{ isLoading ? 'Processing...' : 'Submit Flight' }}
         </button>
@@ -98,7 +99,7 @@
         </div> -->
       <div class="input-group">
         <button class="submit-button"
-                (click)="fetchFlightData()"
+                (click)="formSubmitted()"
                 [disabled]="isLoading">
           {{ isLoading ? 'Searching...' : 'Search Flights' }}
         </button>
