@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Process\Exceptions\ProcessFailedException;
 use App\Models\Flight;
 use Illuminate\Support\Facades\Log; 
+use Illuminate\Support\Facades\Http;   
 
 
 class PredictionController extends Controller
@@ -193,24 +194,39 @@ class PredictionController extends Controller
     }
 
 
-
+    // TODO: Test this
     // function to trigger the model 
     public function model_trigger(ModelRequest $model_request)
     {
-        // data is an array with 2 json files: one for flight information and one for weather information 
-        $data = json_encode($model_request['data']);
-
-        // TODO: replace by model's path
-        $script_path = base_path('../test/model.py') ; 
-        $process = new Process(['python3', $script_path, $data]);
-        try
+        // Extract data from the request
+        $data = $model_request['data'];
+    
+        // TODO: Replace with the actual API endpoint URL
+        $ip = "4.149.171.79";
+        $api_url = 'http://'.$ip.':8000/predict';
+    
+        try 
         {
-            $process->run();
-            return json_decode($process->getOutput(), true);
-        }
+            // Send a POST request to the API with the data
+            $response = Http::post($api_url, $data);
+            if ($response->successful()) 
+            {
+                return $response->json(); 
+            } 
+            else 
+            {
+                return $this->format_error(
+                    'Model API returned an error: ' . $response->body(), 
+                    $response->status()
+                );
+            }
+        } 
         catch (\Exception $e) 
         {
-            return $this->format_error('Model did not run', Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->format_error(
+                'Model API call failed: ' . $e->getMessage(), 
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 
@@ -318,48 +334,53 @@ class PredictionController extends Controller
 
     // function to trigger the whole prediction scheme
     */
+
+    // TODO: Test this
     public function trigger(CrawlingRequest $crawlingRequest)
     {
-        try 
-        {        
-        $data = $this->crawling_trigger($crawlingRequest)['data'];
-        $data_formatted = $this->data_handling($data); 
-        $prediction_data = $this->model_trigger($data_formatted)['prediction']; 
-        $flight_data = $data_formatted['flight_information'][0]; 
-        $status = $prediction_data['status'];
-
-        try 
-        {
-            // error handling
-            if (!$flight_data) {
+        try {
+            // Step 1: Trigger the crawling process
+            $crawlingResponse = $this->crawling_trigger($crawlingRequest);
+            $data = $crawlingResponse->getData(true); // Use getData() to retrieve the data from the JsonResponse
+            $dataFormatted = $this->data_handling($data);
+    
+            // Step 2: Trigger the model prediction process
+            $modelResponse = $this->model_trigger($dataFormatted);
+            $predictionData = $modelResponse->getData(true); // Use getData() here as well
+    
+            // Step 3: Extract flight data from formatted data
+            $flightData = $dataFormatted['flight_information'][0];
+            $status = $predictionData['status'];
+    
+            // Step 4: Error handling for missing flight or prediction data
+            if (!$flightData) {
                 return $this->format_error('Flight data is missing', Response::HTTP_BAD_REQUEST);
             }
-            $flight = Flight::where('id', $flight_data['id'])->first();
-            // error handling
+    
+            // Step 5: Check if flight exists in the database
+            $flight = Flight::find($flightData['id']);
             if (!$flight) {
                 return $this->format_error('Flight not found', Response::HTTP_NOT_FOUND);
             }
-            $prediction = Prediction::where('id', $prediction_data['id'])->first();
-            // error handling   
+    
+            // Step 6: Check if prediction exists in the database
+            $prediction = Prediction::find($predictionData['id']);
             if (!$prediction) {
                 return $this->format_error('Prediction not found', Response::HTTP_NOT_FOUND);
             }
-
-            // Updating the DB
-            $flight->update($status, $flight_data);
-            $prediction->update($prediction_data, $prediction_data);
-
-            return $this->format(['Prediction OK', Response::HTTP_OK, $prediction]);
-        }
-        catch (ProcessFailedException $e)
-        {
-            return $this->format_error('The scheme did not run', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-        }
     
-    catch (ProcessFailedException $e)
-    {
-        return $this->format_error('Prediction did not run', Response::HTTP_INTERNAL_SERVER_ERROR);
+            // Step 7: Update the flight and prediction data in the database
+            $flight->update(['status' => $status] + $flightData);
+            $prediction->update($predictionData);
+    
+            return $this->format(['Prediction OK', Response::HTTP_OK, $prediction]);
+    
+        } catch (\Exception $e) {
+            // Handle any other exceptions during the entire process
+            return $this->format_error('An error occurred during the prediction process: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
-}
+    
+    
+    
 }
