@@ -36,3 +36,10 @@
 .submit-button:hover {
   background-color: var(--purple_hoover_sd);
 }
+
+.success-message {
+  text-align: center;
+  margin-top: 20px;
+  color: green;
+  font-size: 1.2em;
+}

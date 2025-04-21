@@ -31,6 +31,14 @@ export class ApiService {
     );
   }
 
+  postContact(information: any): Observable<boolean> {
+    return this.post<any>('contact', information)
+      .pipe(
+        map(response => response.status === 200)
+      );
+  }
+  
+
   searchFlights(searchParams: any): Observable<Flight[]> {
     return this.post<any>('flights/search/', searchParams)
       .pipe(map(response => response.data));
