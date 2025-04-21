@@ -39,4 +39,5 @@ Route::post('/prediction/data_handling', [PredictionController::class, 'data_han
 // Contact form
 Route::post('/contact', [ContactController::class, 'send_contact']);
 Route::post('/confirm_contact', [ContactController::class, 'confirm_contact']);
+Route::post('/prediction/savetodb', [PredictionController::class, 'saveFlightsToDatabase']);
 });

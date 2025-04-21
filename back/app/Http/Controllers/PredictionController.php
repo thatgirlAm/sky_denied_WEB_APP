@@ -217,7 +217,7 @@ public function saveFlightsToDatabase($flightsData)
             ];
             
             // Try to find an existing flight
-            $flight = \App\Models\Flight::where($criteria)->first();
+            $flight = Flight::where($criteria)->first();
             
             if ($flight) {
                 // Update existing flight
@@ -226,7 +226,7 @@ public function saveFlightsToDatabase($flightsData)
                 $stats['updated']++;
             } else {
                 // Create new flight
-                \App\Models\Flight::create($flightData);
+                Flight::create($flightData);
                 $stats['created']++;
             }
         } catch (\Exception $e) {
