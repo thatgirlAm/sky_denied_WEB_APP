@@ -29,17 +29,18 @@
       <div class="input-group">
         <label for="tail_number">Tail Number</label>
         <input formControlName="tail_number" type="text" id="tail_number">
-        <div class="validation-error" *ngIf="haveFlightForm.get('tail_number')?.invalid && haveFlightForm.get('tail_number')?.touched || submitted ">
+        <div class="validation-error" *ngIf="haveFlightForm.get('tail_number')?.hasError('required') && 
+        (haveFlightForm.get('tail_number')?.touched )">
           ✖ Tail number is required
         </div>
       </div>
       <div class="input-group">
-        <label for="scheduled_departure_local_have_flight">Scheduled Departure</label>
-        <input formControlName="scheduled_departure_local_have_flight" type="date" id="scheduled_departure_local_have_flight">
+        <label for="scheduled_departure_local">Scheduled Departure</label>
+        <input formControlName="scheduled_departure_local" type="date" id="scheduled_departure_local  ">
       </div>
       <div class="input-group">
         <button class="submit-button"
-                (click)="fetchFlightData()"
+                (click)="formSubmitted()"
                 [disabled]=" isLoading">
           {{ isLoading ? 'Processing...' : 'Submit Flight' }}
         </button>
@@ -53,6 +54,7 @@
         <select id="depart_from" formControlName="depart_from">
           <option value="" disabled hidden>Select departure airport</option>
           <option value="Atlanta">Atlanta</option>
+          <option value="Amsterdam">Amsterdam</option>
           <option value="Dallas">Dallas</option>
           <option value="Denver">Denver</option>
           <option value="Chicago">Chicago</option>
@@ -63,7 +65,7 @@
           <option value="Orlando">Orlando</option>
           <option value="Phoenix">Phoenix</option>
         </select>
-        <div class="validation-error" *ngIf="searchFlightForm.get('depart_from')?.errors?.['required'] && searchFlightForm.get('depart_from')?.touched || submitted  ">
+        <div class="validation-error" *ngIf="searchFlightForm.get('depart_from')?.errors?.['required'] && searchFlightForm.get('depart_from')?.touched   ">
           ✖ Departure location is required
         </div>
         <!-- <div class="validation-error" *ngIf="searchFlightForm.get('depart_from_iata')?.errors?.['maxlength']">
@@ -75,6 +77,7 @@
         <select id="arrive_at" formControlName="arrive_at">
           <option value="" disabled hidden>Select departure airport</option>
           <option value="Atlanta">Atlanta</option>
+          <option value="Barcelona">Barcelona</option>
           <option value="Dallas">Dallas</option>
           <option value="Denver">Denver</option>
           <option value="Chicago">Chicago</option>
@@ -85,20 +88,20 @@
           <option value="Orlando">Orlando</option>
           <option value="Phoenix">Phoenix</option>
         </select>
-        <div class="validation-error" *ngIf="searchFlightForm.get('arrive_at')?.errors?.['required'] && searchFlightForm.get('arrive_at')?.touched || submitted  ">
+        <div class="validation-error" *ngIf="searchFlightForm.get('arrive_at')?.errors?.['required'] && searchFlightForm.get('arrive_at')?.touched   ">
           ✖ Arrival location is required
         </div>
       </div>
       <div class="input-group">
-        <label for="scheduled_departure_local_outbound">Scheduled Departure</label>
-        <input formControlName="scheduled_departure_local_outbound" type="date" id="scheduled_departure_local_outbound">
+        <label for="scheduled_departure_local">Scheduled Departure</label>
+        <input formControlName="scheduled_departure_local" type="date" id="scheduled_departure_local">
       </div>
         <!-- <div class="validation-error" *ngIf="searchFlightForm.get('arrive_at')?.errors?.['maxlength']">
           ✖ IATA code must be 3 characters
         </div> -->
       <div class="input-group">
         <button class="submit-button"
-                (click)="fetchFlightData()"
+                (click)="formSubmitted()"
                 [disabled]="isLoading">
           {{ isLoading ? 'Searching...' : 'Search Flights' }}
         </button>

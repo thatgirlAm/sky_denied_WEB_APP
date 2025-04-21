@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent} from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { DataPassingService } from './data-passing.service';
 
 @Component({
   selector: 'app-root',
@@ -11,4 +12,6 @@ import { FooterComponent } from './footer/footer.component';
 })
 export class AppComponent {
   title = 'Sky Denied';
+
+  constructor(private dataPassingService: DataPassingService){}
 }

@@ -9,8 +9,10 @@ import {
 } from '@angular/forms';
 import {ApiService} from '../api-service.service';
 import {Flight} from '../flight';
-import {RouterModule} from '@angular/router';
+import {Router, RouterModule} from '@angular/router';
 import {NgIf} from '@angular/common';
+import { DataPassingService } from '../data-passing.service';
+import { log } from 'node:console';
 
 @Component({
   selector: 'app-search-form',
@@ -32,73 +34,65 @@ export class SearchFormComponent {
 
   constructor(
     private fb: FormBuilder,
-    private api: ApiService
+    private api: ApiService,
+    private dataPassingService: DataPassingService,
+    private router : Router
   ) {
+
     this.haveFlightForm = this.fb.group({
       tail_number: ['', Validators.required],
-      scheduled_departure_local_have_flight: ['', [this.dateTimeValidator]],
+      scheduled_departure_local: ['', [this.dateTimeValidator]],
 
     });
 
     this.searchFlightForm = this.fb.group({
       depart_from: ['', [Validators.required]],
       arrive_at: ['', [Validators.required]],
-      scheduled_departure_local_outbound: ['', [this.dateTimeValidator]],
+      scheduled_departure_local :['', [this.dateTimeValidator]],
     });
   }
 
-  fetchFlightData() {
-    this.submitted = true;
-    const formGroup = this.activeTab === 'have-flight'
-      ? this.haveFlightForm
-      : this.searchFlightForm;
-
-    formGroup.markAllAsTouched();
-    if (formGroup.invalid) return;
-
-    this.isLoading = true;
-    this.searchStarted.emit();
-
-    // Build search parameters based on active tab
-    const searchParams = this.activeTab === 'have-flight'
-      ? { tail_number: this.haveFlightForm.value.tail_number }
-      : {
-        depart_from: this.searchFlightForm.value.depart_from,
-        arrive_at: this.searchFlightForm.value.arrive_at
-      };
-    console.log(searchParams);
-
-
-    this.api.searchFlights(searchParams).subscribe({
-      next: (flights: Flight[]) => {
-        console.log('Flight Data:', flights);
-        console.table(flights);
-        this.isLoading = false;
-        this.submitted = false;
-        this.searchResults.emit(flights);
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.submitted = false;
-        this.searchResults.emit([]);
-      }
-    });
-  }
   switchTab(tabId: string) {
     this.submitted = false;
     this.activeTab = tabId;
   }
 
+  log(){console.log('clicked');
+  }
+  // Passing the form's information to the service
+  formSubmitted() {
+    this.searchStarted.emit();
+    this.submitted = true;
+    this.isLoading = true ;
+   // console.log(this.haveFlightForm.get('tail_number')?.value);
+   // console.log(this.haveFlightForm.get('tail_number')?.valid);
+    const formGroup = this.activeTab === 'have-flight'
+      ? this.haveFlightForm
+      : this.searchFlightForm;
+    console.log(this.dataPassingService.searchParams);
+    
+    formGroup.markAllAsTouched();
+    if (formGroup.invalid) return;
+
+    this.dataPassingService.searchParams = formGroup.value;
+    this.dataPassingService.fetchFlightData() ;
+    //console.log(this.dataPassingService.searchParams);
+    this.isLoading = false ; 
+    this.searchResults.emit(this.dataPassingService.myFlights);
+
+}
+
+
   dateTimeValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
 
-    // Regular expression to match date and time format (e.g., YYYY-MM-DD HH:mm:ss)
+    // Regular expression to match date and time format (e.g., YYYY-MM-DD)
     const dateTimeRegex = /^\d{4}-\d{2}-\d{2}?$/;
 
     if (!value || dateTimeRegex.test(value)) {
       return null; // Valid
     }
 
-    return { invalidDateTime: 'Invalid date and time format. Use YYYY-MM-DD HH:mm:ss' }; // Invalid
+    return { invalidDateTime: 'Invalid date and time format.' }; 
   }
 }

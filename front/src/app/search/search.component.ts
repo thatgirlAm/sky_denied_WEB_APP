@@ -25,7 +25,7 @@ export class SearchComponent {
   showPredictionPopup = false;
   showGetNotifiedPopup = false;
   searchClicked = false ;
-  searchResults: Flight[] = [];
+  searchResults: Flight[] = this.flights;
   searchForm !: FormGroup ; 
 
   // to know if the model has been triggered
@@ -36,21 +36,9 @@ export class SearchComponent {
   submitted = false;
 
   constructor(private apiService: ApiService, private toastr: ToastrService, private router: Router, private fb:FormBuilder) {
-    const navigation = this.router.getCurrentNavigation();
-    if (navigation?.extras.state) {
-      this.flights = navigation.extras.state['flights'];
-      this.searchParams = navigation.extras.state['searchParams'];
-    }
-    console.log(this.flights);
-
-    this.searchForm = this.fb.group({
-      tail_number: ['', Validators.required],
-      scheduled_departure_local: ['', [this.dateTimeValidator]],
-
-    });
     
+   
   }
-
 
 // Charlotte's functions
 
@@ -66,7 +54,6 @@ export class SearchComponent {
 
   handlePredictionTrigger() {
     this.searchClicked = true ;
-    //this.trigger_model();
     this.showPredictionPopup = true;
   }
 
@@ -87,56 +74,7 @@ export class SearchComponent {
   }
 
 
-  fetchFlightData() {
-    this.submitted = true;
-    const formGroup = this.searchForm ; 
 
-    formGroup.markAllAsTouched();
-    if (formGroup.invalid) return;
-  
-    this.isLoading = true;
-  
-    // Build search parameters based on active tab
-    // const searchParams = this.activeTab === 'have-flight' 
-    //   ? { tail_number: this.haveFlightForm.value.tail_number }
-    //   : { 
-    //       depart_from: this.searchFlightForm.value.depart_from_iata,
-    //       arrive_at: this.searchFlightForm.value.arrive_at_iata
-    //     };
-  
-    // this.apiService.searchFlights(searchParams).subscribe({
-    //   next: (flights: Flight[]) => {
-    //     console.log('Search Params:', searchParams);
-    //     console.log('Flights:', flights);
-        
-    //     this.isLoading = false;
-    //     this.submitted = false;
-  
-    //     // Add null check for flights
-    //     if (flights && flights.length > 0) {
-    //       this.router.navigate(['search'], {
-    //         state: {
-    //           flights: flights,
-    //           searchParams: searchParams
-    //         }
-    //       }).catch(error => {
-    //         console.error('Navigation error:', error);
-    //         // Handle navigation error (e.g., show error message)
-    //       });
-    //     } else {
-    //       // Handle no results case
-    //       console.warn('No flights found');
-    //       // Optionally show message to user
-    //     }
-    //   },
-    //   error: (err) => {
-    //     console.error('API Error:', err);
-    //     this.isLoading = false;
-    //     this.submitted = false;
-    //     // Optionally show error message to user
-    //   }
-    // });
-  }
   dateTimeValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
 

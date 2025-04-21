@@ -30,10 +30,10 @@ class FlightController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(FlightResource $request)
+    public function show(FlightRequest $request)
     {
-        $response = FlightResource::make($request);
-        return new FlightResource($response); 
+        $response = FlightResource::collection($request);
+        return $response; 
     }
 
     /**
@@ -59,6 +59,7 @@ class FlightController extends Controller
         $tail_number = $response['tail_number'] ?? null;
         $date = $response['flight_date_utc'] ?? null;
         $flight_number = $response['flight_number_iata'] ?? null;
+        $scheduled_departure_local = $response['scheduled_departure_local'] ?? null;
         $depart_from = $response['depart_from'] ?? null; // Airport name
         $depart_from_iata = $response['depart_from_iata'] ?? null; // IATA code
         $depart_from_icao = $response['depart_from_icao'] ?? null; // ICAO code
@@ -68,8 +69,8 @@ class FlightController extends Controller
     
         $query = Flight::query();
     
-        if ($date) {
-            $query->whereDate('flight_date_utc', $date);
+        if ($scheduled_departure_local) {
+            $query->whereDate('scheduled_departure_local', $scheduled_departure_local);
         }
     
         if ($tail_number) {

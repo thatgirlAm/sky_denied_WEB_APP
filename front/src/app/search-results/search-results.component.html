@@ -14,19 +14,20 @@
     <p>Search in progress...</p>
   </div>
 
+  <!-- Flight Results -->
   <div class="flight-card" *ngIf="loaded">
-    <div class="flight-info">
+    <div class="flight-info" *ngFor="let flight of flights">
       <div class="cell">
-        <div class="flight-number">AA1234</div>
+        <div class="flight-number">{{ flight.flight_number_iata }}</div>
         <button class="notify-button" (click)="triggerGetNotifiedPopup()">Get notified</button>
       </div>
       <div class="cell">
-        <div class="flight-date">20 March 2025</div>
-        <div class="flight-time">6:20</div>
+        <div class="flight-date">{{ flight.scheduled_departure_local | date: 'longDate' }}</div>
+        <div class="flight-time">{{ flight.scheduled_departure_local | date: 'shortTime' }}</div>
       </div>
       <div class="cell">
-        <div class="flight-date">20 March 2025</div>
-        <div class="flight-time">8:40</div>
+        <div class="flight-date">{{ flight.scheduled_arrival_local | date: 'longDate' }}</div>
+        <div class="flight-time">{{ flight.scheduled_arrival_local | date: 'shortTime' }}</div>
       </div>
       <div class="cell">
         <button class="predict-button" (click)="triggerPredictionPopup()">Check prediction</button>
@@ -34,11 +35,11 @@
     </div>
   </div>
 
+  <!-- Load More Button -->
   <div class="load-more" *ngIf="loaded">
-    <button class="load-button">
+    <button class="load-button" (click)="loadMoreResults()">
       <img src="image/loading_icon.svg" alt="Load more icon" />
       <span>Load more results</span>
     </button>
   </div>
 </div>
-
