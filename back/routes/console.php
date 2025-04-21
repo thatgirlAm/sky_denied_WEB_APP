@@ -9,4 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 // TODO: Set the occurence
-Schedule::command('crawl:flights')->daily();
+Schedule::command('crawl:flights')->daily()->runInBackground();
