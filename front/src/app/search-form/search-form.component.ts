@@ -42,7 +42,6 @@ export class SearchFormComponent {
     this.haveFlightForm = this.fb.group({
       tail_number: ['', Validators.required],
       scheduled_departure_local: ['', [this.dateTimeValidator]],
-
     });
 
     this.searchFlightForm = this.fb.group({
@@ -70,14 +69,14 @@ export class SearchFormComponent {
       ? this.haveFlightForm
       : this.searchFlightForm;
     console.log(this.dataPassingService.searchParams);
-    
+
     formGroup.markAllAsTouched();
     if (formGroup.invalid) return;
 
     this.dataPassingService.searchParams = formGroup.value;
     this.dataPassingService.fetchFlightData() ;
     //console.log(this.dataPassingService.searchParams);
-    this.isLoading = false ; 
+    this.isLoading = false ;
     this.searchResults.emit(this.dataPassingService.myFlights);
 
 }
@@ -93,6 +92,6 @@ export class SearchFormComponent {
       return null; // Valid
     }
 
-    return { invalidDateTime: 'Invalid date and time format.' }; 
+    return { invalidDateTime: 'Invalid date and time format.' };
   }
 }

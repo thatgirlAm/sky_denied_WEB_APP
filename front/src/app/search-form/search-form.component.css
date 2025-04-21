@@ -1,3 +1,7 @@
+.section {
+  width: 80%;
+}
+
 .flight-search-container {
   border: 1px solid var(--blue_sd);
   border-radius: 8px;
@@ -16,7 +20,7 @@
 .tab-buttons {
   display: flex;
   justify-content: center;
-  margin: 3% 0 5%;
+  margin: 1% 0 2%;
 }
 
 .tab-button {
@@ -47,13 +51,17 @@
 }
 
 .tab-content.active {
-  display: block;
-  margin-bottom: 3%;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  width: 90%;
+  gap: 2%;
+  padding: 0 5%;
 }
 
 .input-group {
-  width: 60%;
-  margin: auto auto 15px;
+  width: 100%;
+  margin: auto auto 1px;
 }
 
 .input-group label {
@@ -72,14 +80,23 @@
   box-sizing: border-box;
   font-family: 'Lato', sans-serif;
   text-align: center;
+  height: 40px;
+}
+
+.input-group select {
+  padding:0;
 }
 
 .input-group input::placeholder {
   color: black;
 }
 
+.validation {
+  height: 25px;
+}
+
 .submit-button {
-  width: 60%;
+  width: 80%;
   background-color: var(--blue_sd);
 }
 

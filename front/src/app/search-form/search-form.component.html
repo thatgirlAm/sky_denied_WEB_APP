@@ -29,14 +29,22 @@
       <div class="input-group">
         <label for="tail_number">Tail Number</label>
         <input formControlName="tail_number" type="text" id="tail_number">
-        <div class="validation-error" *ngIf="haveFlightForm.get('tail_number')?.hasError('required') && 
+        <div class="validation">
+          <div class="validation-error" *ngIf="haveFlightForm.get('tail_number')?.hasError('required') &&
         (haveFlightForm.get('tail_number')?.touched )">
-          ✖ Tail number is required
+            ✖ Tail number is required
+          </div>
         </div>
       </div>
       <div class="input-group">
         <label for="scheduled_departure_local">Scheduled Departure</label>
         <input formControlName="scheduled_departure_local" type="date" id="scheduled_departure_local  ">
+        <div class="validation">
+          <div class="validation-error" *ngIf="haveFlightForm.get('scheduled_departure_local')?.hasError('required') &&
+        (haveFlightForm.get('scheduled_departure_local')?.touched )">
+            ✖ Date is required
+          </div>
+        </div>
       </div>
       <div class="input-group">
         <button class="submit-button"
@@ -44,15 +52,17 @@
                 [disabled]=" isLoading">
           {{ isLoading ? 'Processing...' : 'Submit Flight' }}
         </button>
+        <div class="validation">
+        </div>
       </div>
     </div>
 
     <!-- Search Flight Tab -->
     <div [formGroup]="searchFlightForm" class="tab-content" [class.active]="activeTab === 'search-flight'">
       <div class="input-group">
-        <label for="depart_from">Departure</label>
+        <label for="depart_from">Departure city</label>
         <select id="depart_from" formControlName="depart_from">
-          <option value="" disabled hidden>Select departure airport</option>
+          <option value="" disabled hidden>Select departure</option>
           <option value="Atlanta">Atlanta</option>
           <option value="Amsterdam">Amsterdam</option>
           <option value="Dallas">Dallas</option>
@@ -65,17 +75,16 @@
           <option value="Orlando">Orlando</option>
           <option value="Phoenix">Phoenix</option>
         </select>
-        <div class="validation-error" *ngIf="searchFlightForm.get('depart_from')?.errors?.['required'] && searchFlightForm.get('depart_from')?.touched   ">
-          ✖ Departure location is required
+        <div class="validation">
+          <div class="validation-error" *ngIf="searchFlightForm.get('depart_from')?.errors?.['required'] && searchFlightForm.get('depart_from')?.touched   ">
+            ✖ Departure is required
+          </div>
         </div>
-        <!-- <div class="validation-error" *ngIf="searchFlightForm.get('depart_from_iata')?.errors?.['maxlength']">
-          ✖ IATA code must be 3 characters
-        </div> -->
       </div>
       <div class="input-group">
-        <label for="arrive_at">Arrival</label>
+        <label for="arrive_at">Arrival city</label>
         <select id="arrive_at" formControlName="arrive_at">
-          <option value="" disabled hidden>Select departure airport</option>
+          <option value="" disabled hidden>Select arrival</option>
           <option value="Atlanta">Atlanta</option>
           <option value="Barcelona">Barcelona</option>
           <option value="Dallas">Dallas</option>
@@ -88,23 +97,35 @@
           <option value="Orlando">Orlando</option>
           <option value="Phoenix">Phoenix</option>
         </select>
-        <div class="validation-error" *ngIf="searchFlightForm.get('arrive_at')?.errors?.['required'] && searchFlightForm.get('arrive_at')?.touched   ">
-          ✖ Arrival location is required
+        <div class="validation">
+          <div class="validation-error" *ngIf="searchFlightForm.get('arrive_at')?.errors?.['required'] && searchFlightForm.get('arrive_at')?.touched   ">
+            ✖ Arrival is required
+          </div>
         </div>
       </div>
       <div class="input-group">
         <label for="scheduled_departure_local">Scheduled Departure</label>
         <input formControlName="scheduled_departure_local" type="date" id="scheduled_departure_local">
+        <div class="validation">
+          <div class="validation-error" *ngIf="haveFlightForm.get('scheduled_departure_local')?.hasError('required') &&
+        (haveFlightForm.get('scheduled_departure_local')?.touched )">
+            ✖ Date is required
+          </div>
+        </div>
       </div>
-        <!-- <div class="validation-error" *ngIf="searchFlightForm.get('arrive_at')?.errors?.['maxlength']">
-          ✖ IATA code must be 3 characters
-        </div> -->
+
       <div class="input-group">
         <button class="submit-button"
                 (click)="formSubmitted()"
                 [disabled]="isLoading">
           {{ isLoading ? 'Searching...' : 'Search Flights' }}
         </button>
+        <div class="validation">
+          <div class="validation-error" *ngIf="haveFlightForm.get('scheduled_departure_local')?.hasError('required') &&
+        (haveFlightForm.get('scheduled_departure_local')?.touched )">
+            ✖ Date is required
+          </div>
+        </div>
       </div>
     </div>
 
