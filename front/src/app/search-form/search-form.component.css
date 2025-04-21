@@ -78,10 +78,6 @@
   color: black;
 }
 
-.validation-error {
-  color: var(--red_sd);
-}
-
 .submit-button {
   width: 60%;
   background-color: var(--blue_sd);
