@@ -11,7 +11,6 @@ import { log } from 'node:console';
   styleUrl: './search-results.component.css'
 })
 export class SearchResultsComponent implements OnInit{
-
   @Input() flights: Flight[] | null = null;
   @Output() notifyClicked = new EventEmitter<void>();
   loaded: boolean = false;
