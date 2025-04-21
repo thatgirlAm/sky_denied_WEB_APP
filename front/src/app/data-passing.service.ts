@@ -16,8 +16,8 @@ export class DataPassingService {
   fetchFlightData(){
     this.api.searchFlights(this.searchParams).subscribe({
           next: (flights: Flight[]) => {
-            console.log('Flight Data:', flights);
-            console.table(flights);
+            //console.log('Flight Data:', flights);
+            console.table("fetch data called");
             this.myFlights = flights;
             //console.log(this.myFlights);
             //this.searchResults.emit(flights);

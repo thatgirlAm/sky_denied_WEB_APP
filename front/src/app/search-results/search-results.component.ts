@@ -1,11 +1,12 @@
 import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf, CommonModule } from '@angular/common';
 import { Flight } from '../flight';
 import { DataPassingService } from '../data-passing.service';
+import { log } from 'node:console';
 
 @Component({
   selector: 'app-search-results',
-  imports: [NgIf, NgFor],
+  imports: [NgIf, NgFor, CommonModule],
   templateUrl: './search-results.component.html',
   styleUrl: './search-results.component.css'
 })
@@ -16,18 +17,22 @@ export class SearchResultsComponent implements OnInit{
   loaded: boolean = false;
   @Output() predictClicked = new EventEmitter<void>();
   
-  constructor(private dataPassingService:DataPassingService){}
+  constructor(private dataPassingService:DataPassingService){
+  }
   ngOnInit(): void {
       this.setFlights();
+      console.log("From results initialisation");
       console.log(this.flights);
-      
   }
   public setFlights(){
+    console.log('initialised');
     this.loaded = false
     if(this.dataPassingService.searchParams){
       this.dataPassingService.fetchFlightData(); 
       this.flights = this.dataPassingService.myFlights;
       this.loaded = true;
+      console.log("from results:");  
+      console.log(this.flights);
     }
   }
 

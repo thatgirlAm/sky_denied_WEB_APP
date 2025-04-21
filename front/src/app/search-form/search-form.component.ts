@@ -75,8 +75,9 @@ export class SearchFormComponent {
 
     this.dataPassingService.searchParams = formGroup.value;
     this.dataPassingService.fetchFlightData() ;
-    console.log(this.dataPassingService.searchParams);
-    this.router.navigateByUrl('search'); 
+    //console.log(this.dataPassingService.searchParams);
+    this.isLoading = false ; 
+    this.searchResults.emit(this.dataPassingService.myFlights);
 
 }
 

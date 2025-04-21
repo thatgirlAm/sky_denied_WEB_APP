@@ -22,12 +22,12 @@
         <button class="notify-button" (click)="triggerGetNotifiedPopup()">Get notified</button>
       </div>
       <div class="cell">
-        <div class="flight-date">{{ flight.scheduled_departure_local  }}</div>
-        <div class="flight-time">{{ flight.scheduled_departure_local }}</div>
+        <div class="flight-date">{{ flight.scheduled_departure_local | date: 'longDate' }}</div>
+        <div class="flight-time">{{ flight.scheduled_departure_local | date: 'shortTime' }}</div>
       </div>
       <div class="cell">
-        <div class="flight-date">{{ flight.scheduled_arrival_local }}</div>
-        <div class="flight-time">{{ flight.scheduled_arrival_local }}</div>
+        <div class="flight-date">{{ flight.scheduled_arrival_local | date: 'longDate' }}</div>
+        <div class="flight-time">{{ flight.scheduled_arrival_local | date: 'shortTime' }}</div>
       </div>
       <div class="cell">
         <button class="predict-button" (click)="triggerPredictionPopup()">Check prediction</button>
