@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import {ApiService} from '../api-service.service';
 import {Flight} from '../flight';
-import {RouterModule} from '@angular/router';
+import {Router, RouterModule} from '@angular/router';
 import {NgIf} from '@angular/common';
 import { DataPassingService } from '../data-passing.service';
 import { log } from 'node:console';
@@ -36,6 +36,7 @@ export class SearchFormComponent {
     private fb: FormBuilder,
     private api: ApiService,
     private dataPassingService: DataPassingService,
+    private router : Router
   ) {
 
     this.haveFlightForm = this.fb.group({
@@ -62,6 +63,7 @@ export class SearchFormComponent {
   formSubmitted() {
     this.searchStarted.emit();
     this.submitted = true;
+    this.isLoading = true ;
    // console.log(this.haveFlightForm.get('tail_number')?.value);
    // console.log(this.haveFlightForm.get('tail_number')?.valid);
     const formGroup = this.activeTab === 'have-flight'
@@ -72,7 +74,9 @@ export class SearchFormComponent {
     if (formGroup.invalid) return;
 
     this.dataPassingService.searchParams = formGroup.value;
+    this.dataPassingService.fetchFlightData() ;
     console.log(this.dataPassingService.searchParams);
+    this.router.navigateByUrl('search'); 
 
 }
 

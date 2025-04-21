@@ -25,7 +25,7 @@ export class SearchComponent {
   showPredictionPopup = false;
   showGetNotifiedPopup = false;
   searchClicked = false ;
-  searchResults: Flight[] = [];
+  searchResults: Flight[] = this.flights;
   searchForm !: FormGroup ; 
 
   // to know if the model has been triggered

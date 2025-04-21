@@ -64,7 +64,7 @@
           <option value="Orlando">Orlando</option>
           <option value="Phoenix">Phoenix</option>
         </select>
-        <div class="validation-error" *ngIf="searchFlightForm.get('depart_from')?.errors?.['required'] && searchFlightForm.get('depart_from')?.touched || submitted  ">
+        <div class="validation-error" *ngIf="searchFlightForm.get('depart_from')?.errors?.['required'] && searchFlightForm.get('depart_from')?.touched   ">
           ✖ Departure location is required
         </div>
         <!-- <div class="validation-error" *ngIf="searchFlightForm.get('depart_from_iata')?.errors?.['maxlength']">
@@ -86,7 +86,7 @@
           <option value="Orlando">Orlando</option>
           <option value="Phoenix">Phoenix</option>
         </select>
-        <div class="validation-error" *ngIf="searchFlightForm.get('arrive_at')?.errors?.['required'] && searchFlightForm.get('arrive_at')?.touched || submitted  ">
+        <div class="validation-error" *ngIf="searchFlightForm.get('arrive_at')?.errors?.['required'] && searchFlightForm.get('arrive_at')?.touched   ">
           ✖ Arrival location is required
         </div>
       </div>

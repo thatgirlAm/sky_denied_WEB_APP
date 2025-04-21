@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Flight } from './flight';
 import { FormGroup } from '@angular/forms';
 import { log } from 'node:console';
+import { ApiService } from './api-service.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +11,21 @@ export class DataPassingService {
 
   public myFlights!: Flight[];
   public searchParams !: FormGroup<any> ; 
-  constructor() {}
+  constructor(private api: ApiService) {}
 
   fetchFlightData(){
-    console.log("Clicked");
+    this.api.searchFlights(this.searchParams).subscribe({
+          next: (flights: Flight[]) => {
+            console.log('Flight Data:', flights);
+            console.table(flights);
+            this.myFlights = flights;
+            //console.log(this.myFlights);
+            //this.searchResults.emit(flights);
+           },
+           error: (err) => {
+            //this.searchResults.emit([]);
+           }
+         });
   }
 
   // fetchFlightData() {
