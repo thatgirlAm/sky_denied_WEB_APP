@@ -91,7 +91,8 @@ button, input[type="submit"] {
   transition: background-color 0.3s ease;
 }
 
-input {
+input, textarea {
+  font-family: 'Lato', sans-serif;
   border: none;
   border-bottom: 1px solid lightgrey;
   text-align: center;
@@ -134,4 +135,9 @@ app-search-form {
 .loader p {
   text-align: center;
   color: var(--purple_sd);
+}
+
+.validation-error {
+  color: var(--red_sd);
+  width: 100%;
 }
