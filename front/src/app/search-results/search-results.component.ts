@@ -26,6 +26,8 @@ export class SearchResultsComponent implements OnInit{
   }
   public setFlights(){
     console.log('initialised');
+    console.log(this.dataPassingService.searchParams);
+    
     this.loaded = false
     if(this.dataPassingService.searchParams){
       this.dataPassingService.fetchFlightData(); 

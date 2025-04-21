@@ -19,7 +19,7 @@ export class DataPassingService {
             //console.log('Flight Data:', flights);
             console.table("fetch data called");
             this.myFlights = flights;
-            //console.log(this.myFlights);
+            console.log(this.myFlights);
             //this.searchResults.emit(flights);
            },
            error: (err) => {

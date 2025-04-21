@@ -35,8 +35,8 @@
         </div>
       </div>
       <div class="input-group">
-        <label for="scheduled_departure_local_have_flight">Scheduled Departure</label>
-        <input formControlName="scheduled_departure_local_have_flight" type="date" id="scheduled_departure_local_have_flight">
+        <label for="scheduled_departure_local">Scheduled Departure</label>
+        <input formControlName="scheduled_departure_local" type="date" id="scheduled_departure_local">
       </div>
       <div class="input-group">
         <button class="submit-button"
@@ -54,6 +54,7 @@
         <select id="depart_from" formControlName="depart_from">
           <option value="" disabled hidden>Select departure airport</option>
           <option value="Atlanta">Atlanta</option>
+          <option value="Atlanta">Amsterdam</option>
           <option value="Dallas">Dallas</option>
           <option value="Denver">Denver</option>
           <option value="Chicago">Chicago</option>
@@ -76,6 +77,7 @@
         <select id="arrive_at" formControlName="arrive_at">
           <option value="" disabled hidden>Select departure airport</option>
           <option value="Atlanta">Atlanta</option>
+          <option value="Atlanta">Barcelona</option>
           <option value="Dallas">Dallas</option>
           <option value="Denver">Denver</option>
           <option value="Chicago">Chicago</option>
@@ -91,8 +93,8 @@
         </div>
       </div>
       <div class="input-group">
-        <label for="scheduled_departure_local_outbound">Scheduled Departure</label>
-        <input formControlName="scheduled_departure_local_outbound" type="date" id="scheduled_departure_local_outbound">
+        <label for="scheduled_departure_local">Scheduled Departure</label>
+        <input formControlName="scheduled_departure_local" type="date" id="scheduled_departure_local">
       </div>
         <!-- <div class="validation-error" *ngIf="searchFlightForm.get('arrive_at')?.errors?.['maxlength']">
           ✖ IATA code must be 3 characters

@@ -41,14 +41,14 @@ export class SearchFormComponent {
 
     this.haveFlightForm = this.fb.group({
       tail_number: ['', Validators.required],
-      scheduled_departure_local_have_flight: ['', [this.dateTimeValidator]],
+      scheduled_departure_local: ['', [this.dateTimeValidator]],
 
     });
 
     this.searchFlightForm = this.fb.group({
       depart_from: ['', [Validators.required]],
       arrive_at: ['', [Validators.required]],
-      scheduled_departure_local_outbound: ['', [this.dateTimeValidator]],
+      scheduled_departure_local :['', [this.dateTimeValidator]],
     });
   }
 
@@ -69,7 +69,8 @@ export class SearchFormComponent {
     const formGroup = this.activeTab === 'have-flight'
       ? this.haveFlightForm
       : this.searchFlightForm;
-
+    console.log(this.dataPassingService.searchParams);
+    
     formGroup.markAllAsTouched();
     if (formGroup.invalid) return;
 
