@@ -122,22 +122,38 @@ class PredictionController extends Controller
             foreach ($flight_data as $flight) {
                 $processed_flights[] = [
                     'flight_date' => $flight['flight_date'] ?? null,
-                    'flight_number' => $flight['flight_number_iata'] ?? null,
+                    'flight_date_utc' => $flight['flight_date_utc'] ?? null,
+                    'flight_number_iata' => $flight['flight_number_iata'] ?? null,
+                    'flight_number_icao' => $flight['flight_number_icao'] ?? null,
+                    'tail_number' => $flight['tail_number'] ?? null,
+                    'airline' => $flight['airline'] ?? null,
                     'status' => $flight['status'] ?? null,
                     'depart_from' => $flight['depart_from'] ?? null,
-                    'arrive_at' => $flight['arrive_at'] ?? null,
+                    'depart_from_iata' => $flight['depart_from_iata'] ?? null,
+                    'depart_from_icao' => $flight['depart_from_icao'] ?? null,
+                    'scheduled_departure_local' => $flight['scheduled_departure_local'] ?? null,
+                    'scheduled_departure_local_tz' => $flight['scheduled_departure_local_tz'] ?? null,
                     'scheduled_departure_utc' => $flight['scheduled_departure_utc'] ?? null,
+                    'actual_departure_local' => $flight['actual_departure_local'] ?? null,
+                    'actual_departure_local_tz' => $flight['actual_departure_local_tz'] ?? null,
                     'actual_departure_utc' => $flight['actual_departure_utc'] ?? null,
+                    'arrive_at' => $flight['arrive_at'] ?? null,
+                    'arrive_at_iata' => $flight['arrive_at_iata'] ?? null,
+                    'arrive_at_icao' => $flight['arrive_at_icao'] ?? null,
+                    'scheduled_arrival_local' => $flight['scheduled_arrival_local'] ?? null,
+                    'scheduled_arrival_local_tz' => $flight['scheduled_arrival_local_tz'] ?? null,
                     'scheduled_arrival_utc' => $flight['scheduled_arrival_utc'] ?? null,
+                    'actual_arrival_local' => $flight['actual_arrival_local'] ?? null,
+                    'actual_arrival_local_tz' => $flight['actual_arrival_local_tz'] ?? null,
                     'actual_arrival_utc' => $flight['actual_arrival_utc'] ?? null,
-                    'schedule_duration' => $flight['schedule_duration'] ?? null,
-                    'actual_duration' => $flight['actual_duration'] ?? null,
+                    'duration' => $flight['duration'] ?? null,
                 ];
+                
             }
     
             // Structure the result as desired
             $result = [
-                'main_flight_date' => $main_flight_date_utc,
+                'main_scheduled_departure_utc' => $main_flight_date_utc,
                 'flights' => $processed_flights,
             ];
     
@@ -239,62 +255,62 @@ class PredictionController extends Controller
         }
     }
 
-    // function to test out crawling and data handling
-    public function crawling_handling_test(CrawlingRequest $request)
-    {
-        // 1) Run the crawler and get its JSON‑response
-        $crawlingResponse = $this->crawling_trigger($request);
+    // // function to test out crawling and data handling
+    // public function crawling_handling_test(CrawlingRequest $request)
+    // {
+    //     // 1) Run the crawler and get its JSON‑response
+    //     $crawlingResponse = $this->crawling_trigger($request);
     
-        // 2) Decode the raw JSON
-        $raw     = $crawlingResponse->getContent();
-        $decoded = json_decode($raw, true);
+    //     // 2) Decode the raw JSON
+    //     $raw     = $crawlingResponse->getContent();
+    //     $decoded = json_decode($raw, true);
     
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            return $this->format_error(
-                'Invalid JSON from crawling_trigger: '.json_last_error_msg(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
+    //     if (json_last_error() !== JSON_ERROR_NONE) {
+    //         return $this->format_error(
+    //             'Invalid JSON from crawling_trigger: '.json_last_error_msg(),
+    //             Response::HTTP_INTERNAL_SERVER_ERROR
+    //         );
+    //     }
     
-        // 3) Did it succeed?
-        $status = $decoded['status'] ?? null;
-        if ($status !== Response::HTTP_OK) {
-            // propagate the failure message/status
-            return $this->format_error(
-                $decoded['message']    ?? 'crawling_trigger failed',
-                $decoded['status']     ?? Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
+    //     // 3) Did it succeed?
+    //     $status = $decoded['status'] ?? null;
+    //     if ($status !== Response::HTTP_OK) {
+    //         // propagate the failure message/status
+    //         return $this->format_error(
+    //             $decoded['message']    ?? 'crawling_trigger failed',
+    //             $decoded['status']     ?? Response::HTTP_INTERNAL_SERVER_ERROR
+    //         );
+    //     }
     
-        // 4) Pull out the first (and only) element in data[]
-        if (
-            ! isset($decoded['data'][0]['flights'], $decoded['data'][0]['main_flight_date'])
-        ) {
-            return $this->format_error(
-                'Unexpected payload shape from crawling_trigger',
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
+    //     // 4) Pull out the first (and only) element in data[]
+    //     if (
+    //         ! isset($decoded['data']['flights'][0], $decoded['data'][0]['main_scheduled_departure_utc'])
+    //     ) {
+    //         return $this->format_error(
+    //             'Unexpected payload shape from crawling_trigger',
+    //             Response::HTTP_INTERNAL_SERVER_ERROR
+    //         );
+    //     }
     
-        $flights = $decoded['data'][0]['flights'];
-        $mainUtc = $decoded['data'][0]['main_flight_date'];
+    //     $flights = $decoded['data'][0]['flights'];
+    //     $mainUtc = $decoded['data'][0]['main_flight_date'];
     
-        // 5) Build the exact payload your Datahandling_request expects
-        $payload = [
-            'status' => Response::HTTP_OK,
-            'data'   => [
-                'main_scheduled_departure_utc' => $mainUtc,
-                'flights'                     => $flights,
-            ],
-        ];
+    //     // 5) Build the exact payload your Datahandling_request expects
+    //     $payload = [
+    //         'status' => Response::HTTP_OK,
+    //         'data'   => [
+    //             'main_scheduled_departure_utc' => $mainUtc,
+    //             'flights'                     => $flights,
+    //         ],
+    //     ];
     
-        // 6) Instantiate & populate the FormRequest
-        $handling_request = new DataHandlingRequest();
-        $handling_request->merge($payload);
+    //     // 6) Instantiate & populate the FormRequest
+    //     $handling_request = new DataHandlingRequest();
+    //     $handling_request->merge($payload);
     
-        // 7) Dispatch to data_handling() and return its response
-        return $this->data_handling($handling_request);
-    }
+    //     // 7) Dispatch to data_handling() and return its response
+    //     return $this->data_handling($handling_request);
+    // }
     
     public function model_testing(ModelRequest $request)
     {
@@ -350,18 +366,44 @@ class PredictionController extends Controller
         try {
             // Step 1: Trigger the crawling process
             $crawlingResponse = $this->crawling_trigger($crawlingRequest);
-            return $crawlingResponse;
-            return $data ;
-            $dataFormatted = $this->data_handling($data);
-    
-            // Step 2: Trigger the model prediction process
-            $modelResponse = $this->model_trigger($dataFormatted);
-            $predictionData = $modelResponse->getData(true); // Use getData() here as well
-    
-            // Step 3: Extract flight data from formatted data
-            $flightData = $dataFormatted['flight_information'][0];
+      
+            $dataHandlingRequest = new DataHandlingRequest([
+                'message' => $crawlingResponse->original['message'],
+                'status' => $crawlingResponse->original['status'],
+                'data' => $crawlingResponse->original['data']
+            ]);
+           
+            // Step 2: Pre-processing the data to only pass the 3 precedent flights
+            $dataFormatted = $this->data_handling($dataHandlingRequest);
+            $modelTriggerRequest = new ModelRequest([
+                'message' => $dataFormatted->original['message'],
+                'status' => $dataFormatted->original['status'],
+                'data' => $dataFormatted->original['data']
+            ]);
+            // Step 3: Trigger the model prediction process
+            $modelResponse = $this->model_trigger($modelTriggerRequest);
+            $predictionData = $modelResponse;
+            
+            // Step 4: Extract flight data from formatted data
+            $flightData = $dataFormatted->original['data'][0];
             $status = $predictionData['status'];
-    
+
+            // Step 5: Prepare the prediction data for the database
+            $predictionDataDB = [
+                'tail_number' => $flightData['tail_number'], 
+                'delayed' => $modelResponse['value'] === 'Delayed (15-60 min)' ? true : false,
+                'previous_prediction' => json_encode($modelResponse), 
+                'accuracy' => null, 
+                'schedule_date_utc' => $flightData['schedule_date_utc'] 
+            ];
+
+            // Step 6: Updating the data to the database
+            $prediction = Prediction::updateOrCreatePrediction($predictionData);
+            // TODO: to change
+            $flight = Flight::find($flightData['id']);
+
+            $flight->update(['status' => $modelResponse['value']]);
+            
             // Step 4: Error handling for missing flight or prediction data
             if (!$flightData) {
                 return $this->format_error('Flight data is missing', Response::HTTP_BAD_REQUEST);
