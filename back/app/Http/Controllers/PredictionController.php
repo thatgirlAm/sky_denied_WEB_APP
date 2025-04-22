@@ -78,73 +78,82 @@ class PredictionController extends Controller
 
     // function to handle data crawling in real time
     public function crawling_trigger(CrawlingRequest $crawling_request)
-{
-    // Retrieve parameters from the request
-    $response = $crawling_request->all();
-    $tail_number = $response['tail_number'];
-    $mode = $response['mode'];
-    $main_flight_date_utc = $response['main_scheduled_departure_utc'];
-
-    // Construct the JSON data to be passed to the Python script
-    $data = json_encode([[
-        'aircraft' => $tail_number,
-        'mode' => $mode
-    ]]);
-
-    // Determine the script path using a relative path
-    $script_path = base_path('../data/main.py');
-
-    // Define the Python process
-    $process = new Process(['python3', $script_path, $data]);
-    $process->setTimeout(120);
-
-    try {
-        // Run the process
-        $process->mustRun();
-
-        // Trim the output and log it for debugging
-        $output = trim($process->getOutput());
-        \Log::info("Raw Python output: " . $output);
-
-        // Decode the JSON output
-        $flights_information = json_decode($output, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            \Log::error("JSON decode error: " . json_last_error_msg());
-            \Log::error("Raw output: " . $output);
+    {
+        // Retrieve parameters from the request
+        $response = $crawling_request->all();
+        $tail_number = $response['tail_number'];
+        $main_flight_date_utc = $response['main_scheduled_departure_utc'];
+    
+        // Construct the JSON data to be passed to the API
+        $queryParams = [
+            'aircraft' => $tail_number,
+        ];
+    
+        // Define the API URL
+        $ip = "172.179.154.4";
+        $api_url = 'http://' . $ip . ':8000/realtime';
+    
+        try {
+            // Call the API with a timeout
+            $response = \Http::timeout(120)->get($api_url, $queryParams);
+    
+            // Check for HTTP errors
+            if ($response->failed()) {
+                \Log::error("API call failed: " . $response->status());
+                return $this->format_error(
+                    'API call failed with status: ' . $response->status(),
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            }
+    
+            // Decode the JSON response
+            $flights_information = $response->json();
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                \Log::error("JSON decode error: " . json_last_error_msg());
+                return $this->format_error(
+                    'Error parsing API response: ' . json_last_error_msg(),
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            }
+    
+            // Extract relevant flight data
+            $flight_data = $flights_information['response']['data'] ?? [];
+            $processed_flights = [];
+            foreach ($flight_data as $flight) {
+                $processed_flights[] = [
+                    'flight_date' => $flight['flight_date'] ?? null,
+                    'flight_number' => $flight['flight_number_iata'] ?? null,
+                    'status' => $flight['status'] ?? null,
+                    'depart_from' => $flight['depart_from'] ?? null,
+                    'arrive_at' => $flight['arrive_at'] ?? null,
+                    'scheduled_departure_utc' => $flight['scheduled_departure_utc'] ?? null,
+                    'actual_departure_utc' => $flight['actual_departure_utc'] ?? null,
+                    'scheduled_arrival_utc' => $flight['scheduled_arrival_utc'] ?? null,
+                    'actual_arrival_utc' => $flight['actual_arrival_utc'] ?? null,
+                    'schedule_duration' => $flight['schedule_duration'] ?? null,
+                    'actual_duration' => $flight['actual_duration'] ?? null,
+                ];
+            }
+    
+            // Structure the result as desired
+            $result = [
+                'main_flight_date' => $main_flight_date_utc,
+                'flights' => $processed_flights,
+            ];
+    
+            // Return success response
+            return $this->format(['API call successful', Response::HTTP_OK, $result]);
+    
+        } catch (\Exception $e) {
+            // Log and handle unexpected errors
+            \Log::error("Unexpected error: " . $e->getMessage());
             return $this->format_error(
-                'Error parsing script output: ' . json_last_error_msg(),
+                'An unexpected error occurred: ' . $e->getMessage(),
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-       
-        // Structure the result as desired
-        $result = [
-            [
-                'flights' => $flights_information,
-                'main_flight_date' => $main_flight_date_utc
-            ]
-        ];
-
-        // Return success response
-        return $this->format(['Script ran successfully', Response::HTTP_OK, $result]);
-
-    } catch (ProcessFailedException $e) {
-        // Log and handle process failure
-        \Log::error("Python script failed: " . $e->getMessage());
-        return $this->format_error(
-            'Script did not run: ' . $e->getMessage(),
-            Response::HTTP_INTERNAL_SERVER_ERROR
-        );
-
-    } catch (\Exception $e) {
-        // Log and handle other exceptions
-        \Log::error("Unexpected error: " . $e->getMessage());
-        return $this->format_error(
-            'An unexpected error occurred: ' . $e->getMessage(),
-            Response::HTTP_INTERNAL_SERVER_ERROR
-        );
     }
-}
+    
 
     
     
@@ -341,7 +350,8 @@ class PredictionController extends Controller
         try {
             // Step 1: Trigger the crawling process
             $crawlingResponse = $this->crawling_trigger($crawlingRequest);
-            $data = $crawlingResponse->getData(true); // Use getData() to retrieve the data from the JsonResponse
+            return $crawlingResponse;
+            return $data ;
             $dataFormatted = $this->data_handling($data);
     
             // Step 2: Trigger the model prediction process
