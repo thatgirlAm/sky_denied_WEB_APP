@@ -47,5 +47,5 @@ Route::post('/user', [UserController::class, 'addUser']);
 // Contact form
 Route::post('/contact', [ContactController::class, 'send_contact']);
 Route::post('/confirm_contact', [ContactController::class, 'confirm_contact']);
-});
+
 
