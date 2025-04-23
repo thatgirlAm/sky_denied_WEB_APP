@@ -1,8 +1,3 @@
-# 
-
-
-
-
 """
 run_all.py
 
@@ -17,7 +12,10 @@ import airportsdata
 import pandas as pd
 import json
 import sys
-import os
+import logging
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import JSONResponse
+import uvicorn
 
 # Import scraping functions
 from src.get_flight_by_airport_flightera import crawl_flighttera_airport_flights
@@ -73,9 +71,9 @@ def run_schedule_mode(airport_list_iata):
 
     airports = airportsdata.load("IATA")
 
-    start_date_str = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
+    start_date_str = (datetime.now() + timedelta(days=0)).strftime("%Y-%m-%d")
     # Use today's date as end date (or adjust as needed)
-    end_date_str = (datetime.now() - timedelta(days=2)).strftime("%Y-%m-%d")
+    end_date_str = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
 
     flightera_arrival_dfs = []
     flightera_departure_dfs = []
@@ -103,57 +101,9 @@ def run_schedule_mode(airport_list_iata):
     df = clean_and_merge(flightera_arrival_dfs, flightera_departure_dfs, flightradar24_dfs)
     logger.info("Data merged successfully with %d total rows.", len(df))
 
+    # df = pd.read_csv('data/flight_schedule_2025-04-19.csv')
     push_fligth_schedule_to_postgres(df)
     logger.info("SCHEDULE mode completed.")
-
-def run_realtime_mode(aircraft):
-    logger = create_logger("realtime", "realtime.log")
-    logger.info("REALTIME mode started for aircraft: %s", aircraft)
-
-    df = run_flightradar24_aircraft_scrape(logger, aircraft)
-    
-    if df.empty:
-        logger.warning(f"No data found for aircraft: {aircraft}")
-        # Make sure to output valid JSON even when empty
-        print('[]')  # This is critical
-        logger.info("REALTIME mode completed with no data.")
-        return
-    
-    # For non-empty dataframes
-    df_cleaned = clean_aircraft(df)
-    logger.info("Realtime aircraft data cleaned: %d rows", len(df_cleaned))
-
-    # Ensure proper JSON formatting and print to stdout
-    json_array = df_cleaned.to_dict(orient="records")
-    json_string = json.dumps(json_array)
-    logger.info(f"Outputting JSON data: {json_string[:100]}...")  # Log the start of the output
-    print(json_string)  # This is critical - must print to stdout
-
-    logger.info("REALTIME mode completed.")
-'''
-def run_realtime_mode(aircraft):
-    logger = create_logger("realtime", "realtime.log")
-    logger.info("REALTIME mode started for aircraft: %s", aircraft)
-
-    df = run_flightradar24_aircraft_scrape(logger, aircraft)
-    
-    if df.empty:
-        logger.warning(f"No data found for aircraft: {aircraft}")
-        # Return an empty array as JSON
-        print(json.dumps([]))
-        logger.info("REALTIME mode completed with no data.")
-        return
-    
-    df_cleaned = clean_aircraft(df)
-    logger.info("Realtime aircraft data cleaned: %d rows", len(df_cleaned))
-
-    # Output to console
-    json_array = df_cleaned.to_dict(orient="records")
-    json_string = json.dumps(json_array)
-    logger.info(json_string)
-    print(json_string)
-
-    logger.info("REALTIME mode completed.")
 
 def run_realtime_mode(aircraft):
     # Create or get the realtime logger
@@ -166,13 +116,18 @@ def run_realtime_mode(aircraft):
 
     # Output to console if you like
     json_array = df_cleaned.to_dict(orient="records")
+    logger.info(json_array[0])
     json_string = json.dumps(json_array)
-    logger.info(json_string)
-
     print(json_string)
-
     logger.info("REALTIME mode completed.")
-'''
+    return {
+        "status": "success",
+        "response": {
+            "aircraft": aircraft,
+            "data": json_array
+        }
+    }
+
 def main():
     if len(sys.argv) < 2:
         print("Usage: run_all.py '[{...}]'")
@@ -194,7 +149,7 @@ def main():
                 continue
             run_schedule_mode(airport_list)
         elif mode == "realtime":
-            aircraft = command.get("aircraft", None)
+            aircraft = command.get("aircraft")
             if not aircraft:
                 print("No aircraft provided for realtime mode.")
                 continue
@@ -202,5 +157,51 @@ def main():
         else:
             print(f"Unrecognized mode: {mode}. Valid modes are 'schedule' or 'realtime'.")
 
+# --- FastAPI API endpoints ---
+app = FastAPI()
+
+@app.post("/schedule")
+async def schedule_endpoint(payload: dict):
+    airport_list = payload.get("airport_list_iata", [])
+    if not airport_list:
+        raise HTTPException(status_code=400, detail="Missing 'airport_list_iata'")
+    try:
+        run_schedule_mode(airport_list)
+        return {"status": "success", "message": "Schedule mode completed"}
+    except Exception as e:
+        return JSONResponse(content={"status": "error", "message": str(e)}, status_code=500)
+
+@app.get("/realtime")
+async def realtime_endpoint(aircraft: str = None):
+    if not aircraft:
+        raise HTTPException(status_code=400, detail="Missing 'aircraft' parameter")
+
+    try:
+        result = run_realtime_mode(aircraft)
+    except Exception as e:
+        logging.getLogger("api").exception("Error in realtime_endpoint")
+        return JSONResponse(
+            content={"status": "error", "message": f"Exception: {str(e)}"},
+            status_code=500
+        )
+
+    # Validate result
+    if result is None or not isinstance(result, dict) or "status" not in result:
+        return JSONResponse(
+            content={"status": "error", "message": "Invalid response from run_realtime_mode"},
+            status_code=500
+        )
+
+    # Return success or error based on the result's status
+    if result.get("status") == "success":
+        return JSONResponse(content=result, status_code=200)
+    else:
+        return JSONResponse(content=result, status_code=500)
+# --- end API endpoints ---
+
 if __name__ == "__main__":
-    main()
+    # If CLI args provided, run in CLI mode; otherwise launch API server
+    if len(sys.argv) > 1:
+        main()
+    else:
+        uvicorn.run(app, host="0.0.0.0", port=8000)

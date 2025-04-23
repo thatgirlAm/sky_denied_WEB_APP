@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Process\Exceptions\ProcessFailedException;
 use App\Models\Flight;
 use Illuminate\Support\Facades\Log; 
+use Illuminate\Support\Facades\Http;   
 
 
 class PredictionController extends Controller
@@ -77,93 +78,114 @@ class PredictionController extends Controller
 
     // function to handle data crawling in real time
     public function crawling_trigger(CrawlingRequest $crawling_request)
-{
-    // Retrieve parameters from the request
-    $response = $crawling_request->all();
-    $tail_number = $response['tail_number'];
-    $mode = $response['mode'];
-    $main_flight_date_utc = $response['main_scheduled_departure_utc'];
-
-    // Construct the JSON data to be passed to the Python script
-    $data = json_encode([[
-        'aircraft' => $tail_number,
-        'mode' => $mode
-    ]]);
-
-    // Determine the script path using a relative path
-    $script_path = base_path('../data/main.py');
-
-    // Define the Python process
-    $process = new Process(['python3', $script_path, $data]);
-    $process->setTimeout(120);
-
-    try {
-        // Run the process
-        $process->mustRun();
-
-        // Trim the output and log it for debugging
-        $output = trim($process->getOutput());
-        \Log::info("Raw Python output: " . $output);
-
-        // Decode the JSON output
-        $flights_information = json_decode($output, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            \Log::error("JSON decode error: " . json_last_error_msg());
-            \Log::error("Raw output: " . $output);
+    {
+        // Retrieve parameters from the request
+        $response = $crawling_request->all();
+        $tail_number = $response['tail_number'];
+        $main_flight_date_utc = $response['main_scheduled_departure_utc'];
+    
+        // Construct the JSON data to be passed to the API
+        $queryParams = [
+            'aircraft' => $tail_number,
+        ];
+    
+        // Define the API URL
+        $ip = "172.179.154.4";
+        $api_url = 'http://' . $ip . ':8000/realtime';
+    
+        try {
+            // Call the API with a timeout
+            $response = \Http::timeout(120)->get($api_url, $queryParams);
+    
+            // Check for HTTP errors
+            if ($response->failed()) {
+                \Log::error("API call failed: " . $response->status());
+                return $this->format_error(
+                    'API call failed with status: ' . $response->status(),
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            }
+    
+            // Decode the JSON response
+            $flights_information = $response->json();
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                \Log::error("JSON decode error: " . json_last_error_msg());
+                return $this->format_error(
+                    'Error parsing API response: ' . json_last_error_msg(),
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            }
+    
+            // Extract relevant flight data
+            $flight_data = $flights_information['response']['data'] ?? [];
+            $processed_flights = [];
+            foreach ($flight_data as $flight) {
+                $processed_flights[] = [
+                    'flight_date' => $flight['flight_date'] ?? null,
+                    'flight_date_utc' => $flight['flight_date_utc'] ?? null,
+                    'flight_number_iata' => $flight['flight_number_iata'] ?? null,
+                    'flight_number_icao' => $flight['flight_number_icao'] ?? null,
+                    'tail_number' => $flight['tail_number'] ?? null,
+                    'airline' => $flight['airline'] ?? null,
+                    'status' => $flight['status'] ?? null,
+                    'depart_from' => $flight['depart_from'] ?? null,
+                    'depart_from_iata' => $flight['depart_from_iata'] ?? null,
+                    'depart_from_icao' => $flight['depart_from_icao'] ?? null,
+                    'scheduled_departure_local' => $flight['scheduled_departure_local'] ?? null,
+                    'scheduled_departure_local_tz' => $flight['scheduled_departure_local_tz'] ?? null,
+                    'scheduled_departure_utc' => $flight['scheduled_departure_utc'] ?? null,
+                    'actual_departure_local' => $flight['actual_departure_local'] ?? null,
+                    'actual_departure_local_tz' => $flight['actual_departure_local_tz'] ?? null,
+                    'actual_departure_utc' => $flight['actual_departure_utc'] ?? null,
+                    'arrive_at' => $flight['arrive_at'] ?? null,
+                    'arrive_at_iata' => $flight['arrive_at_iata'] ?? null,
+                    'arrive_at_icao' => $flight['arrive_at_icao'] ?? null,
+                    'scheduled_arrival_local' => $flight['scheduled_arrival_local'] ?? null,
+                    'scheduled_arrival_local_tz' => $flight['scheduled_arrival_local_tz'] ?? null,
+                    'scheduled_arrival_utc' => $flight['scheduled_arrival_utc'] ?? null,
+                    'actual_arrival_local' => $flight['actual_arrival_local'] ?? null,
+                    'actual_arrival_local_tz' => $flight['actual_arrival_local_tz'] ?? null,
+                    'actual_arrival_utc' => $flight['actual_arrival_utc'] ?? null,
+                    'duration' => $flight['duration'] ?? null,
+                ];
+                
+            }
+    
+            // Structure the result as desired
+            $result = [
+                'main_scheduled_departure_utc' => $main_flight_date_utc,
+                'flights' => $processed_flights,
+            ];
+    
+            // Return success response
+            return $this->format(['API call successful', Response::HTTP_OK, $result]);
+    
+        } catch (\Exception $e) {
+            // Log and handle unexpected errors
+            \Log::error("Unexpected error: " . $e->getMessage());
             return $this->format_error(
-                'Error parsing script output: ' . json_last_error_msg(),
+                'An unexpected error occurred: ' . $e->getMessage(),
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-       
-        // Structure the result as desired
-        $result = [
-            [
-                'flights' => $flights_information,
-                'main_flight_date' => $main_flight_date_utc
-            ]
-        ];
-
-        // Return success response
-        return $this->format(['Script ran successfully', Response::HTTP_OK, $result]);
-
-    } catch (ProcessFailedException $e) {
-        // Log and handle process failure
-        \Log::error("Python script failed: " . $e->getMessage());
-        return $this->format_error(
-            'Script did not run: ' . $e->getMessage(),
-            Response::HTTP_INTERNAL_SERVER_ERROR
-        );
-
-    } catch (\Exception $e) {
-        // Log and handle other exceptions
-        \Log::error("Unexpected error: " . $e->getMessage());
-        return $this->format_error(
-            'An unexpected error occurred: ' . $e->getMessage(),
-            Response::HTTP_INTERNAL_SERVER_ERROR
-        );
     }
-}
+    
 
     
     
     // function to handle the data resizing                   
     public function data_handling(DatahandlingRequest $request)
     {
-        // Extract the response body from the request
         $response = $request->all(); 
-        
-        // Ensure 'data' key exists and is an array
-        $flights = $response['data']['flights'] ?? []; 
+        $flights = $response['data']['flights'] ?? [];
         $main_scheduled_departure_utc = $response["data"]["main_scheduled_departure_utc"];
-        //return $flights ; 
         $result = [];
         
-        // Check if the response status is HTTP_OK
         if ($response['status'] == Response::HTTP_OK) {
-            $result = [];
+            // Find matching flight and previous 3 flights
             foreach ($flights as $i => $flight) {
                 if ($flight['scheduled_departure_utc'] === $main_scheduled_departure_utc) {
+                    // Add matching flight and previous 3 flights
                     $result[] = $flight;
                     for ($j = 1; $j <= 3; $j++) {
                         if (isset($flights[$i - $j])) {
@@ -173,99 +195,122 @@ class PredictionController extends Controller
                     break;
                 }
             }
-        
-            // if nothing matched, return a clear NO_CONTENT error
+    
+            // Add reporting_airline to filtered flights
+            foreach ($result as &$flight) {
+                $flightNumberIata = $flight['flight_number_iata'] ?? '';
+                $flight['reporting_airline'] = substr($flightNumberIata, 0, 2);
+            }
+            unset($flight); // Break the reference
+    
             if (empty($result)) {
                 return $this->format_error(
                     'No flight corresponds to the given UTC date/time',
                     Response::HTTP_NO_CONTENT
                 );
             }
-        
-            // otherwise return your standard success shape
-            return $this->format(['success', Response::HTTP_OK, $result]);
+    
+            return $this->format([
+                'success',
+                Response::HTTP_OK,
+                array_reverse($result) // Reverse to maintain chronological order
+            ]);
         }
     }
-    
 
 
-
+    // TODO: Test this
     // function to trigger the model 
     public function model_trigger(ModelRequest $model_request)
     {
-        // data is an array with 2 json files: one for flight information and one for weather information 
-        $data = json_encode($model_request['data']);
-
-        // TODO: replace by model's path
-        $script_path = base_path('../test/model.py') ; 
-        $process = new Process(['python3', $script_path, $data]);
-        try
+        // Extract data from the request
+        $data = $model_request['data'];
+    
+        // TODO: Replace with the actual API endpoint URL
+        $ip = "4.149.171.79";
+        $api_url = 'http://'.$ip.':8000/predict';
+    
+        try 
         {
-            $process->run();
-            return json_decode($process->getOutput(), true);
-        }
+            // Send a POST request to the API with the data
+            $response = Http::post($api_url, $data);
+            if ($response->successful()) 
+            {
+                return $response->json(); 
+            } 
+            else 
+            {
+                return $this->format_error(
+                    'Model API returned an error: ' . $response->body(), 
+                    $response->status()
+                );
+            }
+        } 
         catch (\Exception $e) 
         {
-            return $this->format_error('Model did not run', Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->format_error(
+                'Model API call failed: ' . $e->getMessage(), 
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 
-    // function to test out crawling and data handling
-    public function crawling_handling_test(CrawlingRequest $request)
-    {
-        // 1) Run the crawler and get its JSON‑response
-        $crawlingResponse = $this->crawling_trigger($request);
+    // // function to test out crawling and data handling
+    // public function crawling_handling_test(CrawlingRequest $request)
+    // {
+    //     // 1) Run the crawler and get its JSON‑response
+    //     $crawlingResponse = $this->crawling_trigger($request);
     
-        // 2) Decode the raw JSON
-        $raw     = $crawlingResponse->getContent();
-        $decoded = json_decode($raw, true);
+    //     // 2) Decode the raw JSON
+    //     $raw     = $crawlingResponse->getContent();
+    //     $decoded = json_decode($raw, true);
     
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            return $this->format_error(
-                'Invalid JSON from crawling_trigger: '.json_last_error_msg(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
+    //     if (json_last_error() !== JSON_ERROR_NONE) {
+    //         return $this->format_error(
+    //             'Invalid JSON from crawling_trigger: '.json_last_error_msg(),
+    //             Response::HTTP_INTERNAL_SERVER_ERROR
+    //         );
+    //     }
     
-        // 3) Did it succeed?
-        $status = $decoded['status'] ?? null;
-        if ($status !== Response::HTTP_OK) {
-            // propagate the failure message/status
-            return $this->format_error(
-                $decoded['message']    ?? 'crawling_trigger failed',
-                $decoded['status']     ?? Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
+    //     // 3) Did it succeed?
+    //     $status = $decoded['status'] ?? null;
+    //     if ($status !== Response::HTTP_OK) {
+    //         // propagate the failure message/status
+    //         return $this->format_error(
+    //             $decoded['message']    ?? 'crawling_trigger failed',
+    //             $decoded['status']     ?? Response::HTTP_INTERNAL_SERVER_ERROR
+    //         );
+    //     }
     
-        // 4) Pull out the first (and only) element in data[]
-        if (
-            ! isset($decoded['data'][0]['flights'], $decoded['data'][0]['main_flight_date'])
-        ) {
-            return $this->format_error(
-                'Unexpected payload shape from crawling_trigger',
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
+    //     // 4) Pull out the first (and only) element in data[]
+    //     if (
+    //         ! isset($decoded['data']['flights'][0], $decoded['data'][0]['main_scheduled_departure_utc'])
+    //     ) {
+    //         return $this->format_error(
+    //             'Unexpected payload shape from crawling_trigger',
+    //             Response::HTTP_INTERNAL_SERVER_ERROR
+    //         );
+    //     }
     
-        $flights = $decoded['data'][0]['flights'];
-        $mainUtc = $decoded['data'][0]['main_flight_date'];
+    //     $flights = $decoded['data'][0]['flights'];
+    //     $mainUtc = $decoded['data'][0]['main_flight_date'];
     
-        // 5) Build the exact payload your Datahandling_request expects
-        $payload = [
-            'status' => Response::HTTP_OK,
-            'data'   => [
-                'main_scheduled_departure_utc' => $mainUtc,
-                'flights'                     => $flights,
-            ],
-        ];
+    //     // 5) Build the exact payload your Datahandling_request expects
+    //     $payload = [
+    //         'status' => Response::HTTP_OK,
+    //         'data'   => [
+    //             'main_scheduled_departure_utc' => $mainUtc,
+    //             'flights'                     => $flights,
+    //         ],
+    //     ];
     
-        // 6) Instantiate & populate the FormRequest
-        $handling_request = new DataHandlingRequest();
-        $handling_request->merge($payload);
+    //     // 6) Instantiate & populate the FormRequest
+    //     $handling_request = new DataHandlingRequest();
+    //     $handling_request->merge($payload);
     
-        // 7) Dispatch to data_handling() and return its response
-        return $this->data_handling($handling_request);
-    }
+    //     // 7) Dispatch to data_handling() and return its response
+    //     return $this->data_handling($handling_request);
+    // }
     
     public function model_testing(ModelRequest $request)
     {
@@ -278,7 +323,7 @@ class PredictionController extends Controller
         {
             $process->run();
             $output = $process->getOutput();
-            return $output;
+            return json_encode($output);
         }
         catch (\Exception $e)
         {
@@ -314,48 +359,80 @@ class PredictionController extends Controller
 
     // function to trigger the whole prediction scheme
     */
+
+    // TODO: Test this
     public function trigger(CrawlingRequest $crawlingRequest)
     {
-        try 
-        {        
-        $data = $this->crawling_trigger($crawlingRequest)['data'];
-        $data_formatted = $this->data_handling($data); 
-        $prediction_data = $this->model_trigger($data_formatted)['prediction']; 
-        $flight_data = $data_formatted['flight_information'][0]; 
-        $status = $prediction_data['status'];
+        try {
+            // Step 1: Trigger the crawling process
+            $crawlingResponse = $this->crawling_trigger($crawlingRequest);
+      
+            $dataHandlingRequest = new DataHandlingRequest([
+                'message' => $crawlingResponse->original['message'],
+                'status' => $crawlingResponse->original['status'],
+                'data' => $crawlingResponse->original['data']
+            ]);
+           
+            // Step 2: Pre-processing the data to only pass the 3 precedent flights
+            $dataFormatted = $this->data_handling($dataHandlingRequest);
+            $modelTriggerRequest = new ModelRequest([
+                'message' => $dataFormatted->original['message'],
+                'status' => $dataFormatted->original['status'],
+                'data' => $dataFormatted->original['data']
+            ]);
+            // Step 3: Trigger the model prediction process
+            $modelResponse = $this->model_trigger($modelTriggerRequest);
+            $predictionData = $modelResponse;
+            
+            // Step 4: Extract flight data from formatted data
+            $flightData = $dataFormatted->original['data'][0];
+            $status = $predictionData['status'];
 
-        try 
-        {
-            // error handling
-            if (!$flight_data) {
+            // Step 5: Prepare the prediction data for the database
+            $predictionDataDB = [
+                'tail_number' => $flightData['tail_number'], 
+                'delayed' => $modelResponse['value'] === 'Delayed (15-60 min)' ? true : false,
+                'previous_prediction' => json_encode($modelResponse), 
+                'accuracy' => null, 
+                'schedule_date_utc' => $flightData['main_scheduled_departure_utc'] 
+            ];
+
+            // Step 6: Updating the data to the database
+            $prediction = Prediction::updateOrCreatePrediction($predictionData);
+            // TODO: to change
+            $flight = Flight::find($flightData['id']);
+
+            $flight->update(['status' => $modelResponse['value']]);
+
+            // Step 4: Error handling for missing flight or prediction data
+            if (!$flightData) {
                 return $this->format_error('Flight data is missing', Response::HTTP_BAD_REQUEST);
             }
-            $flight = Flight::where('id', $flight_data['id'])->first();
-            // error handling
+    
+            // Step 5: Check if flight exists in the database
+            $flight = Flight::find($flightData['id']);
             if (!$flight) {
                 return $this->format_error('Flight not found', Response::HTTP_NOT_FOUND);
             }
-            $prediction = Prediction::where('id', $prediction_data['id'])->first();
-            // error handling   
+    
+            // Step 6: Check if prediction exists in the database
+            $prediction = Prediction::find($predictionData['id']);
             if (!$prediction) {
                 return $this->format_error('Prediction not found', Response::HTTP_NOT_FOUND);
             }
-
-            // Updating the DB
-            $flight->update($status, $flight_data);
-            $prediction->update($prediction_data, $prediction_data);
-
-            return $this->format(['Prediction OK', Response::HTTP_OK, $prediction]);
-        }
-        catch (ProcessFailedException $e)
-        {
-            return $this->format_error('The scheme did not run', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-        }
     
-    catch (ProcessFailedException $e)
-    {
-        return $this->format_error('Prediction did not run', Response::HTTP_INTERNAL_SERVER_ERROR);
+            // Step 7: Update the flight and prediction data in the database
+            $flight->update(['status' => $status] + $flightData);
+            $prediction->update($predictionData);
+    
+            return $this->format(['Prediction OK', Response::HTTP_OK, $prediction]);
+    
+        } catch (\Exception $e) {
+            // Handle any other exceptions during the entire process
+            return $this->format_error('An error occurred during the prediction process: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
-}
+    
+    
+    
 }
