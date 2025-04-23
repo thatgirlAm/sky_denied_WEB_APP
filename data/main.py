@@ -71,7 +71,7 @@ def run_schedule_mode(airport_list_iata):
 
     airports = airportsdata.load("IATA")
 
-    start_date_str = (datetime.now() + timedelta(days=0)).strftime("%Y-%m-%d")
+    start_date_str = (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d")
     # Use today's date as end date (or adjust as needed)
     end_date_str = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
 

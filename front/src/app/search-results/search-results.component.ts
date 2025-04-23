@@ -42,7 +42,8 @@ export class SearchResultsComponent implements OnInit{
       this.loaded = !!this.flights && this.flights.length > 0;
     }
   }
-  triggerPredictionPopup() {
+  triggerPredictionPopup(flight : Flight) {
+    this.dataPassingService.selectedFlight = flight;
     this.predictClicked.emit();
   }
 

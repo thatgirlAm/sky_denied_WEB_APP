@@ -31,7 +31,7 @@
           <div class="flight-time">{{ flight.scheduled_arrival_local | date: 'shortTime' }}</div>
         </div>
         <div class="cell">
-          <button class="predict-button" (click)="triggerPredictionPopup()">Check prediction</button>
+          <button class="predict-button" (click)="triggerPredictionPopup(flight)">Check prediction</button>
         </div>
       </div>
     </div>

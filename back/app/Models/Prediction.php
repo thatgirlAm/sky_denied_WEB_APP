@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Prediction extends Model
 {
     protected $fillable=[
-        "flight_id", 
+        "tail_number",
         "delayed",
         "previous_prediction",
-        "accuracy"
+        "accuracy",
+        "schedule_date_utc"
     ];
 
-
+    
     public static function updateOrCreatePrediction(array $data)
     {
         return self::updateOrCreate(

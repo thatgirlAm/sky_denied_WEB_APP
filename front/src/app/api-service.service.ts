@@ -39,6 +39,14 @@ export class ApiService {
   }
   
 
+  postPrediction(information: any): Observable<boolean> {
+    return this.post<any>('prediction/trigger', information)
+      .pipe(
+        map(response => response.data)
+      );
+  }
+  
+
   searchFlights(searchParams: any): Observable<Flight[]> {
     return this.post<any>('flights/search/', searchParams)
       .pipe(map(response => response.data));

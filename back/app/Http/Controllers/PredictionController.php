@@ -10,11 +10,10 @@ use \App\Http\Requests\ModelRequest;
 use PhpParser\Node\Stmt\Catch_;
 use Symfony\Component\Process\Process;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Process\Exceptions\ProcessFailedException;
 use App\Models\Flight;
 use Illuminate\Support\Facades\Log; 
 use Illuminate\Support\Facades\Http;   
-
+//use DateTime;
 
 class PredictionController extends Controller
 {
@@ -40,9 +39,16 @@ class PredictionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->all();
+        $input["tail_number"] = $request->input("tail_number");
+        $value = $request->input("value", "");
+        $input["delayed"] = !str_contains($value, "Delayed");
+        $input["previous_prediction"] = "On time";
+        $input["schedule_date_utc"] = $request->input("schedule_date_utc");
+        $input["accuracy"] = "";
+        return $this->format(["Success", Response::HTTP_OK,Prediction::create($input)]);
     }
-
+    
     /**
      * Display the specified resource.
      */
@@ -180,10 +186,11 @@ class PredictionController extends Controller
         $flights = $response['data']['flights'] ?? [];
         $main_scheduled_departure_utc = $response["data"]["main_scheduled_departure_utc"];
         $result = [];
-        
+        //return $flights;
         if ($response['status'] == Response::HTTP_OK) {
             // Find matching flight and previous 3 flights
             foreach ($flights as $i => $flight) {
+                //printf($flight['scheduled_departure_utc'] . " " .  "\n" );
                 if ($flight['scheduled_departure_utc'] === $main_scheduled_departure_utc) {
                     // Add matching flight and previous 3 flights
                     $result[] = $flight;
@@ -213,7 +220,8 @@ class PredictionController extends Controller
             return $this->format([
                 'success',
                 Response::HTTP_OK,
-                array_reverse($result) // Reverse to maintain chronological order
+                $result
+                 
             ]);
         }
     }
@@ -375,64 +383,76 @@ class PredictionController extends Controller
            
             // Step 2: Pre-processing the data to only pass the 3 precedent flights
             $dataFormatted = $this->data_handling($dataHandlingRequest);
+            //return $dataFormatted;
             $modelTriggerRequest = new ModelRequest([
                 'message' => $dataFormatted->original['message'],
                 'status' => $dataFormatted->original['status'],
                 'data' => $dataFormatted->original['data']
             ]);
+            
             // Step 3: Trigger the model prediction process
             $modelResponse = $this->model_trigger($modelTriggerRequest);
-            $predictionData = $modelResponse;
             
             // Step 4: Extract flight data from formatted data
-            $flightData = $dataFormatted->original['data'][0];
-            $status = $predictionData['status'];
-
-            // Step 5: Prepare the prediction data for the database
-            $predictionDataDB = [
-                'tail_number' => $flightData['tail_number'], 
-                'delayed' => $modelResponse['value'] === 'Delayed (15-60 min)' ? true : false,
-                'previous_prediction' => json_encode($modelResponse), 
-                'accuracy' => null, 
-                'schedule_date_utc' => $flightData['main_scheduled_departure_utc'] 
-            ];
-
-            // Step 6: Updating the data to the database
-            $prediction = Prediction::updateOrCreatePrediction($predictionData);
-            // TODO: to change
-            $flight = Flight::find($flightData['id']);
-
-            $flight->update(['status' => $modelResponse['value']]);
-
-            // Step 4: Error handling for missing flight or prediction data
-            if (!$flightData) {
+            if (empty($dataFormatted->original['data']) || !isset($dataFormatted->original['data'][0])) {
                 return $this->format_error('Flight data is missing', Response::HTTP_BAD_REQUEST);
             }
-    
-            // Step 5: Check if flight exists in the database
-            $flight = Flight::find($flightData['id']);
-            if (!$flight) {
-                return $this->format_error('Flight not found', Response::HTTP_NOT_FOUND);
+            $flightData = $dataFormatted->original['data'][0];
+            //return $flightData;
+           $flightData['scheduled_departure_utc'] .= ':00';
+           //return $flightData['scheduled_departure_utc'];
+            // Get flight from database or return error if not found
+            // $flight = Flight::where('tail_number', $flightData['tail_number'])
+            //         ->where('scheduled_departure_utc', $flightData['scheduled_departure_utc'])
+            //         ->first();
+            //return $flight;
+            // if (!$flight) {
+            //     return $this->format_error('Flight not found in database', Response::HTTP_NOT_FOUND);
+            // }
+            
+            // Step 5: Determine if the flight is delayed based on model response
+            $isDelayed = $modelResponse['value'] !== 'On Time / Slight Delay (<= 15 min)';
+            
+            // Step 6: Prepare the prediction data for the database
+            $predictionDataDB = [
+                'tail_number' => $flightData['tail_number'], 
+                'delayed' => $isDelayed,
+                'value' => $modelResponse['value'], 
+                'previous_prediction' => null, 
+                'accuracy' => null, 
+                'schedule_date_utc' => $flightData['scheduled_departure_utc']
+            ];
+            
+            //return $predictionDataDB;
+            // Step 7: Create or update prediction in database
+            $prediction = Prediction::where('tail_number', $flightData['tail_number'])
+                       ->where('schedule_date_utc', $flightData['scheduled_departure_utc'])
+                       ->first();
+            //return $prediction; 
+            if ($prediction) {
+                $predictionDataDB['previous_prediction'] = $prediction->value;
+                $prediction->update($predictionDataDB);
+            } else {
+                $prediction = Prediction::create($predictionDataDB);
             }
+            
+            // Step 9: Format the response to match your Prediction interface
+            $responseData = [
+                'message' => 'Prediction completed successfully',
+                'status' => $modelResponse['status'],
+                'value' => $modelResponse['value'],
+                'tail_number' => $flightData['tail_number'],
+                'delayed' => $isDelayed,
+                'previous_predicition' => $predictionDataDB['previous_prediction'],
+                'schedule_date_utc' => $flightData['scheduled_departure_utc']
+            ];
     
-            // Step 6: Check if prediction exists in the database
-            $prediction = Prediction::find($predictionData['id']);
-            if (!$prediction) {
-                return $this->format_error('Prediction not found', Response::HTTP_NOT_FOUND);
-            }
     
-            // Step 7: Update the flight and prediction data in the database
-            $flight->update(['status' => $status] + $flightData);
-            $prediction->update($predictionData);
-    
-            return $this->format(['Prediction OK', Response::HTTP_OK, $prediction]);
+            return $this->format(["Success", Response::HTTP_OK, $responseData]);
     
         } catch (\Exception $e) {
             // Handle any other exceptions during the entire process
             return $this->format_error('An error occurred during the prediction process: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    
-    
-    
 }

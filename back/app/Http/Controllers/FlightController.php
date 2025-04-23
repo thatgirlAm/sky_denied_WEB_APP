@@ -112,6 +112,23 @@ class FlightController extends Controller
     
         return $this->format(["Successfully retrieved information", Response::HTTP_OK, FlightResource::collection($results)]);
     }
-    
+    public function updateFlight(array $flightData, array $attributes)
+{
+    // Attempt to find the flight based on the provided criteria
+    $flight = Flight::where('tail_number', $flightData['tail_number'])
+                    ->where('scheduled_departure_utc', $flightData['scheduled_departure_utc'])
+                    ->first();
+
+    // If the flight is not found, return an error response or handle it
+    if (!$flight) {
+        throw new \Exception('Flight not found with the given criteria.');
+    }
+
+    // Update the flight with the provided attributes
+    $flight->update($attributes);
+
+    return $flight;
+}
+
     
 }

@@ -9,36 +9,44 @@
     </div>
     <div class="prediction-result" *ngIf="prediction_loaded">
       <button class="close-button" (click)="close()">✕</button>
-
+    
       <div class="flight-header">
-        <h1 class="flight-number"> AA1234 </h1>
-        <h2 class="flight-date">20 March 2025</h2>
+        <h1 class="flight-number">{{ flight.flight_number_iata }}</h1>
+        <h2 class="flight-date">{{ flight.scheduled_departure_local | date: 'dd MMMM yyyy' }}</h2>
       </div>
-
+    
       <div class="flight-route">
         <div class="location">
           <div class="location-label">From</div>
-          <p class="city">PARIS</p>
-          <p class="time">6:20</p>
+          <p class="city">{{ flight.depart_from_iata }}</p>
+          <p class="time">{{ flight.scheduled_departure_local | date: 'shortTime' }}</p>
         </div>
-
+    
         <div class="plane-container">
           <span class="divider"></span>
           <span class="plane-icon">✈</span>
           <span class="divider"></span>
         </div>
-
+    
         <div class="location">
           <div class="location-label">To</div>
-          <p class="city">BERLIN</p>
-          <p class="time">8:40</p>
+          <p class="city">{{ flight.arrive_at_iata }}</p>
+          <p class="time">{{ flight.scheduled_arrival_local | date: 'shortTime' }}</p>
         </div>
       </div>
-
-      <div class="prediction-banner">
-        Less than 30 min late
+    
+      <div class="prediction-banner" [ngClass]="{'delayed': prediction.delayed, 'on-time': !prediction.delayed}">
+        {{ getDelayMessage() }}
       </div>
-
+    
+      <div *ngIf="prediction.status" class="prediction-status">
+        Status: {{ prediction.status }}
+      </div>
+    
+      <div *ngIf="prediction.previous_predicition" class="previous-prediction">
+        Previous prediction: {{ prediction.previous_predicition }}
+      </div>
+    
       <div class="prediction-footer">
         <button class="claim-button">Check refund policies</button>
       </div>

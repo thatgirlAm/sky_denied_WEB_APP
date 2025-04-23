@@ -3,6 +3,8 @@ import { Flight } from './flight';
 import { FormGroup } from '@angular/forms';
 import { log } from 'node:console';
 import { ApiService } from './api-service.service';
+import { Prediction } from './prediction';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,10 @@ export class DataPassingService {
 
   public myFlights!: Flight[];
   public searchParams !: FormGroup<any> ; 
-  constructor(private api: ApiService) {}
+  public predictionParams !: FormGroup<any>;
+  public prediction !: Prediction ; 
+  public selectedFlight !: Flight ; 
+  constructor(private api: ApiService, private toastr: ToastrService) {}
 
   fetchFlightData(){
     this.api.searchFlights(this.searchParams).subscribe({
@@ -28,42 +33,20 @@ export class DataPassingService {
          });
   }
 
-  // fetchFlightData() {
-  //   this.submitted = true;
-  //   const formGroup = this.activeTab === 'have-flight'
-  //     ? this.haveFlightForm
-  //     : this.searchFlightForm;
-
-  //   formGroup.markAllAsTouched();
-  //   if (formGroup.invalid) return;
-
-  //   this.isLoading = true;
-  //   this.searchStarted.emit();
-
-  //   // Build search parameters based on active tab
-  //   const searchParams = this.activeTab === 'have-flight'
-  //     ? { tail_number: this.haveFlightForm.value.tail_number }
-  //     : {
-  //       depart_from: this.searchFlightForm.value.depart_from,
-  //       arrive_at: this.searchFlightForm.value.arrive_at
-  //     };
-  //   console.log(searchParams);
-
-
-  //   this.api.searchFlights(searchParams).subscribe({
-  //     next: (flights: Flight[]) => {
-  //       console.log('Flight Data:', flights);
-  //       console.table(flights);
-  //       this.isLoading = false;
-  //       this.submitted = false;
-  //       this.searchResults.emit(flights);
-  //     },
-  //     error: (err) => {
-  //       this.isLoading = false;
-  //       this.submitted = false;
-  //       this.searchResults.emit([]);
-  //     }
-  //   });
-  // }
-  
+  triggerPrediction() {
+    this.api.postPrediction(this.predictionParams.value).subscribe({
+      next: (response: any) => {
+        console.log('Prediction response:', response);
+        if (response && response.data) {
+          this.prediction = response.data.prediction;
+        } else {
+          this.toastr.warning('Prediction data format unexpected');
+        }
+      },
+      error: (err) => {
+        this.toastr.error("Failed to get prediction");
+        console.error('Prediction error:', err);
+      }
+    });
+  }
 }
