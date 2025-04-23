@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\HTTP\Controllers\FlightController ;
@@ -33,4 +34,5 @@ Route::post('/prediction/model_trigger', [PredictionController::class, 'model_tr
 Route::post('/prediction/trigger', [PredictionController::class, 'trigger']);
 Route::post('/prediction/model_trigger_test', [PredictionController::class, 'model_trigger_test']);
 Route::post('/prediction/data_handling', [PredictionController::class, 'data_handling']);
+Route::post('/user', [UserController::class, 'addUser']);
 });

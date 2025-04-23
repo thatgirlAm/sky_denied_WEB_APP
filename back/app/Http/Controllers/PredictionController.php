@@ -394,7 +394,7 @@ class PredictionController extends Controller
                 'delayed' => $modelResponse['value'] === 'Delayed (15-60 min)' ? true : false,
                 'previous_prediction' => json_encode($modelResponse), 
                 'accuracy' => null, 
-                'schedule_date_utc' => $flightData['schedule_date_utc'] 
+                'schedule_date_utc' => $flightData['main_scheduled_departure_utc'] 
             ];
 
             // Step 6: Updating the data to the database
@@ -403,7 +403,7 @@ class PredictionController extends Controller
             $flight = Flight::find($flightData['id']);
 
             $flight->update(['status' => $modelResponse['value']]);
-            
+
             // Step 4: Error handling for missing flight or prediction data
             if (!$flightData) {
                 return $this->format_error('Flight data is missing', Response::HTTP_BAD_REQUEST);
