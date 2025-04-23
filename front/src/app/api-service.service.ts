@@ -9,6 +9,8 @@ import { Inject } from '@angular/core';
 import { lastValueFrom, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Flight } from './flight';
+import { Prediction } from './prediction';
+import { log } from 'node:console';
 
 
 @Injectable({ providedIn: 'root' })
@@ -39,10 +41,12 @@ export class ApiService {
   }
   
 
-  postPrediction(information: any): Observable<boolean> {
+  postPrediction(information: any) : any{
     return this.post<any>('prediction/trigger', information)
       .pipe(
-        map(response => response.data)
+        map(response => {
+          console.log(response);
+          response.data})
       );
   }
   

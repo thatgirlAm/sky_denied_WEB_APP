@@ -73,7 +73,7 @@ def run_schedule_mode(airport_list_iata):
 
     start_date_str = (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d")
     # Use today's date as end date (or adjust as needed)
-    end_date_str = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+    end_date_str = (datetime.now() - timedelta(days=2)).strftime("%Y-%m-%d")
 
     flightera_arrival_dfs = []
     flightera_departure_dfs = []

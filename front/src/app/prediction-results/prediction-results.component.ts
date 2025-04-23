@@ -17,16 +17,26 @@ export class PredictionResultsComponent implements OnInit{
   flight!: Flight;
   prediction!: Prediction;
   predictionForm!: FormGroup;
+
   
   ngOnInit(): void {
     this.flight = this.dataPassingService.selectedFlight ; 
+    
+    const date = new Date(this.flight.scheduled_departure_local);
+    const formattedDate = date.toISOString().split('T')[0]; 
+    const formattedTime = date.toTimeString().split(':').slice(0, 2).join(':'); 
+    const result = `${formattedDate} ${formattedTime}`;
+    console.log(result); 
+
     this.predictionForm = this.fb.group({
-      flight_number: [this.flight.flight_number_iata],
-      departure_date: [new Date(this.flight.scheduled_departure_local).toISOString().split('T')[0]],
+      main_scheduled_departure_utc: [result],
+      mode: ["realtime"],
       tail_number: [this.flight.tail_number || ''] 
     });
-    this.dataPassingService.predictionParams = this.predictionForm;
+    this.dataPassingService.predictionParams = this.predictionForm.value;
     this.predict(); 
+    console.log(this.predictionForm);
+    
   }
 
   @Output() closePopup = new EventEmitter<void>();
@@ -40,7 +50,7 @@ export class PredictionResultsComponent implements OnInit{
       this.prediction = this.dataPassingService.prediction;
       this.prediction_loaded = true;
       console.log('Prediction loaded:', this.prediction);
-    }, 3000); // Simulating 3 seconds loading time
+    }, 3000); 
   }
 
   close() {
