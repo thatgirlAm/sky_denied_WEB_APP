@@ -1,0 +1,27 @@
+.section-divider {
+  margin: 2% auto auto;
+  width: 65%;
+}
+
+.photos {
+  display: flex;
+  gap: 2%;
+  justify-content: center;
+}
+
+.photos img {
+  height: 150px;
+}
+
+.image {
+  padding-top: 5%;
+  padding-left: 2%;
+}
+
+.image img {
+  height: 250px;
+}
+
+.paragraph a {
+  font-family: 'Lato', sans-serif;
+}

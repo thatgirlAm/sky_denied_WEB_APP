@@ -1,0 +1,31 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 60px;
+  background-color: white;
+}
+
+.logo img {
+  height: 80px;
+}
+
+/* Do not display the underline for the logo */
+.logo a:hover::after {
+  transform: scaleX(0);
+}
+
+.nav-links {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  font-size: 16px;
+}
+
+.button {
+  background-color: var(--purple_sd);
+}
+
+.button:hover {
+  background-color: #592f6b;
+}

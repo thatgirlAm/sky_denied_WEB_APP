@@ -1,1 +1,143 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+  --blue_sd: #0056B3;
+  --purple_sd: #7C4091;
+  --red_sd: #DC3545;
+  --green_sd: #28A745;
+  --purple_hoover_sd: #592f6b;
+  --blue_hoover_sd: #004494;
+}
+
+.section {
+  display: flex;
+  justify-content: space-evenly;
+  max-width: 60%;
+  min-width: 40%;
+  margin: auto;
+  gap: 5%;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.section-divider {
+  border: none;
+  height: 2px;
+  background-color: var(--purple_sd);
+  margin: 30px 0 10px;
+}
+
+h1 {
+  font-family: 'Lora', serif;
+  font-size: 48px;
+  color: var(--purple_sd);
+  text-align: center;
+  min-width: 700px;
+}
+
+h2 {
+  font-family: 'Lora', serif;
+  font-size: 24px;
+  color: var(--purple_sd);
+  text-align: center;
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+}
+
+label {
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  color: black;
+}
+
+a {
+  font-family: 'Lora', serif;
+  font-size: 16px;
+  cursor: pointer;
+  color: black;
+  text-decoration: none;
+  position: relative;
+}
+
+a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 2px;
+  background-color: var(--purple_sd);
+  transform: scaleX(0);
+}
+
+a:hover {
+  color: var(--purple_sd);
+}
+
+a:hover::after {
+  transform: scaleX(1);
+}
+
+button, input[type="submit"] {
+  font-size: 16px;
+  font-family: 'Lora', serif;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+input, textarea {
+  font-family: 'Lato', sans-serif;
+  border: none;
+  border-bottom: 1px solid lightgrey;
+  text-align: center;
+  padding: 8px 1%;
+  font-size: 16px;
+}
+
+label {
+  margin: 0.5rem;
+  font-size: 16px;
+}
+
+app-search-form {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.paragraph h1 {
+  text-align: left;
+}
+
+.paragraph {
+  flex: 1 1 40%;
+  min-width: 50%;
+  text-align: justify;
+}
+
+.loader {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.loader img {
+  height: 150px;
+}
+
+.loader p {
+  text-align: center;
+  color: var(--purple_sd);
+}
+
+.validation-error {
+  color: var(--red_sd);
+  width: 100%;
+}
