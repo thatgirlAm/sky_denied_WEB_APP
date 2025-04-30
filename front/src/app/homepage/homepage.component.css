@@ -7,23 +7,20 @@
   min-width: 700px;
 }
 
-/* Css from embedded getty image ==> legal code */
-.getty-embed {
+.video-embed {
   flex: 1 1 40%;
   padding-top: 10%;
   font-size: 11px;
   width: 100%;
-  max-width: 506px;
-  min-width: 350px;
 }
 
-.getty-caption {
+.video-caption {
   padding: 0;
   margin: 0;
   text-align: left;
 }
 
-.getty-caption a {
+.video-caption a {
   color: #a7a7a7;
   text-decoration: none;
   font-weight: normal !important;
@@ -31,21 +28,9 @@
   display: inline-block;
 }
 
-.getty-frame-container {
-  overflow: hidden;
-  position: relative;
-  height: 0;
-  padding-top: 66.798416%;
+.youtube-frame-container iframe {
   width: 100%;
-}
-
-.getty-frame-container iframe {
-  display: inline-block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  height: 250px;
   margin: 0;
 }
 
