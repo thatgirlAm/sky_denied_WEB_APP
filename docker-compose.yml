@@ -1,33 +1,50 @@
-version: '3.8'
+version: '3'
+
 services:
-  laravel:
-    build: ./back
-    ports:
-      - "8000:80"
+  # PHP-FPM Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: php-service
     volumes:
-      - ./backend:/var/www/html:rw
-    environment:
-      - APP_ENV=local
-      - APP_DEBUG=true
-      - APP_KEY=YourSecretKeyLocal
-      - DB_CONNECTION=pgsql
-      - DB_HOST=es-us-2-sky-denied-v2.postgres.database.azure.com
-      - DB_PORT=5432
-      - DB_DATABASE=postgres
-      - DB_USERNAME=amaellediop
-      - DB_PASSWORD="abcd1234!"
-    # Si votre Laravel communique avec d'autres services, configurez les dépendances ici
-    # depends_on:
-    #   - autre_service
-
-  angular:
-    build: ./front
-    ports:
-      - "4200:80"
-    volumes:
-      - ./frontend/src:/app/src:rw # Pour le développement avec live-reload (optionnel)
-      - ./frontend/public:/app/public:rw # Si vous avez des assets publics
-    # Si votre Angular dépend du Laravel pour le développement local
+      - ./:/var/www/html
+    networks:
+      - laravel-network
     depends_on:
-    - laravel
+      - db
+  
+  # Web Server (NGINX)
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: webserver
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - laravel-network
+    depends_on:
+      - app
+  
+  # Database (optional)
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: your_root_password
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: your_laravel_password
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - laravel-network
 
+networks:
+  laravel-network:
+    driver: bridge
+
+volumes:
+  db-data:

@@ -50,7 +50,7 @@ COPY --from=laravel-base /var/www/html /var/www/html
 EXPOSE 80
 
 # User
-USER  www-data
+# USER  www-data
 
 # Start
 CMD ["sh", "-c", "php-fpm && nginx -g 'daemon off;'"]
