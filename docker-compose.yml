@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  laravel:
+    build: ./back
+    ports:
+      - "8000:80"
+    volumes:
+      - ./backend:/var/www/html:rw
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=YourSecretKeyLocal
+      - DB_CONNECTION=pgsql
+      - DB_HOST=es-us-2-sky-denied-v2.postgres.database.azure.com
+      - DB_PORT=5432
+      - DB_DATABASE=postgres
+      - DB_USERNAME=amaellediop
+      - DB_PASSWORD="abcd1234!"
+    # Si votre Laravel communique avec d'autres services, configurez les dépendances ici
+    # depends_on:
+    #   - autre_service
+
+  angular:
+    build: ./front
+    ports:
+      - "4200:80"
+    volumes:
+      - ./frontend/src:/app/src:rw # Pour le développement avec live-reload (optionnel)
+      - ./frontend/public:/app/public:rw # Si vous avez des assets publics
+    # Si votre Angular dépend du Laravel pour le développement local
+    depends_on:
+    - laravel
+
