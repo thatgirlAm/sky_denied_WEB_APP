@@ -1,0 +1,105 @@
+.section {
+  width: 80%;
+}
+
+.flight-search-container {
+  border: 1px solid var(--blue_sd);
+  border-radius: 8px;
+  padding: 2%;
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.flight-search-container h1 {
+  width: 100%;
+  max-width: 100%;
+  min-width: 50%;
+  margin: 0;
+}
+
+.tab-buttons {
+  display: flex;
+  justify-content: center;
+  margin: 1% 0 2%;
+}
+
+.tab-button {
+  background-color: transparent;
+  border: none;
+  color: black;
+  width: 40%;
+  min-width: auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
+  transition: border-bottom-color;
+}
+
+.tab-button.active {
+  color: var(--purple_sd);
+  border-bottom-color: var(--purple_sd);
+}
+
+.tab-button:hover {
+  color: var(--purple_sd);
+}
+
+.tab-content {
+  display: none;
+  text-align: center;
+}
+
+.tab-content.active {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  width: 90%;
+  gap: 2%;
+  padding: 0 5%;
+}
+
+.input-group {
+  width: 100%;
+  margin: auto auto 1px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: black;
+  font-size: 16px;
+}
+
+.input-group input[type="text"], .input-group input[type="date"], .input-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid lightgrey;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+  font-family: 'Lato', sans-serif;
+  text-align: center;
+  height: 40px;
+}
+
+.input-group select {
+  padding:0;
+}
+
+.input-group input::placeholder {
+  color: black;
+}
+
+.validation {
+  height: 25px;
+}
+
+.submit-button {
+  width: 80%;
+  background-color: var(--blue_sd);
+}
+
+.submit-button:hover {
+  background-color: var(--blue_hoover_sd);
+}

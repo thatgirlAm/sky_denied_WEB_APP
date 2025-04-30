@@ -1,0 +1,30 @@
+export interface Flight {
+    flight_date: string;
+    flight_date_utc: string;
+    flight_number_iata: string;
+    flight_number_icao: string | null;
+    tail_number: string;
+    airline: string;
+    status: string;
+    depart_from: string;
+    depart_from_iata: string;
+    depart_from_icao: string;
+    scheduled_departure_local: string;
+    scheduled_departure_local_tz: string;
+    scheduled_departure_utc: string;
+    actual_departure_local: string | null;
+    actual_departure_local_tz: string | null;
+    actual_departure_utc: string | null;
+    arrive_at: string;
+    arrive_at_iata: string;
+    arrive_at_icao: string;
+    scheduled_arrival_local: string;
+    scheduled_arrival_local_tz: string;
+    scheduled_arrival_utc: string;
+    actual_arrival_local: string | null;
+    actual_arrival_local_tz: string | null;
+    actual_arrival_utc: string | null;
+    duration: string;
+    created_at: string;
+    updated_at: string;
+  }

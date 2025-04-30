@@ -44,5 +44,61 @@ class Flight extends Model
         'actual_arrival_utc',
         'duration',
     ];
+
+
+      /**
+     * Find a flight based on tail number and schedule date
+     *
+     * @param string $tailNumber
+     * @param string $scheduleDate
+     * @return Flight|null
+     */
+    public static function findByCompositeKey($tailNumber, $scheduleDate)
+    {
+        return self::where('tail_number', $tailNumber)
+                ->where('schedule_date_utc', $scheduleDate)
+                ->first();
+    }
+    
+    /**
+     * Update a flight's status based on composite key
+     *
+     * @param string $tailNumber
+     * @param string $scheduleDate
+     * @param string $status
+     * @return Flight|bool
+     */
+    public static function updateStatusByCompositeKey($tailNumber, $scheduleDate, $status)
+    {
+        $flight = self::findByCompositeKey($tailNumber, $scheduleDate);
+        
+        if (!$flight) {
+            return false;
+        }
+        
+        $flight->status = $status;
+        $flight->save();
+        
+        return $flight;
+    }
+
+   static public function updateFlight(array $flightData, array $attributes)
+{
+    // Attempt to find the flight based on the provided criteria
+    $flight = Flight::where('tail_number', $flightData['tail_number'])
+                    ->where('scheduled_departure_utc', $flightData['scheduled_departure_utc'])
+                    ->first();
+
+    // If the flight is not found, return an error response or handle it
+    if (!$flight) {
+        throw new \Exception('Flight not found with the given criteria.');
+    }
+
+    // Update the flight with the provided attributes
+    $flight->update($attributes);
+
+    return $flight;
+}
+
 }
 

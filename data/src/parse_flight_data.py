@@ -11,7 +11,20 @@ import pandas as pd
 from dateutil import parser
 from datetime import datetime
 
-
+def convert_to_24h(time_str):
+    if not time_str or not any(char.isdigit() for char in time_str):
+        return None  # No numbers in the string — probably not a time
+    try:
+        # Try parsing it as 12-hour format to validate
+        if "AM" in time_str.upper() or "PM" in time_str.upper():
+            return datetime.strptime(time_str.strip(), "%I:%M %p").strftime("%H:%M")
+        else:
+            # Try parsing it as 24-hour format to validate
+            datetime.strptime(time_str.strip(), "%H:%M")
+            return time_str.strip()
+    except ValueError:
+        return None
+        
 def parse_flightera(soup, mode="arrival"):
     rows = soup.find_all("tr", class_=lambda c: c and ("bg-white" in c or "bg-gray-50" in c))
     flight_data = []
@@ -175,6 +188,18 @@ def parse_flightradar24(soup, mode="arrival"):
         else:
             continue  # skip non-flight rows
 
+
+        # --- Flight time ---
+        scheduled_time_str = convert_to_24h(cols[0].get_text(strip=True))  # e.g. "13:05"
+        if flight_date and scheduled_time_str:
+            full_datetime_str = f"{flight_date} {scheduled_time_str}"
+            try:
+                scheduled_datetime_local = datetime.strptime(full_datetime_str, "%Y-%m-%d %H:%M").strftime("%Y-%m-%d %H:%M")
+            except ValueError:
+                scheduled_datetime_local = None
+        else:
+            scheduled_datetime_local = None
+
         # --- Flight Numbers ---
         flight_number_iata = cols[1].get_text(strip=True)  # e.g. "FR461"
 
@@ -199,10 +224,10 @@ def parse_flightradar24(soup, mode="arrival"):
         }
 
         if mode == "arrival":
-            flight_record["scheduled_arrival_date_local"] = flight_date
+            flight_record["scheduled_arrival_local"] = scheduled_datetime_local
             flight_record["depart_from_iata"] = code_iata
         else:
-            flight_record["scheduled_departure_date_local"] = flight_date
+            flight_record["scheduled_departure_local"] = scheduled_datetime_local
             flight_record["arrive_at_iata"] = code_iata
 
         flight_data.append(flight_record)
@@ -229,20 +254,6 @@ def parse_flightradar24_aircraft(soup):
     # Find all rows in the flight history table
     rows = soup.find_all("tr", class_="data-row")
     flight_history = []
-
-    def convert_to_24h(time_str):
-        if not time_str or not any(char.isdigit() for char in time_str):
-            return None  # No numbers in the string — probably not a time
-        try:
-           # Try parsing it as 12-hour format to validate
-            if "AM" in time_str.upper() or "PM" in time_str.upper():
-                return datetime.strptime(time_str.strip(), "%I:%M %p").strftime("%H:%M")
-            else:
-                # Try parsing it as 24-hour format to validate
-                datetime.strptime(time_str.strip(), "%H:%M")
-                return time_str.strip()
-        except ValueError:
-            return None
 
     for row in rows:
         cells = row.find_all("td")
@@ -287,3 +298,11 @@ def parse_flightradar24_aircraft(soup):
         })
     
     return pd.DataFrame(flight_history)
+
+# if __name__ == "__main__":
+#     import bs4 
+#     with open("test/flightradar24.html", "r", encoding="utf-8") as f:
+#         html = f.read()
+    
+#     soup = bs4.BeautifulSoup(html, "html.parser")
+#     parse_flightradar24(soup)

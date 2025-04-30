@@ -1,8 +1,8 @@
 import os
 import pandas as pd
 import logging
-from sqlalchemy import create_engine, text
-from sqlalchemy.types import DateTime, Date, Text
+from sqlalchemy import create_engine,text
+from sqlalchemy.types import DateTime, Date
 from dotenv import load_dotenv
 import airportsdata
 
@@ -16,6 +16,7 @@ DB_PASS = os.getenv("POSTGRES_PASSWORD")
 DB_HOST = os.getenv("POSTGRES_HOST")
 DB_PORT = os.getenv("POSTGRES_PORT", "5432")
 DB_NAME = os.getenv("POSTGRES_DB")
+
 
 # Connection string
 DATABASE_URL = f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
@@ -32,8 +33,7 @@ def push_fligth_schedule_to_postgres(df: pd.DataFrame = None, csv_path: str = No
         "scheduled_departure_utc", "actual_departure_local", "actual_departure_local_tz",
         "actual_departure_utc", "arrive_at", "arrive_at_iata", "arrive_at_icao",
         "scheduled_arrival_local", "scheduled_arrival_local_tz", "scheduled_arrival_utc",
-        "actual_arrival_local", "actual_arrival_local_tz", "actual_arrival_utc", "duration",
-        "created_at", "updated_at"
+        "actual_arrival_local", "actual_arrival_local_tz", "actual_arrival_utc", "duration"
     ]
 
     TABLE_NAME = "flight_schedule"
@@ -53,11 +53,6 @@ def push_fligth_schedule_to_postgres(df: pd.DataFrame = None, csv_path: str = No
         if "date" in col or "time" in col:
             df[col] = pd.to_datetime(df[col], errors="coerce")
 
-    # Add timestamps
-    now = pd.Timestamp.now()
-    df["created_at"] = now
-    df["updated_at"] = now
-
     # Define SQLAlchemy type mapping
     dtype_mapping = {
         "flight_date": Date(),
@@ -69,9 +64,7 @@ def push_fligth_schedule_to_postgres(df: pd.DataFrame = None, csv_path: str = No
         "scheduled_arrival_local": DateTime(),
         "scheduled_arrival_utc": DateTime(),
         "actual_arrival_local": DateTime(),
-        "actual_arrival_utc": DateTime(),
-        "created_at": DateTime(),
-        "updated_at": DateTime()
+        "actual_arrival_utc": DateTime()
     }
 
     logger.info("Connecting to PostgreSQL...")
@@ -146,7 +139,7 @@ def push_fligth_schedule_to_postgres(df: pd.DataFrame = None, csv_path: str = No
             actual_arrival_local_tz = EXCLUDED.actual_arrival_local_tz,
             actual_arrival_utc = EXCLUDED.actual_arrival_utc,
             duration = EXCLUDED.duration,
-            updated_at = EXCLUDED.updated_at
+            updated_at = CURRENT_TIMESTAMP
         """
         conn.execute(text(upsert_sql))
 

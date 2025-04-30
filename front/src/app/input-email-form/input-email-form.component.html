@@ -1,1 +1,23 @@
-<p>input-email-form works!</p>
+<div class="container">
+  <div class="input-email-popup">
+    <button class="close-button" (click)="close()">✕</button>
+
+    <div class="header">
+      <h1 class="title"> Get notified! </h1>
+      <h2 class="subtitle">Receive an email when the delay prediction for the flight VY8300 changes</h2>
+    </div>
+
+    <div class="email-form">
+      <label>
+        Your email
+      </label>
+      <input id="email-input" type="email" placeholder="myemail@email.com" />
+    </div>
+
+    <div class="buttons">
+      <input class="submit-button" type="submit" value="Submit">
+      <button class="cancel-button" (click)="close()">Cancel</button>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,135 @@
+<div class="section">
+
+  <!-- Headers -->
+  <div class="flight-search-container">
+    <h1>
+      Make a search
+    </h1>
+    <div class="tab-buttons">
+      <button
+        class="tab-button"
+        [class.active]="activeTab === 'have-flight'"
+        (click)="switchTab('have-flight')"
+        data-tab="have-flight"
+      >
+        I have a flight
+      </button>
+      <button
+        class="tab-button"
+        [class.active]="activeTab === 'search-flight'"
+        (click)="switchTab('search-flight')"
+        data-tab="search-flight"
+      >
+        I want to search a flight
+      </button>
+    </div>
+
+    <!-- Have Flight Tab -->
+    <div [formGroup]="haveFlightForm" class="tab-content" [class.active]="activeTab === 'have-flight'">
+      <div class="input-group">
+        <label for="tail_number">Tail Number</label>
+        <input formControlName="tail_number" type="text" id="tail_number">
+        <div class="validation">
+          <div class="validation-error" *ngIf="haveFlightForm.get('tail_number')?.hasError('required') &&
+        (haveFlightForm.get('tail_number')?.touched )">
+            ✖ Tail number is required
+          </div>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="scheduled_departure_local">Scheduled Departure</label>
+        <input formControlName="scheduled_departure_local" type="date" id="scheduled_departure_local  ">
+        <div class="validation">
+          <div class="validation-error" *ngIf="haveFlightForm.get('scheduled_departure_local')?.hasError('required') &&
+        (haveFlightForm.get('scheduled_departure_local')?.touched )">
+            ✖ Date is required
+          </div>
+        </div>
+      </div>
+      <div class="input-group">
+        <button class="submit-button"
+                (click)="formSubmitted()"
+                [disabled]=" isLoading">
+          {{ isLoading ? 'Processing...' : 'Submit Flight' }}
+        </button>
+        <div class="validation">
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Flight Tab -->
+    <div [formGroup]="searchFlightForm" class="tab-content" [class.active]="activeTab === 'search-flight'">
+      <div class="input-group">
+        <label for="depart_from">Departure city</label>
+        <select id="depart_from" formControlName="depart_from">
+          <option value="" disabled hidden>Select departure</option>
+          <option value="Atlanta">Atlanta</option>
+          <option value="Amsterdam">Amsterdam</option>
+          <option value="Dallas">Dallas</option>
+          <option value="Denver">Denver</option>
+          <option value="Chicago">Chicago</option>
+          <option value="Charlotte">Charlotte</option>
+          <option value="Los Angeles">Los Angeles</option>
+          <option value="Barcelona">Barcelona</option>
+          <option value="Las Vegas">Las Vegas</option>
+          <option value="Seattle">Seattle</option>
+          <option value="Orlando">Orlando</option>
+          <option value="Phoenix">Phoenix</option>
+        </select>
+        <div class="validation">
+          <div class="validation-error" *ngIf="searchFlightForm.get('depart_from')?.errors?.['required'] && searchFlightForm.get('depart_from')?.touched   ">
+            ✖ Departure is required
+          </div>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="arrive_at">Arrival city</label>
+        <select id="arrive_at" formControlName="arrive_at">
+          <option value="" disabled hidden>Select arrival</option>
+          <option value="Atlanta">Atlanta</option>
+          <option value="Barcelona">Barcelona</option>
+          <option value="Lyon">Lyon</option>
+          <option value="Dallas">Dallas</option>
+          <option value="Denver">Denver</option>
+          <option value="Chicago">Chicago</option>
+          <option value="Charlotte">Charlotte</option>
+          <option value="Los Angeles">Los Angeles</option>
+          <option value="Las Vegas">Las Vegas</option>
+          <option value="Seattle">Seattle</option>
+          <option value="Orlando">Orlando</option>
+          <option value="Phoenix">Phoenix</option>
+        </select>
+        <div class="validation">
+          <div class="validation-error" *ngIf="searchFlightForm.get('arrive_at')?.errors?.['required'] && searchFlightForm.get('arrive_at')?.touched   ">
+            ✖ Arrival is required
+          </div>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="scheduled_departure_local">Scheduled Departure</label>
+        <input formControlName="scheduled_departure_local" type="date" id="scheduled_departure_local">
+        <div class="validation">
+          <div class="validation-error" *ngIf="haveFlightForm.get('scheduled_departure_local')?.hasError('required') &&
+        (haveFlightForm.get('scheduled_departure_local')?.touched )">
+            ✖ Date is required
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <button class="submit-button"
+                (click)="formSubmitted()"
+                [disabled]="isLoading">
+          {{ isLoading ? 'Searching...' : 'Search Flights' }}
+        </button>
+        <div class="validation">
+          <div class="validation-error" *ngIf="haveFlightForm.get('scheduled_departure_local')?.hasError('required') &&
+        (haveFlightForm.get('scheduled_departure_local')?.touched )">
+            ✖ Date is required
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,45 @@
+.row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  gap: 1%;
+}
+
+.input-group {
+  flex: 1;
+  min-width: 49%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.input-group input, #body {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+  box-sizing: border-box;
+  text-align: justify;
+}
+
+#body {
+  height: 150px;
+}
+
+.submit-button {
+  margin: auto;
+  width: 60%;
+  background-color: var(--purple_sd);
+}
+
+.submit-button:hover {
+  background-color: var(--purple_hoover_sd);
+}
+
+.success-message {
+  text-align: center;
+  margin-top: 20px;
+  color: green;
+  font-size: 1.2em;
+}

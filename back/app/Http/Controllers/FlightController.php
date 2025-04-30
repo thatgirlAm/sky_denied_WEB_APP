@@ -30,10 +30,10 @@ class FlightController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(FlightResource $request)
+    public function show(FlightRequest $request)
     {
-        $response = FlightResource::make($request);
-        return new FlightResource($response); 
+        $response = FlightResource::collection($request);
+        return $response; 
     }
 
     /**
@@ -59,29 +59,76 @@ class FlightController extends Controller
         $tail_number = $response['tail_number'] ?? null;
         $date = $response['flight_date_utc'] ?? null;
         $flight_number = $response['flight_number_iata'] ?? null;
-
+        $scheduled_departure_local = $response['scheduled_departure_local'] ?? null;
+        $depart_from = $response['depart_from'] ?? null; // Airport name
+        $depart_from_iata = $response['depart_from_iata'] ?? null; // IATA code
+        $depart_from_icao = $response['depart_from_icao'] ?? null; // ICAO code
+        $arrive_at = $response['arrive_at'] ?? null; // Airport name
+        $arrive_at_iata = $response['arrive_at_iata'] ?? null; // IATA code
+        $arrive_at_icao = $response['arrive_at_icao'] ?? null; // ICAO code
+    
         $query = Flight::query();
-
-        if ($date) 
-        {
-            $query->whereDate('flight_date_utc', $date);
+    
+        if ($scheduled_departure_local) {
+            $query->whereDate('scheduled_departure_local', $scheduled_departure_local);
         }
-
-        if ($tail_number) 
-        {
+    
+        if ($tail_number) {
             $query->where('tail_number', 'LIKE', "%{$tail_number}%");
         }
-
-        if ($flight_number) 
-        {
+    
+        if ($flight_number) {
             $query->where('flight_number_iata', 'LIKE', "%{$flight_number}%");
         }
-
+    
+        // Search by departure airport
+        if ($depart_from) {
+            $query->where('depart_from', 'LIKE', "%{$depart_from}%");
+        }
+    
+        if ($depart_from_iata) {
+            $query->where('depart_from_iata', 'LIKE', "%{$depart_from_iata}%");
+        }
+    
+        if ($depart_from_icao) {
+            $query->where('depart_from_icao', 'LIKE', "%{$depart_from_icao}%");
+        }
+    
+        // Search by arrival airport
+        if ($arrive_at) {
+            $query->where('arrive_at', 'LIKE', "%{$arrive_at}%");
+        }
+    
+        if ($arrive_at_iata) {
+            $query->where('arrive_at_iata', 'LIKE', "%{$arrive_at_iata}%");
+        }
+    
+        if ($arrive_at_icao) {
+            $query->where('arrive_at_icao', 'LIKE', "%{$arrive_at_icao}%");
+        }
+    
         // Execute the query and get results
         $results = $query->get();
-
-        return $results;
-//$this->format(['Search completed successfully', Response::HTTP_OK, FlightResource::collection($results)]);
+    
+        return $this->format(["Successfully retrieved information", Response::HTTP_OK, FlightResource::collection($results)]);
     }
+    public function updateFlight(array $flightData, array $attributes)
+{
+    // Attempt to find the flight based on the provided criteria
+    $flight = Flight::where('tail_number', $flightData['tail_number'])
+                    ->where('scheduled_departure_utc', $flightData['scheduled_departure_utc'])
+                    ->first();
+
+    // If the flight is not found, return an error response or handle it
+    if (!$flight) {
+        throw new \Exception('Flight not found with the given criteria.');
+    }
+
+    // Update the flight with the provided attributes
+    $flight->update($attributes);
+
+    return $flight;
+}
+
     
 }

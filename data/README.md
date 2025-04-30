@@ -27,8 +27,8 @@ uv pip install -r requirements.txt
 # Structure for scheudle mode: '[{"mode": "schedule", "airport_list_iata": ["NCL", "DUB"]}]'
 ## Structure for realtime mode: '[{"mode": "realtime", "aircraft": "n688sl"}]' 
 
-# Run your Python scripts in schedule mode
-python main.py '[{"mode": "schedule", "airport_list_iata": ["NCL", "DUB"]}]'
+# Run your Python scripts in schedule mode (at least 2 airports)
+python main.py '[{"mode": "schedule", "airport_list_iata": ["BCN", "LYS"]}]'
 # Or realtime mode
 python main.py  '[{"mode": "realtime", "aircraft": "n688sl"}]' 
 
