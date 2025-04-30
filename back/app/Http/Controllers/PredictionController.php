@@ -194,9 +194,9 @@ class PredictionController extends Controller
                 if ($flight['scheduled_departure_utc'] === $main_scheduled_departure_utc) {
                     // Add matching flight and previous 3 flights
                     $result[] = $flight;
-                    for ($j = 1; $j <= 3; $j++) {
-                        if (isset($flights[$i - $j])) {
-                            $result[] = $flights[$i - $j];
+                    for ($j = 3; $j >= 1; $j--) {
+                        if (isset($flights[$i + $j])) {
+                            $result[] = $flights[$i + $j];
                         }
                     }
                     break;
