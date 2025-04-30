@@ -1,4 +1,48 @@
+.search-link a {
+  max-width: 50%;
+  text-align: center;
+  font-family: 'Lora', serif;
+  font-size: 48px;
+  color: var(--purple_sd);
+  min-width: 700px;
+}
+
 .section-divider {
   margin: 2% auto auto;
   width: 65%;
+}
+
+.section-training {
+  display: flex;
+  justify-content: space-evenly;
+  max-width: 70%;
+  min-width: 40%;
+  margin: auto;
+  gap: 5%;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.image-training {
+  padding:0;
+  background-color: red;
+  display: flex;
+}
+
+.image-training {
+  padding:0;
+  height: 250px;
+}
+
+.image {
+  padding-top: 5%;
+  padding-left: 2%;
+}
+
+.image img {
+  height: 250px;
+}
+
+.paragraph a {
+  font-family: 'Lato', sans-serif;
 }

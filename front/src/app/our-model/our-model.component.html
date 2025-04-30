@@ -2,14 +2,45 @@
   <div class="section">
     <div class="paragraph">
       <h1>Our model</h1>
+      <p>Presenting our model: QTSimAM (Queueing Theory (QT)-SimAM (Simple Attention Module))-CNN-LSTM; a novel model that integrates a queueing theory foundation with a deep learning model to capture complex temporal dependencies in longitudinal data. The QTSimAM model builds on the SimAM attention mechanism and Mogrifier LSTM framework and includes a new ResidualDelayLayer (RDL), which calculates a series of physics-informed features such as waiting time and queue length directly from the data input sequences (i.e., flight distance and flight time). Subsequently, these features modulate both the convolutional and recurrent parts of the model via the attention mechanisms in QTSimAM with the queue-aware QMogrifierStack, allowing us to experiment with the relationship between domain knowledge and neural sequence learning. The model integrates a multi-scale CNN for feature extraction, queue-aware normalization (through the martial features identified with the RDL), and a multi-layer LSTM stack with queuing dynamics, which allows it to perform well at temporal dependency modelling tasks, such as predicting the kind of flight delay, or models which have resource constraints. The QTSimAM model is end-to-end trainable, and it has auxiliary regression heads for explaining delay estimates, therefore balancing both accuracy and interpretability.</p>
     </div>
     <div class="image"></div>
   </div>
 
+  <div class="section">
+    <div class="search-link">
+      <h1>
+        <a routerLink="/search">Request a prediction with our model</a>
+      </h1>
+    </div>
+  </div>
+
   <div class="section-divider"></div>
 
-  <div class="section">
+  <div class="section-training">
     <h1>Performance</h1>
+    <div class="image-training">
+      <img src="image/training.png" alt="Sky Denied Logo" />
+    </div>
+    <p>Small text about training</p>
+  </div>
+
+  <div class="section">
+    <div class="image">
+      <img src="image/f1.png" alt="Sky Denied Logo" />
+    </div>
+    <div class="paragraph">
+      <p>Small text about f1</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="image">
+      <img src="image/loss.png" alt="Sky Denied Logo" />
+    </div>
+    <div class="paragraph">
+      <p>Small text about loss</p>
+    </div>
   </div>
 
 </div>
