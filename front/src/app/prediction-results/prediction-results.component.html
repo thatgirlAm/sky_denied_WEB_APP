@@ -11,15 +11,19 @@
       <button class="close-button" (click)="close()">✕</button>
 
       <div class="flight-header">
-        <h1 class="flight-number"> AA1234 </h1>
-        <h2 class="flight-date">20 March 2025</h2>
+        <h1 class="flight-number">{{flight.airline}}  {{flight.flight_number_iata}} </h1>
+        <br>
+        <!-- <h2 class="flight-date">{{date | date:'d MMMM yyyy, HH:mm'}}</h2> -->
       </div>
 
       <div class="flight-route">
         <div class="location">
           <div class="location-label">From</div>
-          <p class="city">PARIS</p>
-          <p class="time">6:20</p>
+          <br>
+          <p class="city">{{flight.depart_from }}</p>
+          <br>
+          <br>
+          <p class="time">{{ flight.scheduled_departure_local | date:'d MMMM yyyy, HH:mm' }}</p>
         </div>
 
         <div class="plane-container">
@@ -30,13 +34,16 @@
 
         <div class="location">
           <div class="location-label">To</div>
-          <p class="city">BERLIN</p>
-          <p class="time">8:40</p>
+          <br>
+          <p class="city">{{flight.arrive_at}}</p>
+          <br>
+          <br>
+          <p class="time">{{ flight.scheduled_arrival_local | date:'d MMMM yyyy, HH:mm'}}</p>
         </div>
       </div>
 
       <div class="prediction-banner">
-        Less than 30 min late
+        {{prediction.value}}
       </div>
 
       <div class="prediction-footer"><button class="claim-button">Check refund policies</button>

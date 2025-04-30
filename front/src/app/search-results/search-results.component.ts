@@ -23,17 +23,31 @@ export class SearchResultsComponent implements OnInit{
       console.log("From results initialisation");
       console.log(this.flights);
   }
-  public setFlights(){
+  public async setFlights() {
     console.log('initialised');
     console.log(this.dataPassingService.searchParams);
     
-    this.loaded = false
-    if(this.dataPassingService.searchParams){
-      this.dataPassingService.fetchFlightData(); 
-      this.flights = this.dataPassingService.myFlights;
+    this.loaded = false; // Set to false immediately to show loader
+    
+    if (this.dataPassingService.searchParams) {
+      try {
+        // IMPORTANT: Use await to wait for the Promise to resolve
+        await this.dataPassingService.fetchFlightData();
+        
+        // Now that data is loaded, we can safely assign flights
+        this.flights = this.dataPassingService.myFlights;
+        console.log("from results:");  
+        console.log(this.flights);
+      } catch (error) {
+        console.error('Error fetching flights:', error);
+        this.flights = []; // Reset to empty array on error
+      } finally {
+        // Whether successful or not, set loaded to true when done
+        this.loaded = true;
+      }
+    } else {
+      // If there are no search params, immediately set loaded to true
       this.loaded = true;
-      console.log("from results:");  
-      console.log(this.flights);
     }
   }
 

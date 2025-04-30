@@ -46,7 +46,7 @@ export class ApiService {
       .pipe(
         map(response => {
           console.log(response);
-          response.data})
+        return response})
       );
   }
   

@@ -1771,3 +1771,210 @@ schedule | push_to_postgres | 2025-04-23 20:23:05,635 | INFO | Performing UPSERT
 schedule | push_to_postgres | 2025-04-23 20:23:05,748 | INFO | Dropping temp table 'public.temp_flight_schedule'...
 schedule | push_to_postgres | 2025-04-23 20:23:05,945 | INFO | Upsert complete: 18 rows into 'public.flight_schedule'
 schedule | main | 2025-04-23 20:23:05,946 | INFO | SCHEDULE mode completed.
+schedule | main | 2025-04-30 01:57:26,876 | INFO | SCHEDULE mode started with airports: ['SVQ', 'PMI']
+schedule | main | 2025-04-30 01:57:27,001 | INFO | --- SCRAPING SVQ (LEZL), city=Sevilla ---
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:57:31,976 | INFO | Starting Flightera scrape from: https://www.flightera.net/en/airport/Sevilla/LEZL/arrival/2025-05-02%2023_59?
+schedule | selenium_utility | 2025-04-30 01:57:34,372 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:57:34,419 | INFO | Scraping earlier flights: 2025-05-01 23_59
+schedule | selenium_utility | 2025-04-30 01:57:36,475 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:57:36,507 | INFO | Scraping earlier flights: 2025-04-30 23_59
+schedule | selenium_utility | 2025-04-30 01:57:37,975 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:57:38,089 | INFO | Scraping earlier flights: 2025-04-30 16_25
+schedule | selenium_utility | 2025-04-30 01:57:40,044 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:57:40,173 | INFO | Scraping earlier flights: 2025-04-30 10_40
+schedule | selenium_utility | 2025-04-30 01:57:41,953 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:57:42,061 | INFO | Scraping earlier flights: 2025-04-29 20_55
+schedule | selenium_utility | 2025-04-30 01:57:43,810 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:57:43,958 | INFO | Scraping earlier flights: 2025-04-29 15_30
+schedule | selenium_utility | 2025-04-30 01:57:45,879 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:57:46,091 | INFO | Scraping earlier flights: 2025-04-29 10_20
+schedule | selenium_utility | 2025-04-30 01:57:48,367 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:57:48,494 | INFO | Scraping earlier flights: 2025-04-28 23_10
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:57:48,509 | INFO | Reached end_date. Stopping scrape.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:57:48,640 | INFO | Flightera scrape finished: 179 rows
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:57:50,072 | INFO | Starting Flightera scrape from: https://www.flightera.net/en/airport/Sevilla/LEZL/departure/2025-05-02%2023_59?
+schedule | selenium_utility | 2025-04-30 01:57:52,521 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:57:52,557 | INFO | Scraping earlier flights: 2025-05-01 23_59
+schedule | selenium_utility | 2025-04-30 01:57:54,607 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:57:54,635 | INFO | Scraping earlier flights: 2025-04-30 23_59
+schedule | selenium_utility | 2025-04-30 01:57:56,241 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:57:56,319 | INFO | Scraping earlier flights: 2025-04-30 15_15
+schedule | selenium_utility | 2025-04-30 01:57:58,167 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:57:58,274 | INFO | Scraping earlier flights: 2025-04-30 09_35
+schedule | selenium_utility | 2025-04-30 01:58:00,006 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:58:00,138 | INFO | Scraping earlier flights: 2025-04-29 20_55
+schedule | selenium_utility | 2025-04-30 01:58:02,307 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:58:02,423 | INFO | Scraping earlier flights: 2025-04-29 15_20
+schedule | selenium_utility | 2025-04-30 01:58:03,855 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:58:04,024 | INFO | Scraping earlier flights: 2025-04-29 10_05
+schedule | selenium_utility | 2025-04-30 01:58:05,917 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:58:06,166 | INFO | Scraping earlier flights: 2025-04-28 21_55
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:58:06,166 | INFO | Reached end_date. Stopping scrape.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:58:06,334 | INFO | Flightera scrape finished: 165 rows
+schedule | main | 2025-04-30 01:58:06,334 | INFO | Flightera scrapes done for SVQ: arrivals=179 rows, departures=165 rows
+schedule | get_flight_by_airport_flightradar24 | 2025-04-30 01:58:07,691 | INFO | Navigating to Flightradar24 URL: https://www.flightradar24.com/data/airports/SVQ/arrivals
+schedule | selenium_utility | 2025-04-30 01:58:13,390 | INFO | Button at xpath '//*[@id="onetrust-reject-all-handler"]' clicked successfully.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-30 01:58:13,392 | INFO | Cookie rejection button clicked.
+schedule | selenium_utility | 2025-04-30 01:58:13,393 | INFO | Attempting to click button #1 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-30 01:58:15,813 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-30 01:58:17,385 | INFO | Attempting to click button #2 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-30 01:58:19,872 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-30 01:58:22,671 | INFO | Attempting to click button #3 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-30 01:58:32,805 | WARNING | Failed to click button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]': Message: 
+
+schedule | selenium_utility | 2025-04-30 01:58:32,805 | INFO | No more buttons found after 2 clicks.
+schedule | selenium_utility | 2025-04-30 01:58:32,805 | INFO | Attempting to click button #1 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]'...
+schedule | selenium_utility | 2025-04-30 01:58:35,291 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-30 01:58:37,040 | INFO | Attempting to click button #2 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]'...
+schedule | selenium_utility | 2025-04-30 01:58:47,172 | WARNING | Failed to click button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]': Message: 
+
+schedule | selenium_utility | 2025-04-30 01:58:47,173 | INFO | No more buttons found after 1 clicks.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-30 01:58:47,846 | INFO | Parsed 286 rows from Flightradar24 HTML.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-30 01:58:47,998 | INFO | Flightradar24 arrivals scraping complete for SVQ: 286 rows
+schedule | main | 2025-04-30 01:58:47,999 | INFO | --- SCRAPING PMI (LEPA), city=Palma De Mallorca ---
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:58:49,543 | INFO | Starting Flightera scrape from: https://www.flightera.net/en/airport/Palma+De+Mallorca/LEPA/arrival/2025-05-02%2023_59?
+schedule | selenium_utility | 2025-04-30 01:58:52,001 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:58:52,061 | INFO | Scraping earlier flights: 2025-05-01 23_59
+schedule | selenium_utility | 2025-04-30 01:58:54,036 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:58:54,113 | INFO | Scraping earlier flights: 2025-04-30 23_59
+schedule | selenium_utility | 2025-04-30 01:58:55,661 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:58:55,771 | INFO | Scraping earlier flights: 2025-04-30 19_05
+schedule | selenium_utility | 2025-04-30 01:58:57,351 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:58:57,469 | INFO | Scraping earlier flights: 2025-04-30 17_05
+schedule | selenium_utility | 2025-04-30 01:58:59,368 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:58:59,471 | INFO | Scraping earlier flights: 2025-04-30 15_15
+schedule | selenium_utility | 2025-04-30 01:59:01,626 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:01,753 | INFO | Scraping earlier flights: 2025-04-30 13_45
+schedule | selenium_utility | 2025-04-30 01:59:04,207 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:04,325 | INFO | Scraping earlier flights: 2025-04-30 12_20
+schedule | selenium_utility | 2025-04-30 01:59:06,293 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:06,422 | INFO | Scraping earlier flights: 2025-04-30 10_30
+schedule | selenium_utility | 2025-04-30 01:59:08,168 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:08,282 | INFO | Scraping earlier flights: 2025-04-30 09_25
+schedule | selenium_utility | 2025-04-30 01:59:09,728 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:09,929 | INFO | Scraping earlier flights: 2025-04-30 08_20
+schedule | selenium_utility | 2025-04-30 01:59:11,939 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:12,043 | INFO | Scraping earlier flights: 2025-04-30 03_05
+schedule | selenium_utility | 2025-04-30 01:59:13,678 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:13,777 | INFO | Scraping earlier flights: 2025-04-29 22_40
+schedule | selenium_utility | 2025-04-30 01:59:15,413 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:15,589 | INFO | Scraping earlier flights: 2025-04-29 20_40
+schedule | selenium_utility | 2025-04-30 01:59:17,351 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:17,490 | INFO | Scraping earlier flights: 2025-04-29 19_25
+schedule | selenium_utility | 2025-04-30 01:59:18,874 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:19,012 | INFO | Scraping earlier flights: 2025-04-29 18_00
+schedule | selenium_utility | 2025-04-30 01:59:20,727 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:20,853 | INFO | Scraping earlier flights: 2025-04-29 16_10
+schedule | selenium_utility | 2025-04-30 01:59:22,410 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:22,671 | INFO | Scraping earlier flights: 2025-04-29 14_25
+schedule | selenium_utility | 2025-04-30 01:59:24,161 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:24,332 | INFO | Scraping earlier flights: 2025-04-29 13_10
+schedule | selenium_utility | 2025-04-30 01:59:25,792 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:26,013 | INFO | Scraping earlier flights: 2025-04-29 11_45
+schedule | selenium_utility | 2025-04-30 01:59:28,068 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:28,201 | INFO | Scraping earlier flights: 2025-04-29 10_35
+schedule | selenium_utility | 2025-04-30 01:59:29,766 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:29,922 | INFO | Scraping earlier flights: 2025-04-29 09_25
+schedule | selenium_utility | 2025-04-30 01:59:31,993 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:32,127 | INFO | Scraping earlier flights: 2025-04-29 08_05
+schedule | selenium_utility | 2025-04-30 01:59:34,038 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:34,186 | INFO | Scraping earlier flights: 2025-04-29 00_50
+schedule | selenium_utility | 2025-04-30 01:59:35,748 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:36,057 | INFO | Scraping earlier flights: 2025-04-28 22_25
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:36,057 | INFO | Reached end_date. Stopping scrape.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:36,256 | INFO | Flightera scrape finished: 643 rows
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:37,700 | INFO | Starting Flightera scrape from: https://www.flightera.net/en/airport/Palma+De+Mallorca/LEPA/departure/2025-05-02%2023_59?
+schedule | selenium_utility | 2025-04-30 01:59:39,667 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:39,721 | INFO | Scraping earlier flights: 2025-05-01 23_59
+schedule | selenium_utility | 2025-04-30 01:59:41,162 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:41,199 | INFO | Scraping earlier flights: 2025-04-30 23_59
+schedule | selenium_utility | 2025-04-30 01:59:43,209 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:43,275 | INFO | Scraping earlier flights: 2025-04-30 18_25
+schedule | selenium_utility | 2025-04-30 01:59:45,500 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:45,624 | INFO | Scraping earlier flights: 2025-04-30 16_05
+schedule | selenium_utility | 2025-04-30 01:59:47,118 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:47,232 | INFO | Scraping earlier flights: 2025-04-30 14_30
+schedule | selenium_utility | 2025-04-30 01:59:48,718 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:48,836 | INFO | Scraping earlier flights: 2025-04-30 13_00
+schedule | selenium_utility | 2025-04-30 01:59:50,662 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:50,771 | INFO | Scraping earlier flights: 2025-04-30 11_15
+schedule | selenium_utility | 2025-04-30 01:59:52,843 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:52,957 | INFO | Scraping earlier flights: 2025-04-30 10_00
+schedule | selenium_utility | 2025-04-30 01:59:55,173 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:55,426 | INFO | Scraping earlier flights: 2025-04-30 08_45
+schedule | selenium_utility | 2025-04-30 01:59:57,542 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:57,649 | INFO | Scraping earlier flights: 2025-04-30 07_10
+schedule | selenium_utility | 2025-04-30 01:59:59,791 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 01:59:59,907 | INFO | Scraping earlier flights: 2025-04-30 03_40
+schedule | selenium_utility | 2025-04-30 02:00:01,536 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 02:00:01,657 | INFO | Scraping earlier flights: 2025-04-29 21_20
+schedule | selenium_utility | 2025-04-30 02:00:03,668 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 02:00:03,830 | INFO | Scraping earlier flights: 2025-04-29 19_50
+schedule | selenium_utility | 2025-04-30 02:00:05,513 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 02:00:05,682 | INFO | Scraping earlier flights: 2025-04-29 18_30
+schedule | selenium_utility | 2025-04-30 02:00:08,269 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 02:00:08,412 | INFO | Scraping earlier flights: 2025-04-29 16_30
+schedule | selenium_utility | 2025-04-30 02:00:09,958 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 02:00:10,206 | INFO | Scraping earlier flights: 2025-04-29 15_00
+schedule | selenium_utility | 2025-04-30 02:00:12,052 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 02:00:12,192 | INFO | Scraping earlier flights: 2025-04-29 13_50
+schedule | selenium_utility | 2025-04-30 02:00:14,096 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 02:00:14,230 | INFO | Scraping earlier flights: 2025-04-29 12_25
+schedule | selenium_utility | 2025-04-30 02:00:15,895 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 02:00:16,035 | INFO | Scraping earlier flights: 2025-04-29 11_10
+schedule | selenium_utility | 2025-04-30 02:00:18,041 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 02:00:18,182 | INFO | Scraping earlier flights: 2025-04-29 09_45
+schedule | selenium_utility | 2025-04-30 02:00:20,452 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 02:00:20,580 | INFO | Scraping earlier flights: 2025-04-29 08_20
+schedule | selenium_utility | 2025-04-30 02:00:22,493 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 02:00:22,621 | INFO | Scraping earlier flights: 2025-04-29 06_55
+schedule | selenium_utility | 2025-04-30 02:00:24,419 | INFO | Element at xpath '//a[contains(text(), 'Earlier Flights')]' is present.
+schedule | get_flight_by_airport_flightera | 2025-04-30 02:00:24,677 | INFO | Scraping earlier flights: 2025-04-28 22_25
+schedule | get_flight_by_airport_flightera | 2025-04-30 02:00:24,677 | INFO | Reached end_date. Stopping scrape.
+schedule | get_flight_by_airport_flightera | 2025-04-30 02:00:24,811 | INFO | Flightera scrape finished: 610 rows
+schedule | main | 2025-04-30 02:00:24,811 | INFO | Flightera scrapes done for PMI: arrivals=643 rows, departures=610 rows
+schedule | get_flight_by_airport_flightradar24 | 2025-04-30 02:00:26,329 | INFO | Navigating to Flightradar24 URL: https://www.flightradar24.com/data/airports/PMI/arrivals
+schedule | selenium_utility | 2025-04-30 02:00:31,674 | INFO | Button at xpath '//*[@id="onetrust-reject-all-handler"]' clicked successfully.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-30 02:00:31,674 | INFO | Cookie rejection button clicked.
+schedule | selenium_utility | 2025-04-30 02:00:31,674 | INFO | Attempting to click button #1 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-30 02:00:34,424 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-30 02:00:36,108 | INFO | Attempting to click button #2 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-30 02:00:38,851 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-30 02:00:41,158 | INFO | Attempting to click button #3 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-30 02:00:43,018 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-30 02:00:44,219 | INFO | Attempting to click button #4 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-30 02:00:47,656 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-30 02:00:50,162 | INFO | Attempting to click button #5 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-30 02:00:52,435 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-30 02:00:53,896 | INFO | Attempting to click button #6 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-30 02:00:56,568 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-30 02:00:57,629 | INFO | Attempting to click button #7 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]'...
+schedule | selenium_utility | 2025-04-30 02:01:07,796 | WARNING | Failed to click button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load earlier flights")]': Message: 
+
+schedule | selenium_utility | 2025-04-30 02:01:07,848 | INFO | No more buttons found after 6 clicks.
+schedule | selenium_utility | 2025-04-30 02:01:07,848 | INFO | Attempting to click button #1 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]'...
+schedule | selenium_utility | 2025-04-30 02:01:10,244 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-30 02:01:13,074 | INFO | Attempting to click button #2 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]'...
+schedule | selenium_utility | 2025-04-30 02:01:15,744 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-30 02:01:18,256 | INFO | Attempting to click button #3 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]'...
+schedule | selenium_utility | 2025-04-30 02:01:20,490 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-30 02:01:23,303 | INFO | Attempting to click button #4 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]'...
+schedule | selenium_utility | 2025-04-30 02:01:25,634 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-30 02:01:27,789 | INFO | Attempting to click button #5 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]'...
+schedule | selenium_utility | 2025-04-30 02:01:30,361 | INFO | Button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]' clicked successfully.
+schedule | selenium_utility | 2025-04-30 02:01:33,246 | INFO | Attempting to click button #6 at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]'...
+schedule | selenium_utility | 2025-04-30 02:01:43,493 | WARNING | Failed to click button at xpath '//button[contains(@class, "btn-flights-load") and contains(text(), "Load later flights")]': Message: 
+
+schedule | selenium_utility | 2025-04-30 02:01:43,494 | INFO | No more buttons found after 5 clicks.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-30 02:01:46,649 | INFO | Parsed 1159 rows from Flightradar24 HTML.
+schedule | get_flight_by_airport_flightradar24 | 2025-04-30 02:01:46,954 | INFO | Flightradar24 arrivals scraping complete for PMI: 1159 rows
+schedule | main | 2025-04-30 02:01:46,955 | INFO | All schedule scraping done. Cleaning data...
+schedule | main | 2025-04-30 02:01:47,128 | INFO | Data merged successfully with 11 total rows.
+schedule | push_to_postgres | 2025-04-30 02:01:47,130 | INFO | Connecting to PostgreSQL...
+schedule | push_to_postgres | 2025-04-30 02:01:53,360 | INFO | Connected to DB: postgres | Schema: public
+schedule | push_to_postgres | 2025-04-30 02:01:53,361 | INFO | Creating table 'public.flight_schedule' if not exists...
+schedule | push_to_postgres | 2025-04-30 02:01:53,451 | INFO | Creating and populating temp table 'public.temp_flight_schedule'...
+schedule | push_to_postgres | 2025-04-30 02:01:54,751 | INFO | Performing UPSERT...
+schedule | push_to_postgres | 2025-04-30 02:01:54,848 | INFO | Dropping temp table 'public.temp_flight_schedule'...
+schedule | push_to_postgres | 2025-04-30 02:01:55,032 | INFO | Upsert complete: 11 rows into 'public.flight_schedule'
+schedule | main | 2025-04-30 02:01:55,032 | INFO | SCHEDULE mode completed.

@@ -19,6 +19,7 @@
     <div class="flight-card" *ngFor="let flight of flights">
       <div class="flight-info">
         <div class="cell">
+          <div class="flight-number">{{ flight.airline}}</div>
           <div class="flight-number">{{ flight.flight_number_iata }}</div>
           <button class="notify-button" (click)="triggerGetNotifiedPopup()">Get notified</button>
         </div>

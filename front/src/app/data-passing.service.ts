@@ -19,37 +19,41 @@ export class DataPassingService {
   public selectedFlight !: Flight ; 
   constructor(private api: ApiService, private toastr: ToastrService) {}
 
-  fetchFlightData(){
-    this.api.searchFlights(this.searchParams).subscribe({
-          next: (flights: Flight[]) => {
-            //console.log('Flight Data:', flights);
-            console.table("fetch data called");
-            this.myFlights = flights;
-            //console.log(this.myFlights);
-            //this.searchResults.emit(flights);
-           },
-           error: (err) => {
-            //this.searchResults.emit([]);
-           }
-         });
-  }
-
-  triggerPrediction() {
-    console.log(this.predictionParams);
-    
-    this.api.postPrediction(this.predictionParams).subscribe({
-      next: (response: any ) => {
-        console.log('Prediction response:', response);
-        if (response && response.data) {
-          this.prediction = response.data.message;
-        } else {
-          this.toastr.warning('Prediction data format unexpected');
+  fetchFlightData(): Promise<Flight[]> {
+    return new Promise((resolve, reject) => {
+      this.api.searchFlights(this.searchParams).subscribe({
+        next: (flights: Flight[]) => {
+          console.table("fetch data called");
+          this.myFlights = flights;
+          resolve(flights);  // Resolve the promise with the flights data
+        },
+        error: (err) => {
+          console.error('Error fetching flights:', err);
+          this.myFlights = [];  // Reset to empty array on error
+          reject(err);  // Reject the promise with the error
         }
-      },
-      error: (err:any) => {
-        this.toastr.error("Failed to get prediction");
-        console.error('Prediction error:', err);
-      }
+      });
+    });
+  }
+  triggerPrediction(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.api.postPrediction(this.predictionParams).subscribe({
+        next: (response: any) => {
+          console.log('Prediction response:', response);
+          if (response && response.data) {
+            this.prediction = response.data;
+            resolve(this.prediction); 
+          } else {
+            this.toastr.warning('Prediction data format unexpected');
+            reject('Unexpected data format');
+          }
+        },
+        error: (err: any) => {
+          this.toastr.error("Failed to get prediction");
+          console.error('Prediction error:', err);
+          reject(err);
+        }
+      });
     });
   }
 }

@@ -59,26 +59,38 @@ export class SearchFormComponent {
   log(){console.log('clicked');
   }
   // Passing the form's information to the service
-  formSubmitted() {
-    this.searchStarted.emit();
-    this.submitted = true;
-    this.isLoading = true ;
-   // console.log(this.haveFlightForm.get('tail_number')?.value);
-   // console.log(this.haveFlightForm.get('tail_number')?.valid);
-    const formGroup = this.activeTab === 'have-flight'
-      ? this.haveFlightForm
-      : this.searchFlightForm;
-    console.log(this.dataPassingService.searchParams);
+  // In your component file
+async formSubmitted() {
+  this.searchStarted.emit();
+  this.submitted = true;
+  this.isLoading = true;
+  
+  const formGroup = this.activeTab === 'have-flight'
+    ? this.haveFlightForm
+    : this.searchFlightForm;
+  
+  console.log(this.dataPassingService.searchParams);
 
-    formGroup.markAllAsTouched();
-    if (formGroup.invalid) return;
+  formGroup.markAllAsTouched();
+  if (formGroup.invalid) {
+    this.isLoading = false; // Don't forget to reset loading state if form is invalid
+    return;
+  }
 
-    this.dataPassingService.searchParams = formGroup.value;
-    this.dataPassingService.fetchFlightData() ;
-    //console.log(this.dataPassingService.searchParams);
-    this.isLoading = false ;
+  this.dataPassingService.searchParams = formGroup.value;
+  
+  try {
+    // Wait for the flight data to be fetched
+    await this.dataPassingService.fetchFlightData();
+    
+    // Now we can safely access the flights after the API call completes
     this.searchResults.emit(this.dataPassingService.myFlights);
-
+  } catch (error) {
+    console.error('Error during flight search:', error);
+    this.searchResults.emit([]); // Emit empty array on error
+  } finally {
+    this.isLoading = false; // Always reset loading state, whether successful or not
+  }
 }
 
 
