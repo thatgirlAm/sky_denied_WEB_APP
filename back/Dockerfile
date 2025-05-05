@@ -1,56 +1,45 @@
-FROM php:8.2-fpm-alpine AS laravel-base
+# Image with phph-fpm and laravel extensions
+FROM php:8.4-fpm AS base
 
-# Dependencies install
-RUN apk update && apk add --no-cache \
-    git \
-    curl \
-    zip \
-    unzip \
-    libzip-dev \
-    icu-dev \
-    oniguruma-dev \
+# Install dependencies 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    libpq-dev \
+    libzip-dev zip unzip \
     libxml2-dev \
-    postgresql-dev \
-    mariadb-dev
+    libpng-dev \
+    libonig-dev \
+# Cleaning cache for lighter image
+&& rm -rf /var/lib/apt/lists/*
 
-# PHP extensions
-RUN docker-php-ext-install -j$(nproc) \
-    pdo pdo_mysql pdo_pgsql zip intl mbstring xml opcache
+RUN docker-php-ext-install \
+    pdo_pgsql\
+    mbstring \
+    xml \
+    zip \
+    gd 
 
-# Composer install
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
-# Repo
-WORKDIR /var/www/html
+# Copying composer from official image (lighter multi-stage)
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
-# Copy application file
+# Defining working repo
+WORKDIR /var/www
 COPY . .
-RUN rm -rf vendor node_modules
-
-# Install of PHP dependencies
-RUN composer install --optimize-autoloader --no-dev
-
-# Copying conf files
-COPY .env.example .env
-# Generating key
-RUN php artisan key:generate
-
-# Optimizing the application
-RUN php artisan config:cache && php artisan route:cache && php artisan view:cache
-
-FROM nginx:stable-alpine
 
 
-COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+# Installing php packages 
+RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist \
+# Including the new files 
+    && composer dump-autoload --optimize \
+    && php artisan package:discover --ansi
 
-# Copying Laravel files
-COPY --from=laravel-base /var/www/html /var/www/html
 
-# Exposing 80
-EXPOSE 80
+# Permissions for cache storing
+RUN chown -R www-data:www-data storage bootstrap/cache 
 
-# User
- USER  www-data
+# Exposing port 
+EXPOSE 9000
 
-# Start
-CMD ["sh", "-c", "php-fpm && nginx -g 'daemon off;'"]
+# Launch php-fpm
+CMD ["php-fpm"]
