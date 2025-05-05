@@ -49,13 +49,3 @@ Route::post('/contact', [ContactController::class, 'send_contact']);
 Route::post('/confirm_contact', [ContactController::class, 'confirm_contact']);
 
 
-// docker run --rm -p 8000:8000 \
-// -e DB_CONNECTION=pgsql \
-// -e DB_HOST=es-us-2-sky-denied-v2.postgres.database.azure.com \
-// -e DB_PORT=5432 \
-// -e DB_DATABASE=postgres \
-// -e DB_USERNAME=amaellediop \
-// -e DB_PASSWORD='abcd1234!' \
-// -e DB_SSLMODE=require \
-// laravel-backend-simple \
-// php artisan serve --host=0.0.0.0 --port=8000
