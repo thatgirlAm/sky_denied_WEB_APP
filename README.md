@@ -7,6 +7,10 @@ The web application will be using the following frameworks and tehcnology :
 - Laravel 12 for the back-end 
 - PostGre for the Database
 
+# Containerizing the web application
+
+Both the frontend and the backend have been dockerized and there is a peculiar way of building the whole project because 
+
 # What have been made?
 - Header: entirely functional
 - Footer: almost entirely functional, TODO: add links for terms of use and privacy policy
