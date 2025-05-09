@@ -43,5 +43,5 @@ EXPOSE 8000
 EXPOSE 9000
 
 # Launch php-fpm
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+CMD ["php", "/var/www/artisan", "serve", "--host=0.0.0.0", "--port=8000"]
 

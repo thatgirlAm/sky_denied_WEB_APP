@@ -9,7 +9,31 @@ The web application will be using the following frameworks and tehcnology :
 
 # Containerizing the web application
 
-Both the frontend and the backend have been dockerized and there is a peculiar way of building the whole project because 
+Both the frontend and the backend have been dockerized and there is a peculiar way of building the whole project.
+To run the project, DOcker is necessary. In fact, to insure reproducibility, the Team has containerized the web application. 
+
+## The first step to attempt any run of the project is to set up the .env file:
+Access the ./fo
+There are two ways of building the project:
+
+## Running the overall container of the project
+
+From the sky_denied_WEB_APP folder, run 
+
+`docker-compose build`
+
+When the build is over, go to the frontend's local website:
+
+`http://localhost:8080`
+
+Then the application is functional.
+
+## Running both containers separately
+In fact, if the first method does not work (maybe for port issues, which happens often), you can try running both containers separately. 
+
+### First, run backend container
+
+``
 
 # What have been made?
 - Header: entirely functional
