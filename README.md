@@ -27,6 +27,7 @@ The first step to run the project is to set up the `.env` file. Follow these ste
 2. Copy the content of the `.env.example` file.
 3. Create a new file named `.env` in the same folder (`./back`).
 4. Paste the copied content into the new `.env` file.
+5. Fill the database username and password with the credentials we provided you.
 
 ### Two Ways to Build the Project
 
@@ -82,8 +83,8 @@ docker run --rm -p 8000:8000 \
 -e DB_HOST=es-us-2-sky-denied-v2.postgres.database.azure.com \
 -e DB_PORT=5432 \
 -e DB_DATABASE=postgres \
--e DB_USERNAME=amaellediop \
--e DB_PASSWORD='abcd1234!' \
+-e DB_USERNAME=the_credentials_given_to_you \
+-e DB_PASSWORD='{the_password_given_to_you}' \
 -e DB_SSLMODE=require \
 laravel-backend \
 php artisan serve --host=0.0.0.0 --port=8000
