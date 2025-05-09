@@ -1,15 +1,48 @@
 <div class="our-model-content">
-  <div class="section">
+  <div class="section-text">
     <div class="paragraph">
       <h1>Our model</h1>
+      <p>Presenting our model: QTSimAM (Queueing Theory (QT)-SimAM (Simple Attention Module))-CNN-LSTM; a novel model that integrates a queueing theory foundation with a deep learning model to capture complex temporal dependencies in longitudinal data. The QTSimAM model builds on the SimAM attention mechanism and Mogrifier LSTM framework and includes a new ResidualDelayLayer (RDL), which calculates a series of physics-informed features such as waiting time and queue length directly from the data input sequences (i.e., flight distance and flight time). Subsequently, these features modulate both the convolutional and recurrent parts of the model via the attention mechanisms in QTSimAM with the queue-aware QMogrifierStack, allowing us to experiment with the relationship between domain knowledge and neural sequence learning. The model integrates a multi-scale CNN for feature extraction, queue-aware normalization (through the martial features identified with the RDL), and a multi-layer LSTM stack with queuing dynamics, which allows it to perform well at temporal dependency modelling tasks, such as predicting the kind of flight delay, or models which have resource constraints. The QTSimAM model is end-to-end trainable, and it has auxiliary regression heads for explaining delay estimates, therefore balancing both accuracy and interpretability.</p>
     </div>
     <div class="image"></div>
   </div>
 
+  <div class="section">
+    <div class="search-link">
+      <h1>
+        <a routerLink="/search">Request a prediction with our model</a>
+      </h1>
+    </div>
+  </div>
+
   <div class="section-divider"></div>
 
-  <div class="section">
+  <div class="section-training">
     <h1>Performance</h1>
+    <div class="image-training">
+      <img src="image/training.png" alt="Training results" />
+    </div>
+    <p>Our model demonstrates a consistent improvement in training and validation accuracy across all four prediction tasks (likely different delay types or prediction horizons). The accuracy generally plateaus after a certain number of epochs, suggesting the model has learned effectively without significant overfitting, as the validation accuracy follows a similar trend to the training accuracy. The final achieved accuracy varies slightly between the tasks, indicating potentially different levels of complexity in predicting each outcome.</p>
+  </div>
+
+  <div class="section">
+    <div class="paragraph">
+      <h1>F1-Score</h1>
+      <p>The F1-score, which balances precision and recall, indicates strong performance across the different delay categories analyzed. The consistently high F1-scores across most categories suggest that our model is effective at correctly identifying instances of each delay type without a significant bias towards either precision or recall. Some minor variations in F1-score between categories might reflect differences in the prevalence or inherent predictability of those specific delay types.</p>
+    </div>
+    <div class="image">
+      <img src="image/f1.png" alt="F1-score results" />
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="image">
+      <img src="image/loss.png" alt="Loss results" />
+    </div>
+    <div class="paragraph">
+      <h1>Training and validation loss</h1>
+      <p>The training and validation loss curves demonstrate a successful learning process. The loss decreases steadily over the epochs for both the training and validation sets, indicating that the model is learning to minimize the prediction error. The fact that the validation loss closely follows the training loss, without a significant increase or divergence, further suggests that the model is generalizing well to unseen data and avoiding overfitting. The final low loss values indicate a good fit of the model to the data.</p>
+    </div>
   </div>
 
 </div>

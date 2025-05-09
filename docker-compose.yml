@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  angular-frontend:
+    build:
+      context: ./front
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:80" 
+    networks:
+      - app-network
+    volumes:
+      - ./front:/app
+
+  laravel-backend:
+    build:
+      context: ./back
+      dockerfile: ./Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: es-us-2-sky-denied-v2.postgres.database.azure.com
+      DB_PORT: 5432
+      DB_DATABASE: postgres
+      DB_USERNAME: amaellediop
+      DB_PASSWORD: 'abcd1234!'
+      DB_SSLMODE: require
+    networks:
+      - app-network
+    volumes:
+      - ./back:/var/www
+
+networks:
+  app-network:
+    driver: bridge

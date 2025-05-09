@@ -27,7 +27,7 @@
     <!-- Have Flight Tab -->
     <div [formGroup]="haveFlightForm" class="tab-content" [class.active]="activeTab === 'have-flight'">
       <div class="input-group">
-        <label for="tail_number">Tail Number</label>
+        <label for="tail_number">Flight Number</label>
         <input formControlName="tail_number" type="text" id="tail_number">
         <div class="validation">
           <div class="validation-error" *ngIf="haveFlightForm.get('tail_number')?.hasError('required') &&

@@ -6,7 +6,7 @@ use App\Http\Controllers\ContactController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\HTTP\Controllers\FlightController ;
+use App\Http\Controllers\FlightController ;
 use App\Http\Controllers\PredictionController ;
 use Tests\Feature\PredictionControllerTest;
 
