@@ -17,29 +17,10 @@ from datetime import datetime, time, timedelta
 DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data"))
 GLOBAL_AIRPORTS = airportsdata.load('IATA')
 
-# def read_all_csv_from_folder(folder_path):
-#     if not os.path.exists(folder_path):
-#         print(f"Folder does not exist: {folder_path}")
-#         return pd.DataFrame()
-    
-#     all_files = [f for f in os.listdir(folder_path) if f.endswith(".csv")]
-#     dataframes = []
-#     for file in all_files:
-#         file_path = os.path.join(folder_path, file)
-#         try:
-#             df = pd.read_csv(file_path)
-#             dataframes.append(df)
-#         except Exception as e:
-#             print(f"Failed to read {file}: {e}")
-
-#     if not dataframes:
-#         print(f"No valid CSV files found in {folder_path}")
-#         return pd.DataFrame()
-
-#     return pd.concat(dataframes, ignore_index=True)
-
 def to_utc(local_str, iata_code, fmt="%Y-%m-%d %H:%M"):
     if pd.isna(local_str) or local_str == '' or pd.isna(iata_code) or iata_code == '':
+        return None
+    if iata_code not in GLOBAL_AIRPORTS:
         return None
     tz_name = GLOBAL_AIRPORTS[iata_code]['tz']
     naive_local_dt = datetime.strptime(local_str, fmt)
@@ -117,7 +98,9 @@ def infer_same_tz_date(scheduled_date_local, actual_time_str):
 
 def airport_info_look_up(iata_code,output_column='icao'):
     if pd.isna(iata_code) or iata_code == '':
-        return ""
+        return None
+    if iata_code not in GLOBAL_AIRPORTS:
+        return None
     return GLOBAL_AIRPORTS[iata_code][output_column]
 
 def format_duration(td):
@@ -132,31 +115,6 @@ def format_duration(td):
     if td.components.minutes:
         parts.append(f"{td.components.minutes}m")
     return " ".join(parts)
-
-def infer_arrival_datetime(departure_date, arr_time_str, arr_tz_str):
-    # 1) Convert the departure moment to the arrival tz
-    arr_tz = pytz.timezone(arr_tz_str)
-    dep_in_arr_tz = departure_date.astimezone(arr_tz)
-    
-    # 2) Parse the "HH:MM" arrival time
-    hh, mm = arr_time_str.split(":")
-    arr_time_only = time(int(hh), int(mm))
-    
-    # 3) Combine that time with the *departure date (in arrival tz)*
-    #    to make a tentative arrival datetime (still in arrival tz).
-    candidate_date = dep_in_arr_tz.date()
-    # Naive datetime for the candidate arrival day + time
-    naive_arrival_dt = datetime.combine(candidate_date, arr_time_only)
-    # Localize it to the arrival tz with pytz
-    candidate_arr_dt = arr_tz.localize(naive_arrival_dt)
-    
-    # 4) If candidate_arr_dt is before (or equal to) dep_in_arr_tz,
-    #    assume the actual arrival is the *next* day in that time zone.
-    if candidate_arr_dt <= dep_in_arr_tz:
-        candidate_arr_dt += timedelta(days=1)
-    
-    return candidate_arr_dt
-
 
 def clean_and_merge(flightera_arrival_dfs, flightera_departure_dfs, flightradar24_dfs):
     """
@@ -198,9 +156,6 @@ def clean_and_merge(flightera_arrival_dfs, flightera_departure_dfs, flightradar2
         how="inner",
         suffixes=("", "_dep")
     )
-
-    flight_schedule = flight_schedule[flight_schedule["depart_from_iata"] != flight_schedule["arrive_at_iata"]]
-    flight_schedule = flight_schedule[flight_schedule["depart_from_iata"] != flight_schedule["arrive_at_iata"]]
 
     cols_to_drop = [
         col for col in flight_schedule.columns
@@ -275,6 +230,7 @@ def clean_and_merge(flightera_arrival_dfs, flightera_departure_dfs, flightradar2
                           (flight_schedule["last_scheduled_arrival_utc"].isnull())
                           )
                           ]
+    
     flight_schedule["scheduled_departure_local"] = pd.to_datetime(flight_schedule["scheduled_departure_local"], format= "%Y-%m-%d %H:%M", errors="coerce")
     flight_schedule["scheduled_arrival_local"] = pd.to_datetime(flight_schedule["scheduled_arrival_local"], format= "%Y-%m-%d %H:%M", errors="coerce")
     flight_schedule["actual_departure_local"] = pd.to_datetime(flight_schedule["actual_departure_local"], format= "%Y-%m-%d %H:%M", errors="coerce")
@@ -325,8 +281,21 @@ def clean_and_merge(flightera_arrival_dfs, flightera_departure_dfs, flightradar2
     flight_schedule = flight_schedule.sort_values(by='scheduled_departure_utc', ascending=True)
     today = datetime.now().date()
     # Write the final merged CSV
-    # output_csv = os.path.join(DATA_DIR, f"flight_schedule_{today}.csv")
-    # flight_schedule.to_csv(output_csv, index=False)
+    output_csv = os.path.join(DATA_DIR, f"flight_schedule_{today}.csv")
+    if os.path.exists(output_csv):
+        print(output_csv, "not new")
+        # Read existing data
+        existing_data = pd.read_csv(output_csv)
+        # Append new data
+        combined_data = pd.concat([existing_data, flight_schedule], ignore_index=True)
+        # Remove duplicates if necessary (optional)
+        combined_data.drop_duplicates(inplace=True)
+        # Save combined data
+        combined_data.to_csv(output_csv, index=False)
+    else:
+        # Save new data directly
+        print(output_csv, "new")
+        flight_schedule.to_csv(output_csv, index=False)
     return flight_schedule
 
 

@@ -46,3 +46,5 @@ def crawl_flightradar24_aircraft_flight(base_url, aircraft):
         driver.quit()
         logger.info("Flightradar24 aircraft scrape done for %s: %d rows", aircraft, len(df))
     return df
+
+

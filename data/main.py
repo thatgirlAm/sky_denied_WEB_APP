@@ -71,7 +71,7 @@ def run_schedule_mode(airport_list_iata):
 
     airports = airportsdata.load("IATA")
 
-    start_date_str = (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d")
+    start_date_str = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
     # Use today's date as end date (or adjust as needed)
     end_date_str = (datetime.now() - timedelta(days=2)).strftime("%Y-%m-%d")
 
@@ -101,7 +101,7 @@ def run_schedule_mode(airport_list_iata):
     df = clean_and_merge(flightera_arrival_dfs, flightera_departure_dfs, flightradar24_dfs)
     logger.info("Data merged successfully with %d total rows.", len(df))
 
-    # df = pd.read_csv('data/flight_schedule_2025-04-19.csv')
+    # df = pd.read_csv('data/flight_schedule_2025-05-01.csv')
     push_fligth_schedule_to_postgres(df)
     logger.info("SCHEDULE mode completed.")
 

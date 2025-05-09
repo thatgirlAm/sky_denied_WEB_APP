@@ -106,7 +106,7 @@ def push_fligth_schedule_to_postgres(df: pd.DataFrame = None, csv_path: str = No
             duration TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (flight_date_utc, flight_number_iata, airline, scheduled_departure_utc, scheduled_arrival_utc)
+            PRIMARY KEY (flight_date_utc, flight_number_iata, airline, depart_from_iata, arrive_at_iata, scheduled_departure_utc, scheduled_arrival_utc)
         );
         """))
 
@@ -127,7 +127,7 @@ def push_fligth_schedule_to_postgres(df: pd.DataFrame = None, csv_path: str = No
         upsert_sql = f"""
         INSERT INTO {SCHEMA}.{TABLE_NAME} ({", ".join(DESIRED_COLUMNS)})
         SELECT {", ".join(DESIRED_COLUMNS)} FROM {SCHEMA}.{temp_table_name}
-        ON CONFLICT (flight_date_utc, flight_number_iata, airline, scheduled_departure_utc, scheduled_arrival_utc)
+        ON CONFLICT (flight_date_utc, flight_number_iata, airline, depart_from_iata, arrive_at_iata, scheduled_departure_utc, scheduled_arrival_utc)
         DO UPDATE SET
             tail_number = EXCLUDED.tail_number,
             airline = EXCLUDED.airline,
@@ -170,6 +170,4 @@ def push_airports_to_postgress():
         )
 
     print(f"Data pushed to table '{TABLE_NAME}' in database '{DB_NAME}' successfully!")
-
-
    
